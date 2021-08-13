@@ -1,0 +1,36 @@
+trigger:
+  branches:
+    include:
+    - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK (5.0)'
+  inputs:
+    packageType: sdk
+    version: 5.0.301
+    includePreviewVersions: true
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: DotNetCoreCLI@2
+  displayName: Restore NuGet packages
+  inputs:
+    command: 'restore'
+    projects: | 
+      **/PhotoCarousel.Worker.csproj
+- task: DotNetCoreCLI@2
+  displayName: Build PhotoCarousel.Worker.csproj
+  inputs:
+    command: 'build'
+    projects: | 
+      **/PhotoCarousel.Worker.csproj
+- script: |
+    cd ./PhotoCarousel
+    docker build -t djohnnie/photocarousel-worker .
+    docker login -u $(dockerId) -p $(dockerPwd)
+    docker push djohnnie/photocarousel-worker
+  displayName: Build & Push djohnnie/photocarousel-worker

@@ -1,0 +1,37 @@
+FROM mcr.microsoft.com/dotnet/runtime:5.0 AS base
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /src
+COPY ["PhotoCarousel.sln", "./"]
+COPY ["PhotoCarousel.Common/*.csproj", "./PhotoCarousel.Common/"]
+COPY ["PhotoCarousel.Entities/*.csproj", "./PhotoCarousel.Entities/"]
+COPY ["PhotoCarousel.DataAccess/*.csproj", "./PhotoCarousel.DataAccess/"]
+COPY ["PhotoCarousel.Worker/*.csproj", "./PhotoCarousel.Worker/"]
+
+RUN dotnet restore
+COPY . .
+WORKDIR "/src/PhotoCarousel.Common"
+RUN dotnet build "PhotoCarousel.Common.csproj" -c Release -o /app/build
+WORKDIR "/src/PhotoCarousel.Entities"
+RUN dotnet build "PhotoCarousel.Entities.csproj" -c Release -o /app/build
+WORKDIR "/src/PhotoCarousel.DataAccess"
+RUN dotnet build "PhotoCarousel.DataAccess.csproj" -c Release -o /app/build
+WORKDIR "/src/PhotoCarousel.Worker"
+RUN dotnet build "PhotoCarousel.Worker.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "PhotoCarousel.Worker.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+ENV TZ=Europe/Brussels
+ENV DB_CONNECTION_STRING=...
+ENV INDEXER_INTERVAL_IN_SECONDS=...
+ENV THUMBNAIL_INTERVAL_IN_SECONDS=...
+ENV PHOTO_BASE_PATH=...
+ENV THUMBNAIL_SIZE=...
+
+ENTRYPOINT ["dotnet", "PhotoCarousel.Worker.dll"]
