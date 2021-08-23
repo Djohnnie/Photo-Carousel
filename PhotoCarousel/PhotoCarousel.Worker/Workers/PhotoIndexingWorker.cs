@@ -45,7 +45,7 @@ namespace PhotoCarousel.Worker.Workers
                     _logger.LogCritical("PHOTO-INDEXING-HELPER COULD NOT BE CONSTRUCTED!!!");
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromHours(96), stoppingToken);
             }
         }
     }
