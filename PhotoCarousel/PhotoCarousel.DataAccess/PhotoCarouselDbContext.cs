@@ -29,10 +29,13 @@ namespace PhotoCarousel.DataAccess
             modelBuilder.Entity<Photo>(a =>
             {
                 a.ToTable("PHOTOS");
-                a.HasKey(x => x.Id).IsClustered(false);
-                a.HasIndex(x => x.SysId).IsUnique().IsClustered();
-                a.Property(x => x.SysId).ValueGeneratedOnAdd();
-                a.Property(x => x.Orientation).HasConversion(new EnumToStringConverter<Orientation>());
+                a.HasKey(p => p.Id).IsClustered(false);
+                a.HasIndex(p => p.SysId).IsUnique().IsClustered();
+                a.HasIndex(p => p.Sha256Hash);
+                a.Property(p => p.SysId).ValueGeneratedOnAdd();
+                a.Property(p => p.Orientation).HasConversion(new EnumToStringConverter<Orientation>());
+                a.Property(p => p.Rating).HasConversion(new EnumToStringConverter<Rating>());
+                a.Property(p => p.Sha256Hash).HasMaxLength(32);
             });
         }
     }
