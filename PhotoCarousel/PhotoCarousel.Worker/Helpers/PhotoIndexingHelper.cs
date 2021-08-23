@@ -51,10 +51,12 @@ namespace PhotoCarousel.Worker.Helpers
                     {
                         var sw = Stopwatch.StartNew();
 
-                        var indexedPhoto = await GenerateIndexedPhoto(fileInfo);
+                        var hash = await CalculateSha256(fileInfo);
 
-                        if (!await _dbContext.Photos.AnyAsync(x => x.Sha256Hash == indexedPhoto.Sha256Hash))
+                        if (!await _dbContext.Photos.AnyAsync(x => x.Sha256Hash == hash))
                         {
+                            var indexedPhoto = GenerateIndexedPhoto(fileInfo, hash);
+
                             await _dbContext.Photos.AddAsync(indexedPhoto);
                             await _dbContext.SaveChangesAsync();
                         }
@@ -82,7 +84,7 @@ namespace PhotoCarousel.Worker.Helpers
             }
         }
 
-        private async Task<Photo> GenerateIndexedPhoto(FileInfo fileInfo)
+        private Photo GenerateIndexedPhoto(FileInfo fileInfo, byte[] hash)
         {
             var regex = new Regex(@"[0-9]{4}-[0-9]{2}\s\(.*\)");
             var match = regex.Match(fileInfo.FullName);
@@ -92,7 +94,7 @@ namespace PhotoCarousel.Worker.Helpers
             {
                 Id = Guid.NewGuid(),
                 SourcePath = fileInfo.FullName,
-                Sha256Hash = await CalculateSha256(fileInfo),
+                Sha256Hash = hash,
                 Rating = Rating.None,
                 DateTaken = metadata.Item1,
                 Description = match.Value,
@@ -117,17 +119,20 @@ namespace PhotoCarousel.Worker.Helpers
             using var fs = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
             using Image myImage = Image.FromStream(fs, false, false);
             var orientation = myImage.Width > myImage.Height ? Orientation.Landscape : Orientation.Portrait;
-            PropertyItem propItem = myImage.GetPropertyItem(36867);
-            if (propItem != null)
+
+            try
             {
-                var str = Encoding.UTF8.GetString(propItem.Value);
-                string dateTaken = r.Replace(str, "-", 2);
-                return (DateTime.Parse(dateTaken), orientation);
+                PropertyItem propItem = myImage.GetPropertyItem(36867);
+                if (propItem != null)
+                {
+                    var str = Encoding.UTF8.GetString(propItem.Value);
+                    string dateTaken = r.Replace(str, "-", 2);
+                    return (DateTime.Parse(dateTaken), orientation);
+                }
             }
-            else
-            {
-                return (fileInfo.LastWriteTime, orientation);
-            }
+            catch { }
+
+            return (fileInfo.LastWriteTime, orientation);
         }
     }
 }
