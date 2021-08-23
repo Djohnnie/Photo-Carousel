@@ -47,7 +47,7 @@ namespace PhotoCarousel.Worker.Helpers
             {
                 try
                 {
-                    if (fileInfo.Extension.Equals(".jpg", StringComparison.InvariantCultureIgnoreCase))
+                    if (!fileInfo.FullName.Contains("@eaDir") && fileInfo.Extension.Equals(".jpg", StringComparison.InvariantCultureIgnoreCase))
                     {
                         var sw = Stopwatch.StartNew();
 
