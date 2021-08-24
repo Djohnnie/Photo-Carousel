@@ -53,7 +53,8 @@ namespace PhotoCarousel.Worker.Helpers
 
                         var hash = await CalculateSha256(fileInfo);
 
-                        if (!await _dbContext.Photos.AnyAsync(x => x.Sha256Hash == hash))
+                        if (!await _dbContext.Photos.AnyAsync(
+                            x => x.Sha256Hash == hash && x.SourcePath == directoryInfo.FullName))
                         {
                             var indexedPhoto = GenerateIndexedPhoto(fileInfo, hash);
 

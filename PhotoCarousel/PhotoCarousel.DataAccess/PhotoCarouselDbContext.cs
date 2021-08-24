@@ -32,6 +32,8 @@ namespace PhotoCarousel.DataAccess
                 a.HasKey(p => p.Id).IsClustered(false);
                 a.HasIndex(p => p.SysId).IsUnique().IsClustered();
                 a.HasIndex(p => p.Sha256Hash);
+                a.HasIndex(p => p.SourcePath);
+                a.HasIndex(p => new { p.Sha256Hash, p.SourcePath });
                 a.Property(p => p.SysId).ValueGeneratedOnAdd();
                 a.Property(p => p.Orientation).HasConversion(new EnumToStringConverter<Orientation>());
                 a.Property(p => p.Rating).HasConversion(new EnumToStringConverter<Rating>());
