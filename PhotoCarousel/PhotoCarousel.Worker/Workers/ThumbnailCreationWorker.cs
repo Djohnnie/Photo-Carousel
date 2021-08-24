@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PhotoCarousel.Common.Extensions;
 using PhotoCarousel.Worker.Helpers;
 
 namespace PhotoCarousel.Worker.Workers
@@ -31,21 +32,29 @@ namespace PhotoCarousel.Worker.Workers
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTime.Now);
-
-                using var serviceScope = _serviceScopeFactory.CreateScope();
-                var thumbnailHelper = serviceScope.ServiceProvider.GetService<ThumbnailCreationHelper>();
-
-                if (thumbnailHelper != null)
+                try
                 {
-                    await thumbnailHelper.Go(stoppingToken);
+                    _logger.LogInformation("Worker running at: {time}", DateTime.Now);
+
+                    using var serviceScope = _serviceScopeFactory.CreateScope();
+                    var thumbnailHelper = serviceScope.ServiceProvider.GetService<ThumbnailCreationHelper>();
+
+                    if (thumbnailHelper != null)
+                    {
+                        await thumbnailHelper.Go(stoppingToken);
+                    }
+                    else
+                    {
+                        _logger.LogCritical("THUMBNAIL-CREATION-HELPER COULD NOT BE CONSTRUCTED!!!");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    _logger.LogCritical("THUMBNAIL-CREATION-HELPER COULD NOT BE CONSTRUCTED!!!");
+                    _logger.LogCritical($"Unknown error occurred while creating thumbnails: ({ex.Message}).");
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+                var interval = _configuration.GetThumbnailerIntervalInSeconds();
+                await Task.Delay(TimeSpan.FromSeconds(interval), stoppingToken);
             }
         }
     }

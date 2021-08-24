@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PhotoCarousel.Common.Extensions;
 using PhotoCarousel.Worker.Helpers;
 
 namespace PhotoCarousel.Worker.Workers
@@ -31,21 +32,29 @@ namespace PhotoCarousel.Worker.Workers
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTime.Now);
-
-                using var serviceScope = _serviceScopeFactory.CreateScope();
-                var indexingHelper = serviceScope.ServiceProvider.GetService<PhotoIndexingHelper>();
-
-                if (indexingHelper != null)
+                try
                 {
-                    await indexingHelper.Go(stoppingToken);
+                    _logger.LogInformation("Worker running at: {time}", DateTime.Now);
+
+                    using var serviceScope = _serviceScopeFactory.CreateScope();
+                    var indexingHelper = serviceScope.ServiceProvider.GetService<PhotoIndexingHelper>();
+
+                    if (indexingHelper != null)
+                    {
+                        await indexingHelper.Go(stoppingToken);
+                    }
+                    else
+                    {
+                        _logger.LogCritical("PHOTO-INDEXING-HELPER COULD NOT BE CONSTRUCTED!!!");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    _logger.LogCritical("PHOTO-INDEXING-HELPER COULD NOT BE CONSTRUCTED!!!");
+                    _logger.LogCritical($"Unknown error occurred while indexing: ({ex.Message}).");
                 }
 
-                await Task.Delay(TimeSpan.FromHours(96), stoppingToken);
+                var interval = _configuration.GetIndexerIntervalInSeconds();
+                await Task.Delay(TimeSpan.FromSeconds(interval), stoppingToken);
             }
         }
     }
