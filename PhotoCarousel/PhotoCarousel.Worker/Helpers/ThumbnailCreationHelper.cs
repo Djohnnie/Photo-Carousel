@@ -49,21 +49,20 @@ namespace PhotoCarousel.Worker.Helpers
                     await using var sourceFileStream = new FileStream(photo.SourcePath, FileMode.Open, FileAccess.Read);
                     using var sourceData = SKData.Create(sourceFileStream);
                     using var sourceBitmap = SKBitmap.Decode(sourceFileStream);
-                    using var sourceImage = SKImage.FromBitmap(sourceBitmap);
 
                     var sourceBounds = photo.Orientation == Orientation.Landscape ?
-                        SKRectI.Create(sourceImage.Width / 2 - sourceImage.Height / 2, 0, sourceImage.Height, sourceImage.Height)
+                        SKRectI.Create(sourceBitmap.Width / 2 - sourceBitmap.Height / 2, 0, sourceBitmap.Height, sourceBitmap.Height)
                         :
-                        SKRectI.Create(0, sourceImage.Height / 2 - sourceImage.Width / 2, sourceImage.Width, sourceImage.Width);
+                        SKRectI.Create(0, sourceBitmap.Height / 2 - sourceBitmap.Width / 2, sourceBitmap.Width, sourceBitmap.Width);
 
                     var destinationBounds = photo.Orientation == Orientation.Landscape ?
-                        SKRectI.Create(0, 0, sourceImage.Height, sourceImage.Height)
+                        SKRectI.Create(0, 0, sourceBitmap.Height, sourceBitmap.Height)
                         :
-                        SKRectI.Create(0, 0, sourceImage.Width, sourceImage.Width);
+                        SKRectI.Create(0, 0, sourceBitmap.Width, sourceBitmap.Width);
 
                     using var thumbnailTarget = new SKBitmap(destinationBounds.Width, destinationBounds.Height);
                     using var canvasTarget = new SKCanvas(thumbnailTarget);
-                    canvasTarget.DrawImage(sourceImage, sourceBounds, destinationBounds);
+                    canvasTarget.DrawBitmap(sourceBitmap, sourceBounds, destinationBounds);
                     using var destinationBitmap = thumbnailTarget.Resize(new SKSizeI(thumbnailSize, thumbnailSize), SKFilterQuality.High);
 
                     var thumbnailDestinationPath = Path.Combine(thumbnailPath, $"{photo.Id}.thumbnail.jpg");
