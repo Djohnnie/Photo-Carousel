@@ -4,10 +4,9 @@ using Microsoft.Extensions.Logging;
 using PhotoCarousel.Common.Extensions;
 using PhotoCarousel.DataAccess;
 using PhotoCarousel.Entities.Enums;
+using SkiaSharp;
 using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -35,45 +34,56 @@ namespace PhotoCarousel.Worker.Helpers
         {
             var photoBatch = await _dbContext.Photos
                 .Where(x => string.IsNullOrEmpty(x.ThumbnailPath))
-                .Take(10)
-                .ToListAsync();
+                .Take(4)
+                .ToListAsync(stoppingToken);
 
             var thumbnailSize = _configuration.GetThumbnailSize();
             var thumbnailPath = _configuration.GetThumbnailPath();
 
-            foreach (var photo in photoBatch)
+            var tasks = photoBatch.Select(async photo =>
             {
                 try
                 {
-                    using var fs = new FileStream(photo.SourcePath, FileMode.Open, FileAccess.Read);
-                    using var sourceImage = Image.FromStream(fs, false, false);
+                    var sw = Stopwatch.StartNew();
+
+                    await using var sourceFileStream = new FileStream(photo.SourcePath, FileMode.Open, FileAccess.Read);
+                    using var sourceBitmap = SKBitmap.Decode(sourceFileStream);
+                    using var sourceImage = SKImage.FromBitmap(sourceBitmap);
 
                     var sourceBounds = photo.Orientation == Orientation.Landscape ?
-                        new Rectangle(sourceImage.Width / 2 - sourceImage.Height / 2, 0, sourceImage.Height, sourceImage.Height)
+                        new SKRectI(sourceImage.Width / 2 - sourceImage.Height / 2, 0, sourceImage.Height, sourceImage.Height)
                         :
-                        new Rectangle(0, sourceImage.Height / 2 - sourceImage.Width / 2, sourceImage.Width, sourceImage.Width);
-                    var destinationBounds = new Rectangle(0, 0, thumbnailSize, thumbnailSize);
+                        new SKRectI(0, sourceImage.Height / 2 - sourceImage.Width / 2, sourceImage.Width, sourceImage.Width);
 
-                    using var thumbnailTarget = new Bitmap(thumbnailSize, thumbnailSize);
-                    using var thumbnailGraphics = Graphics.FromImage(thumbnailTarget);
-                    thumbnailGraphics.CompositingQuality = CompositingQuality.HighQuality;
-                    thumbnailGraphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    thumbnailGraphics.CompositingMode = CompositingMode.SourceCopy;
+                    var destinationBounds = photo.Orientation == Orientation.Landscape ?
+                        new SKRectI(0, 0, sourceImage.Height, sourceImage.Height)
+                        :
+                        new SKRectI(0, 0, sourceImage.Width, sourceImage.Width);
 
-                    thumbnailGraphics.DrawImage(
-                        sourceImage, destinationBounds, sourceBounds.X, sourceBounds.Y, sourceBounds.Width, sourceBounds.Height, GraphicsUnit.Pixel);
+                    using var thumbnailTarget = new SKBitmap(destinationBounds.Width, destinationBounds.Height);
+                    using var canvasTarget = new SKCanvas(thumbnailTarget);
+                    canvasTarget.DrawImage(sourceImage, sourceBounds, destinationBounds);
+                    using var destinationBitmap = thumbnailTarget.Resize(new SKSizeI(thumbnailSize, thumbnailSize), SKFilterQuality.High);
 
                     var thumbnailDestinationPath = Path.Combine(thumbnailPath, $"{photo.Id}.thumbnail.jpg");
-                    thumbnailTarget.Save(thumbnailDestinationPath, ImageFormat.Jpeg);
+
+                    await using var destinationFileStream = new FileStream(thumbnailDestinationPath, FileMode.CreateNew);
+                    destinationBitmap.Encode(destinationFileStream, SKEncodedImageFormat.Jpeg, 90);
 
                     photo.ThumbnailPath = thumbnailDestinationPath;
-                    await _dbContext.SaveChangesAsync();
+
+                    sw.Stop();
+                    _logger.LogInformation($"Thumbnail creation successful: {sw.ElapsedMilliseconds}ms");
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError($"Error while creating thumbnail for '{photo.SourcePath}': {ex.Message}");
                 }
-            }
+            });
+
+            await Task.WhenAll(tasks);
+
+            await _dbContext.SaveChangesAsync(stoppingToken);
         }
     }
 }

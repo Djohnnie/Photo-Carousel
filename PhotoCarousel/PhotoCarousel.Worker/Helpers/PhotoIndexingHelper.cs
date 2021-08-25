@@ -63,7 +63,7 @@ namespace PhotoCarousel.Worker.Helpers
                         }
 
                         sw.Stop();
-                        _logger.LogInformation($"STOPWATCH: {sw.ElapsedMilliseconds}ms");
+                        _logger.LogInformation($"Photo indexed successfully: {sw.ElapsedMilliseconds}ms");
                     }
                 }
                 catch (Exception ex)
