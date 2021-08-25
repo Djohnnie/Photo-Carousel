@@ -34,7 +34,7 @@ namespace PhotoCarousel.Worker.Helpers
         {
             var photoBatch = await _dbContext.Photos
                 .Where(x => string.IsNullOrEmpty(x.ThumbnailPath))
-                .Take(4)
+                .Take(16)
                 .ToListAsync(stoppingToken);
 
             var thumbnailSize = _configuration.GetThumbnailSize();
@@ -47,18 +47,19 @@ namespace PhotoCarousel.Worker.Helpers
                     var sw = Stopwatch.StartNew();
 
                     await using var sourceFileStream = new FileStream(photo.SourcePath, FileMode.Open, FileAccess.Read);
+                    using var sourceData = SKData.Create(sourceFileStream);
                     using var sourceBitmap = SKBitmap.Decode(sourceFileStream);
                     using var sourceImage = SKImage.FromBitmap(sourceBitmap);
 
                     var sourceBounds = photo.Orientation == Orientation.Landscape ?
-                        new SKRectI(sourceImage.Width / 2 - sourceImage.Height / 2, 0, sourceImage.Height, sourceImage.Height)
+                        SKRectI.Create(sourceImage.Width / 2 - sourceImage.Height / 2, 0, sourceImage.Height, sourceImage.Height)
                         :
-                        new SKRectI(0, sourceImage.Height / 2 - sourceImage.Width / 2, sourceImage.Width, sourceImage.Width);
+                        SKRectI.Create(0, sourceImage.Height / 2 - sourceImage.Width / 2, sourceImage.Width, sourceImage.Width);
 
                     var destinationBounds = photo.Orientation == Orientation.Landscape ?
-                        new SKRectI(0, 0, sourceImage.Height, sourceImage.Height)
+                        SKRectI.Create(0, 0, sourceImage.Height, sourceImage.Height)
                         :
-                        new SKRectI(0, 0, sourceImage.Width, sourceImage.Width);
+                        SKRectI.Create(0, 0, sourceImage.Width, sourceImage.Width);
 
                     using var thumbnailTarget = new SKBitmap(destinationBounds.Width, destinationBounds.Height);
                     using var canvasTarget = new SKCanvas(thumbnailTarget);
