@@ -48,7 +48,7 @@ namespace PhotoCarousel.Worker.Helpers
 
                     await using var sourceFileStream = new FileStream(photo.SourcePath, FileMode.Open, FileAccess.Read);
                     using var sourceData = SKData.Create(sourceFileStream);
-                    using var sourceBitmap = SKBitmap.Decode(sourceFileStream);
+                    using var sourceBitmap = SKBitmap.Decode(sourceData);
 
                     var sourceBounds = photo.Orientation == Orientation.Landscape ?
                         SKRectI.Create(sourceBitmap.Width / 2 - sourceBitmap.Height / 2, 0, sourceBitmap.Height, sourceBitmap.Height)
