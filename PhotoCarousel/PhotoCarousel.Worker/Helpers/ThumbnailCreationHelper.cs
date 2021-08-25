@@ -77,7 +77,7 @@ namespace PhotoCarousel.Worker.Helpers
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"Error while creating thumbnail for '{photo.SourcePath}': {ex.Message}");
+                    _logger.LogError($"Error while creating thumbnail for '{photo.SourcePath}': {ex}");
                 }
             });
 
