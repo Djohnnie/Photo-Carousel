@@ -36,12 +36,16 @@ namespace PhotoCarousel.Worker.Helpers
 
         public async Task Go(CancellationToken stoppingToken)
         {
+            var sw = Stopwatch.StartNew();
+
             var photoRootPath = _configuration.GetPhotoRootPath();
-            await IndexPhotos(new DirectoryInfo(photoRootPath));
+            await IndexPhotos(new DirectoryInfo(photoRootPath), stoppingToken);
+
+            sw.Stop();
+            _logger.LogInformation($"Whole photo library indexed successfully: {sw.Elapsed.TotalMinutes:F0} min");
         }
 
-
-        private async Task IndexPhotos(DirectoryInfo directoryInfo)
+        private async Task IndexPhotos(DirectoryInfo directoryInfo, CancellationToken stoppingToken)
         {
             foreach (var fileInfo in directoryInfo.GetFiles())
             {
@@ -51,19 +55,19 @@ namespace PhotoCarousel.Worker.Helpers
                     {
                         var sw = Stopwatch.StartNew();
 
-                        var hash = await CalculateSha256(fileInfo);
+                        var hash = await CalculateSha256(fileInfo, stoppingToken);
 
                         if (!await _dbContext.Photos.AnyAsync(
-                            x => x.Sha256Hash == hash && x.SourcePath == fileInfo.FullName))
+                            x => x.Sha256Hash == hash && x.SourcePath == fileInfo.FullName, stoppingToken))
                         {
                             var indexedPhoto = GenerateIndexedPhoto(fileInfo, hash);
 
-                            await _dbContext.Photos.AddAsync(indexedPhoto);
-                            await _dbContext.SaveChangesAsync();
-                        }
+                            await _dbContext.Photos.AddAsync(indexedPhoto, stoppingToken);
+                            await _dbContext.SaveChangesAsync(stoppingToken);
 
-                        sw.Stop();
-                        _logger.LogInformation($"Photo indexed successfully: {sw.ElapsedMilliseconds}ms");
+                            sw.Stop();
+                            _logger.LogInformation($"Photo indexed successfully: {sw.ElapsedMilliseconds}ms");
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -76,7 +80,7 @@ namespace PhotoCarousel.Worker.Helpers
             {
                 try
                 {
-                    await IndexPhotos(childDirectoryInfo);
+                    await IndexPhotos(childDirectoryInfo, stoppingToken);
                 }
                 catch (Exception ex)
                 {
@@ -103,12 +107,12 @@ namespace PhotoCarousel.Worker.Helpers
             };
         }
 
-        private async Task<byte[]> CalculateSha256(FileInfo fileInfo)
+        private async Task<byte[]> CalculateSha256(FileInfo fileInfo, CancellationToken stoppingToken)
         {
             using SHA256 sha256 = SHA256.Create();
             var fileStream = fileInfo.Open(FileMode.Open);
             fileStream.Position = 0;
-            byte[] hash = await sha256.ComputeHashAsync(fileStream);
+            byte[] hash = await sha256.ComputeHashAsync(fileStream, stoppingToken);
             fileStream.Close();
 
             return hash;

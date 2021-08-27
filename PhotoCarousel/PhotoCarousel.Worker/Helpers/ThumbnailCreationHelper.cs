@@ -30,7 +30,7 @@ namespace PhotoCarousel.Worker.Helpers
             _logger = logger;
         }
 
-        public async Task Go(CancellationToken stoppingToken)
+        public async Task<int> Go(CancellationToken stoppingToken)
         {
             var photoBatch = await _dbContext.Photos
                 .Where(x => string.IsNullOrEmpty(x.ThumbnailPath))
@@ -83,7 +83,7 @@ namespace PhotoCarousel.Worker.Helpers
 
             await Task.WhenAll(tasks);
 
-            await _dbContext.SaveChangesAsync(stoppingToken);
+            return await _dbContext.SaveChangesAsync(stoppingToken);
         }
     }
 }

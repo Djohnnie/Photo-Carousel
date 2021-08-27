@@ -22,6 +22,7 @@ namespace PhotoCarousel.Api
         {
             services.AddDbContext<PhotoCarouselDbContext>();
             services.AddTransient<DownloadService>();
+            services.AddTransient<PhotoService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

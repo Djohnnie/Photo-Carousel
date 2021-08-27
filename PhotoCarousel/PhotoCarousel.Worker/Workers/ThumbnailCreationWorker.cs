@@ -32,6 +32,8 @@ namespace PhotoCarousel.Worker.Workers
 
             while (!stoppingToken.IsCancellationRequested)
             {
+                int numberOfThumbnailsCreated = 0;
+
                 try
                 {
                     _logger.LogInformation("Worker running at: {time}", DateTime.Now);
@@ -41,7 +43,7 @@ namespace PhotoCarousel.Worker.Workers
 
                     if (thumbnailHelper != null)
                     {
-                        await thumbnailHelper.Go(stoppingToken);
+                        numberOfThumbnailsCreated = await thumbnailHelper.Go(stoppingToken);
                     }
                     else
                     {
@@ -53,8 +55,15 @@ namespace PhotoCarousel.Worker.Workers
                     _logger.LogCritical($"Unknown error occurred while creating thumbnails: ({ex.Message}).");
                 }
 
-                var interval = _configuration.GetThumbnailerIntervalInSeconds();
-                await Task.Delay(TimeSpan.FromSeconds(interval), stoppingToken);
+                if(numberOfThumbnailsCreated > 0)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+                }
+                else
+                {
+                    var interval = _configuration.GetThumbnailerIntervalInSeconds();
+                    await Task.Delay(TimeSpan.FromSeconds(interval), stoppingToken);
+                }
             }
         }
     }
