@@ -30,7 +30,7 @@ steps:
       **/PhotoCarousel.Api.csproj
 - script: |
     cd ./PhotoCarousel
-    docker build -t djohnnie/photocarousel-api Dockerfile-Api
+    docker build -t djohnnie/photocarousel-api -f Dockerfile-Api .
     docker login -u $(dockerId) -p $(dockerPwd)
     docker push djohnnie/photocarousel-api
   displayName: Build & Push djohnnie/photocarousel-api

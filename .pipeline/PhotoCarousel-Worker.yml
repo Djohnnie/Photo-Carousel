@@ -30,7 +30,7 @@ steps:
       **/PhotoCarousel.Worker.csproj
 - script: |
     cd ./PhotoCarousel
-    docker build -t djohnnie/photocarousel-worker Dockerfile-Worker
+    docker build -t djohnnie/photocarousel-worker -f Dockerfile-Worker .
     docker login -u $(dockerId) -p $(dockerPwd)
     docker push djohnnie/photocarousel-worker
   displayName: Build & Push djohnnie/photocarousel-worker
