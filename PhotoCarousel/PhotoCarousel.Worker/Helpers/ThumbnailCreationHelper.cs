@@ -18,12 +18,12 @@ namespace PhotoCarousel.Worker.Helpers
     {
         private readonly IConfiguration _configuration;
         private readonly PhotoCarouselDbContext _dbContext;
-        private readonly ILogger<PhotoIndexingHelper> _logger;
+        private readonly ILogger<ThumbnailCreationHelper> _logger;
 
         public ThumbnailCreationHelper(
             IConfiguration configuration,
             PhotoCarouselDbContext dbContext,
-            ILogger<PhotoIndexingHelper> logger)
+            ILogger<ThumbnailCreationHelper> logger)
         {
             _configuration = configuration;
             _dbContext = dbContext;

@@ -1,25 +1,25 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PhotoCarousel.Common.Extensions;
 using PhotoCarousel.Worker.Helpers;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PhotoCarousel.Worker.Workers
 {
-    public class PhotoIndexingWorker : BackgroundService
+    public class SchedulerWorker : BackgroundService
     {
         private readonly IConfiguration _configuration;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly ILogger<PhotoIndexingWorker> _logger;
+        private readonly ILogger<SchedulerWorker> _logger;
 
-        public PhotoIndexingWorker(
+        public SchedulerWorker(
             IConfiguration configuration,
             IServiceScopeFactory serviceScopeFactory,
-            ILogger<PhotoIndexingWorker> logger)
+            ILogger<SchedulerWorker> logger)
         {
             _configuration = configuration;
             _serviceScopeFactory = serviceScopeFactory;
@@ -37,15 +37,15 @@ namespace PhotoCarousel.Worker.Workers
                     _logger.LogInformation("Worker running at: {time}", DateTime.Now);
 
                     using var serviceScope = _serviceScopeFactory.CreateScope();
-                    var indexingHelper = serviceScope.ServiceProvider.GetService<PhotoIndexingHelper>();
+                    var schedulerHelper = serviceScope.ServiceProvider.GetService<SchedulerHelper>();
 
-                    if (indexingHelper != null)
+                    if (schedulerHelper != null)
                     {
-                        await indexingHelper.Go(stoppingToken);
+                        //await schedulerHelper.Go(stoppingToken);
                     }
                     else
                     {
-                        _logger.LogCritical("PHOTO-INDEXING-HELPER COULD NOT BE CONSTRUCTED!!!");
+                        _logger.LogCritical("SCHEDULER-HELPER COULD NOT BE CONSTRUCTED!!!");
                     }
                 }
                 catch (Exception ex)

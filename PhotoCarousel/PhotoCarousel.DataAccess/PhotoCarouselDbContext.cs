@@ -12,6 +12,7 @@ namespace PhotoCarousel.DataAccess
         private readonly IConfiguration _configuration;
 
         public DbSet<Photo> Photos { get; set; }
+        public DbSet<History> History { get; set; }
 
         public PhotoCarouselDbContext(IConfiguration configuration)
         {
@@ -38,6 +39,14 @@ namespace PhotoCarousel.DataAccess
                 a.Property(p => p.Orientation).HasConversion(new EnumToStringConverter<Orientation>());
                 a.Property(p => p.Rating).HasConversion(new EnumToStringConverter<Rating>());
                 a.Property(p => p.Sha256Hash).HasMaxLength(32);
+            });
+
+            modelBuilder.Entity<History>(a =>
+            {
+                a.ToTable("HISTORY");
+                a.HasKey(p => p.Id).IsClustered(false);
+                a.HasIndex(p => p.SysId).IsUnique().IsClustered();
+                a.HasIndex(p => p.Scheduled);
             });
         }
     }

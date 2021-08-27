@@ -18,16 +18,16 @@ using System.Threading.Tasks;
 
 namespace PhotoCarousel.Worker.Helpers
 {
-    public class PhotoIndexingHelper
+    public class IndexingHelper
     {
         private readonly IConfiguration _configuration;
         private readonly PhotoCarouselDbContext _dbContext;
-        private readonly ILogger<PhotoIndexingHelper> _logger;
+        private readonly ILogger<IndexingHelper> _logger;
 
-        public PhotoIndexingHelper(
+        public IndexingHelper(
             IConfiguration configuration,
             PhotoCarouselDbContext dbContext,
-            ILogger<PhotoIndexingHelper> logger)
+            ILogger<IndexingHelper> logger)
         {
             _configuration = configuration;
             _dbContext = dbContext;

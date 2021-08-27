@@ -23,11 +23,13 @@ namespace PhotoCarousel.Worker
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddDbContext<PhotoCarouselDbContext>();
-                    services.AddTransient<PhotoIndexingHelper>();
+                    services.AddTransient<IndexingHelper>();
                     services.AddTransient<ThumbnailCreationHelper>();
+                    services.AddTransient<SchedulerHelper>();
                     services.AddHostedService<StartupWorker>();
-                    services.AddHostedService<PhotoIndexingWorker>();
+                    services.AddHostedService<IndexingWorker>();
                     services.AddHostedService<ThumbnailCreationWorker>();
+                    services.AddHostedService<SchedulerWorker>();
                 });
     }
 }

@@ -21,16 +21,16 @@ steps:
   inputs:
     command: 'restore'
     projects: | 
-      **/PhotoCarousel.Worker.csproj
+      **/PhotoCarousel.Api.csproj
 - task: DotNetCoreCLI@2
-  displayName: Build PhotoCarousel.Worker.csproj
+  displayName: Build PhotoCarousel.Api.csproj
   inputs:
     command: 'build'
     projects: | 
-      **/PhotoCarousel.Worker.csproj
+      **/PhotoCarousel.Api.csproj
 - script: |
     cd ./PhotoCarousel
-    docker build -t djohnnie/photocarousel-worker Dockerfile-Worker
+    docker build -t djohnnie/photocarousel-api Dockerfile-Api
     docker login -u $(dockerId) -p $(dockerPwd)
-    docker push djohnnie/photocarousel-worker
-  displayName: Build & Push djohnnie/photocarousel-worker
+    docker push djohnnie/photocarousel-api
+  displayName: Build & Push djohnnie/photocarousel-api
