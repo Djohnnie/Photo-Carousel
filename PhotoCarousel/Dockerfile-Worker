@@ -9,6 +9,7 @@ COPY ["PhotoCarousel.Common/*.csproj", "./PhotoCarousel.Common/"]
 COPY ["PhotoCarousel.Entities/*.csproj", "./PhotoCarousel.Entities/"]
 COPY ["PhotoCarousel.DataAccess/*.csproj", "./PhotoCarousel.DataAccess/"]
 COPY ["PhotoCarousel.Worker/*.csproj", "./PhotoCarousel.Worker/"]
+COPY ["PhotoCarousel.Api/*.csproj", "./PhotoCarousel.Api/"]
 
 RUN dotnet restore
 COPY . .
