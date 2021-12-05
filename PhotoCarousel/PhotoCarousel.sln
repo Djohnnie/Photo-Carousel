@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31605.320
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoCarousel.Worker", "PhotoCarousel.Worker\PhotoCarousel.Worker.csproj", "{FBB5A9DA-260F-407B-9F86-23D2FE1D7DEB}"
 EndProject
@@ -11,7 +11,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoCarousel.DataAccess", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoCarousel.Entities", "PhotoCarousel.Entities\PhotoCarousel.Entities.csproj", "{2F032AF2-ADC7-44FB-BD30-3379889659C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoCarousel.Api", "PhotoCarousel.Api\PhotoCarousel.Api.csproj", "{8939D0BF-ACB7-4A60-9B8B-A83482FCFC45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoCarousel.Api", "PhotoCarousel.Api\PhotoCarousel.Api.csproj", "{8939D0BF-ACB7-4A60-9B8B-A83482FCFC45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Backend", "1. Backend", "{D8982B19-3FB5-4107-87C4-CEFBAC1DD8FF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Frontend", "2. Frontend", "{800BE62D-775A-43ED-9182-A3717DFC4F84}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Tests", "3. Tests", "{4EB85D00-2F0E-44F2-84C5-57ECBE04E960}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhotoCarousel.Display", "PhotoCarousel.Display\PhotoCarousel.Display.csproj", "{8CA477F5-8840-41B0-BE9C-AD8C8C80E8BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,9 +47,21 @@ Global
 		{8939D0BF-ACB7-4A60-9B8B-A83482FCFC45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8939D0BF-ACB7-4A60-9B8B-A83482FCFC45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8939D0BF-ACB7-4A60-9B8B-A83482FCFC45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CA477F5-8840-41B0-BE9C-AD8C8C80E8BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CA477F5-8840-41B0-BE9C-AD8C8C80E8BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CA477F5-8840-41B0-BE9C-AD8C8C80E8BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CA477F5-8840-41B0-BE9C-AD8C8C80E8BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FBB5A9DA-260F-407B-9F86-23D2FE1D7DEB} = {D8982B19-3FB5-4107-87C4-CEFBAC1DD8FF}
+		{EAAA0512-FB66-49CA-9867-F752993769A6} = {D8982B19-3FB5-4107-87C4-CEFBAC1DD8FF}
+		{4FC158BE-BDC8-461E-A2D4-7CB1DB07DFE0} = {D8982B19-3FB5-4107-87C4-CEFBAC1DD8FF}
+		{2F032AF2-ADC7-44FB-BD30-3379889659C8} = {D8982B19-3FB5-4107-87C4-CEFBAC1DD8FF}
+		{8939D0BF-ACB7-4A60-9B8B-A83482FCFC45} = {D8982B19-3FB5-4107-87C4-CEFBAC1DD8FF}
+		{8CA477F5-8840-41B0-BE9C-AD8C8C80E8BF} = {800BE62D-775A-43ED-9182-A3717DFC4F84}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1C6173D0-821D-4D95-8CE3-6F3467B6956C}

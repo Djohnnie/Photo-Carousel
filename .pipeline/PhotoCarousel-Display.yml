@@ -1,0 +1,46 @@
+trigger:
+  branches:
+    include:
+    - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK (6.0)'
+  inputs:
+    packageType: sdk
+    version: 6.0.100
+    includePreviewVersions: true
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: DotNetCoreCLI@2
+  displayName: Restore NuGet packages
+  inputs:
+    command: 'restore'
+    projects: | 
+      **/PhotoCarousel.Display.csproj
+
+- task: DotNetCoreCLI@2
+  displayName: Build PhotoCarousel.Display.csproj
+  inputs:
+    command: 'build'
+    projects: | 
+      **/PhotoCarousel.Display.csproj
+
+- script: |
+    dotnet publish ./PhotoCarousel/PhotoCarousel.Display --configuration "Release" --runtime linux-arm --output ./PhotoCarousel/PhotoCarousel.Display/bin/Release/publish
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Display/bin/Release/publish' 
+    includeRootFolder: false 
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/PhotoCarousel.Display.zip' 
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: $(Build.ArtifactStagingDirectory)
+    artifactName: PhotoCarousel.Display

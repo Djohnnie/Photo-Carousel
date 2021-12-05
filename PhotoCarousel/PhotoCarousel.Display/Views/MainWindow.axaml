@@ -1,0 +1,57 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AvaloniaApplication1.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:reactiveUi="clr-namespace:ReactiveUI;assembly=ReactiveUI"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="PhotoCarousel.Display.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="AvaloniaApplication1"
+        Cursor="None">
+
+  <Design.DataContext>
+    <vm:MainWindowViewModel/>
+  </Design.DataContext>
+
+  <Grid
+      Cursor="None" >
+
+    <!--<Border BorderThickness="50"
+            BorderBrush="#EEEEEE">
+      <Border BoxShadow="inset 0 0 10 Gray" BorderThickness="0"
+              Padding="10">
+        --><!--<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>--><!--
+
+
+        <Image Source="{Binding TestImage}"
+               Stretch="UniformToFill"/>
+
+
+
+      </Border>
+    </Border>-->
+
+    <Border BoxShadow="0 0 20 Gray" 
+            BorderThickness="0"
+            Margin="100"
+            Padding="0"
+            Cursor="None" >
+        
+        <Image Source="{Binding TestImage}"
+               Stretch="UniformToFill"
+               Cursor="None" />
+
+    </Border>
+
+    <TextBlock Text="{Binding TestDescription}"
+               HorizontalAlignment="Center" VerticalAlignment="Bottom"
+               Margin="0 0 0 26"
+               FontFamily="Segoe Print"
+               FontSize="26"
+               Foreground="Gray" />
+
+  </Grid>
+
+
+</Window>
