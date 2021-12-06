@@ -10,48 +10,41 @@
         Title="AvaloniaApplication1"
         Cursor="None">
 
-  <Design.DataContext>
-    <vm:MainWindowViewModel/>
-  </Design.DataContext>
+	<Design.DataContext>
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
 
-  <Grid
-      Cursor="None" >
+	<Grid Cursor="None" >
 
-    <!--<Border BorderThickness="50"
-            BorderBrush="#EEEEEE">
-      <Border BoxShadow="inset 0 0 10 Gray" BorderThickness="0"
-              Padding="10">
-        --><!--<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>--><!--
+		<Grid.RowDefinitions>
+			<RowDefinition Height="1*" />
+			<RowDefinition Height="8*" />
+			<RowDefinition Height="1*" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1*" />
+			<ColumnDefinition Width="14*" />
+			<ColumnDefinition Width="1*" />
+		</Grid.ColumnDefinitions>
 
+		<Border BoxShadow="0 0 20 Gray" BorderThickness="0"
+				Margin="0" Padding="0" Cursor="None"
+				Grid.Row="1" Grid.Column="1">
 
-        <Image Source="{Binding TestImage}"
-               Stretch="UniformToFill"/>
+			<Image Source="{Binding TestImage}"
+				   Stretch="UniformToFill"
+				   Cursor="None" />
 
+		</Border>
 
+		<TextBlock Text="{Binding TestDescription}"
+				   HorizontalAlignment="Center" VerticalAlignment="Bottom"
+				   Margin="0 0 0 26"
+				   FontFamily="Segoe Print"
+				   FontSize="32"
+				   Foreground="Gray"
+				   Grid.Row="2" Grid.Column="1"/>
 
-      </Border>
-    </Border>-->
-
-    <Border BoxShadow="0 0 20 Gray" 
-            BorderThickness="0"
-            Margin="100"
-            Padding="0"
-            Cursor="None" >
-        
-        <Image Source="{Binding TestImage}"
-               Stretch="UniformToFill"
-               Cursor="None" />
-
-    </Border>
-
-    <TextBlock Text="{Binding TestDescription}"
-               HorizontalAlignment="Center" VerticalAlignment="Bottom"
-               Margin="0 0 0 26"
-               FontFamily="Segoe Print"
-               FontSize="26"
-               Foreground="Gray" />
-
-  </Grid>
-
+	</Grid>
 
 </Window>
