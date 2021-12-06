@@ -39,7 +39,7 @@
 
 		<TextBlock Text="{Binding TestDescription}"
 				   HorizontalAlignment="Center" VerticalAlignment="Bottom"
-				   Margin="0 0 0 26"
+				   Margin="0 0 0 50"
 				   FontFamily="Segoe Print"
 				   FontSize="65"
 				   Foreground="Gray"
