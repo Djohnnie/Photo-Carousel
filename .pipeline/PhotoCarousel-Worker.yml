@@ -4,10 +4,11 @@ trigger:
     - main
   paths:
     include:
-    - Photo-Carousel/PhotoCarousel/PhotoCarousel.Worker
-    - Photo-Carousel/PhotoCarousel/PhotoCarousel.Common
-    - Photo-Carousel/PhotoCarousel/PhotoCarousel.Entities
-    - Photo-Carousel/PhotoCarousel/PhotoCarousel.DataAccess
+    - PhotoCarousel/.pipeline/PhotoCarousel-Worker.yml
+    - PhotoCarousel/PhotoCarousel.Worker/*
+    - PhotoCarousel/PhotoCarousel.Common/*
+    - PhotoCarousel/PhotoCarousel.Entities/*
+    - PhotoCarousel/PhotoCarousel.DataAccess/*
 
 pool:
   vmImage: 'ubuntu-latest'

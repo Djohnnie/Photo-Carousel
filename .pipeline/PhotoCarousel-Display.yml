@@ -4,7 +4,8 @@ trigger:
     - main
   paths:
     include:
-    - Photo-Carousel/PhotoCarousel/PhotoCarousel.Display
+    - PhotoCarousel/.pipeline/PhotoCarousel-Display.yml
+    - PhotoCarousel/PhotoCarousel.Display/*
 
 pool:
   vmImage: 'ubuntu-latest'
