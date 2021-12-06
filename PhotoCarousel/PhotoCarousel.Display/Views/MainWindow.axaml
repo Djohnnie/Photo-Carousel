@@ -41,7 +41,7 @@
 				   HorizontalAlignment="Center" VerticalAlignment="Bottom"
 				   Margin="0 0 0 26"
 				   FontFamily="Segoe Print"
-				   FontSize="32"
+				   FontSize="65"
 				   Foreground="Gray"
 				   Grid.Row="2" Grid.Column="1"/>
 
