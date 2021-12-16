@@ -99,9 +99,11 @@ namespace PhotoCarousel.Worker.Helpers
             {
                 Id = Guid.NewGuid(),
                 SourcePath = fileInfo.FullName,
+                FolderPath = Path.GetDirectoryName(fileInfo.FullName),
                 Sha256Hash = hash,
                 Rating = Rating.None,
                 DateTaken = metadata.Item1,
+                DateIndexed = DateTime.UtcNow,
                 Description = match.Value,
                 Orientation = metadata.Item2
             };

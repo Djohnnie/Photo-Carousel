@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using PhotoCarousel.Common.Extensions;
@@ -35,10 +36,12 @@ namespace PhotoCarousel.DataAccess
                 a.HasIndex(p => p.Sha256Hash);
                 a.HasIndex(p => p.SourcePath);
                 a.HasIndex(p => new { p.Sha256Hash, p.SourcePath });
+                a.HasIndex(p => p.FolderPath);
                 a.Property(p => p.SysId).ValueGeneratedOnAdd();
                 a.Property(p => p.Orientation).HasConversion(new EnumToStringConverter<Orientation>());
                 a.Property(p => p.Rating).HasConversion(new EnumToStringConverter<Rating>());
                 a.Property(p => p.Sha256Hash).HasMaxLength(32);
+                a.Property(p => p.DateIndexed).HasDefaultValue(DateTime.UtcNow);
             });
 
             modelBuilder.Entity<History>(a =>
