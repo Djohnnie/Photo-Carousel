@@ -27,5 +27,13 @@ namespace PhotoCarousel.Api.Controllers
 
             return Ok(photo);
         }
+
+        [HttpGet("byfolder")]
+        public async Task<IActionResult> GetRandomPhoto(string folderPath)
+        {
+            var photos = await _photoService.GetPhotosByFolder(folderPath);
+
+            return Ok(photos);
+        }
     }
 }

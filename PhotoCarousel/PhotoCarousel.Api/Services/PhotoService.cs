@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PhotoCarousel.DataAccess;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using PhotoContract = PhotoCarousel.Api.Contracts.Photo;
@@ -36,6 +38,18 @@ namespace PhotoCarousel.Api.Services
                 Id = photo.Id,
                 Description = photo.Description
             };
+        }
+
+        public async Task<List<PhotoContract>> GetPhotosByFolder(string folderPath)
+        {
+            var photos = await _dbContext.Photos.Where(x => x.FolderPath == folderPath).ToListAsync();
+
+            return photos.Select(photo => new PhotoContract
+            {
+                Id = photo.Id,
+                Description = Path.GetFileName(photo.SourcePath),
+                Rating = photo.Rating
+            }).ToList();
         }
     }
 }

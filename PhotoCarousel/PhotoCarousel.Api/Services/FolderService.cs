@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,10 +36,42 @@ public class FolderService
             return null;
         }
 
-        return allFolders.Select(x => new FolderContract
+        var foldersToReturn = new List<FolderContract>();
+
+        foreach (var folderPath in allFolders)
         {
-            Name = new DirectoryInfo(x).Name,
-            FullPath = x
-        }).ToList();
+            ParseFolders(folderPath, foldersToReturn);
+        }
+
+        return foldersToReturn;
+    }
+
+    private void ParseFolders(string folderPath, List<FolderContract> foldersToReturn)
+    {
+        var folderPathParts = folderPath.Split(new[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
+
+        var currentFolders = foldersToReturn;
+        var fullPathBuilder = new StringBuilder();
+
+        foreach (var folderPathPart in folderPathParts)
+        {
+            fullPathBuilder.Append("/");
+            fullPathBuilder.Append(folderPathPart);
+
+            var existingFolderPart = currentFolders.SingleOrDefault(x => x.Name == folderPathPart);
+            if (existingFolderPart == null)
+            {
+                existingFolderPart = new FolderContract
+                {
+                    Name = folderPathPart,
+                    FullPath = fullPathBuilder.ToString(),
+                    ChildFolders = new List<FolderContract>()
+                };
+
+                currentFolders.Add(existingFolderPart);
+            }
+
+            currentFolders = existingFolderPart.ChildFolders;
+        }
     }
 }
