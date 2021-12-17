@@ -10,15 +10,15 @@ trigger:
     - PhotoCarousel/PhotoCarousel.Display/*
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
 
 steps:
 
 - task: UseDotNet@2
-  displayName: 'Use .NET SDK (6.0)'
+  displayName: 'Use .NET SDK (6.0.101)'
   inputs:
     packageType: sdk
-    version: 6.0.100
+    version: 6.0.101
     includePreviewVersions: true
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
