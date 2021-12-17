@@ -4,7 +4,7 @@ trigger:
     - main
   paths:
     include:
-    - PhotoCarousel/.pipeline/PhotoCarousel-Api.yml
+    - .pipeline/PhotoCarousel-Api.yml
     - PhotoCarousel/PhotoCarousel.Api/*
     - PhotoCarousel/PhotoCarousel.Common/*
     - PhotoCarousel/PhotoCarousel.Enums/*
