@@ -28,7 +28,11 @@ namespace PhotoCarousel.Worker.Workers
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.LogInformation("THUMBNAIL-CREATION-WORKER WILL START IN ONE MINUTE...");
+
             await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+
+            _logger.LogInformation("THUMBNAIL-CREATION-WORKER HAS STARTED");
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -36,8 +40,6 @@ namespace PhotoCarousel.Worker.Workers
 
                 try
                 {
-                    _logger.LogInformation("Worker running at: {time}", DateTime.Now);
-
                     using var serviceScope = _serviceScopeFactory.CreateScope();
                     var thumbnailHelper = serviceScope.ServiceProvider.GetService<ThumbnailCreationHelper>();
 

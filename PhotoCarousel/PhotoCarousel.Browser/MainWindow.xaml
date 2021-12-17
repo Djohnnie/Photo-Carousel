@@ -1,0 +1,87 @@
+﻿<Window x:Class="PhotoCarousel.Browser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PhotoCarousel.Browser"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d" Title="PhotoCarousel Browser" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Column="0" Header="Folders"
+            Style="{DynamicResource MaterialDesignCardGroupBox}"
+            Margin="10,10,5,10">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <materialDesign:PackIcon
+                            Kind="Folder"
+                            Height="32"
+                            Width="32"
+                            VerticalAlignment="Center" />
+                        <TextBlock
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                            Text="{Binding}" />
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <TreeView ItemsSource="{Binding MovieCategories}" MinWidth="220">
+                <!--<TreeView.Resources>
+                    <Style TargetType="TreeViewItem"
+                                BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+                        <Setter
+                                  Property="materialDesign:TreeViewAssist.ExpanderSize"
+                                  Value="32" />
+                        <Setter
+                                  Property="materialDesign:TreeViewAssist.ShowSelection"
+                                  Value="False" />
+                    </Style>
+                    <HierarchicalDataTemplate
+                                DataType="{x:Type domain:MovieCategory}"
+                                ItemsSource="{Binding Movies}">
+                        <TextBlock
+                                  Text="{Binding Name}"
+                                  Margin="3,2" />
+                    </HierarchicalDataTemplate>
+                    <DataTemplate
+                            DataType="{x:Type domain:Movie}">
+                        <TextBlock
+                              Text="{Binding Name}"
+                              Margin="3 2"
+                              ToolTip="{Binding Director}" />
+                    </DataTemplate>
+                </TreeView.Resources>-->
+            </TreeView>
+        </GroupBox>
+
+        <GroupBox Grid.Column="1" Header="Photos"
+                  Style="{DynamicResource MaterialDesignCardGroupBox}"
+                  Margin="5,10,10,10">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel
+                        Orientation="Horizontal">
+                        <materialDesign:PackIcon
+                            Kind="ImageArea"
+                            Height="32"
+                            Width="32"
+                            VerticalAlignment="Center" />
+                        <TextBlock
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                            Text="{Binding}" />
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+
+        </GroupBox>
+    </Grid>
+</Window>

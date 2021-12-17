@@ -6,7 +6,8 @@ using PhotoCarousel.DataAccess;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PhotoCarousel.Entities.Enums;
+using PhotoCarousel.Enums;
+using PhotoCarousel.Entities;
 
 namespace PhotoCarousel.Worker.Helpers
 {
@@ -29,17 +30,26 @@ namespace PhotoCarousel.Worker.Helpers
         public async Task Go(CancellationToken stoppingToken)
         {
             // Get history today
-            var historyToday = await _dbContext.History
-                .Where(x => x.Scheduled.Date == DateTime.Today)
+            var historicPhotoIds = await _dbContext.History
+                .Where(x => x.Scheduled.Date == DateTime.UtcNow.Date)
+                .Select(x => x.Id)
                 .ToListAsync(stoppingToken);
-            var idsToExclude = historyToday.Select(x => x.PhotoId);
 
             // Get a random photo
             var randomPhoto = await _dbContext.Photos
                 .Where(x => !string.IsNullOrEmpty(x.Description))
                 .Where(x => x.Rating == Rating.ThumbsUp)
-                .Where(x => !idsToExclude.Contains(x.Id))
-                .ToListAsync(stoppingToken);
+                .Where(x => !historicPhotoIds.Contains(x.Id))
+                .OrderBy(x => Guid.NewGuid())
+                .FirstOrDefaultAsync(stoppingToken);
+
+            await _dbContext.History.AddAsync(new History
+            {
+                Id = Guid.NewGuid(),
+                PhotoId = randomPhoto.Id,
+                Scheduled = DateTime.UtcNow
+            }, stoppingToken);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

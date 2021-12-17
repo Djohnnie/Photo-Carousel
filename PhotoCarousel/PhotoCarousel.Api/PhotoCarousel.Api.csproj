@@ -10,8 +10,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PhotoCarousel.Common\PhotoCarousel.Common.csproj" />
+    <ProjectReference Include="..\PhotoCarousel.Contracts\PhotoCarousel.Contracts.csproj" />
     <ProjectReference Include="..\PhotoCarousel.DataAccess\PhotoCarousel.DataAccess.csproj" />
     <ProjectReference Include="..\PhotoCarousel.Entities\PhotoCarousel.Entities.csproj" />
+    <ProjectReference Include="..\PhotoCarousel.Enums\PhotoCarousel.Enums.csproj" />
   </ItemGroup>
 
 </Project>

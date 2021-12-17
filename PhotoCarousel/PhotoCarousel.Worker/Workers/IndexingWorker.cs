@@ -28,14 +28,16 @@ namespace PhotoCarousel.Worker.Workers
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.LogInformation("INDEXING-WORKER WILL START IN ONE MINUTE...");
+
             await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+            
+            _logger.LogInformation("INDEXING-WORKER HAS STARTED");
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
                 {
-                    _logger.LogInformation("Worker running at: {time}", DateTime.Now);
-
                     using var serviceScope = _serviceScopeFactory.CreateScope();
                     var indexingHelper = serviceScope.ServiceProvider.GetService<IndexingHelper>();
 

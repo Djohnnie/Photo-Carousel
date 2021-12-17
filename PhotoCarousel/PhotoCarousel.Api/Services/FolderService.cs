@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PhotoCarousel.DataAccess;
-using FolderContract = PhotoCarousel.Api.Contracts.Folder;
+using FolderContract = PhotoCarousel.Contracts.Folder;
 
 namespace PhotoCarousel.Api.Services;
 

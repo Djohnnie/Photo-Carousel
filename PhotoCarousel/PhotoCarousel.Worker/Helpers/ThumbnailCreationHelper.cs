@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PhotoCarousel.Common.Extensions;
 using PhotoCarousel.DataAccess;
-using PhotoCarousel.Entities.Enums;
+using PhotoCarousel.Enums;
 using SkiaSharp;
 using System;
 using System.Diagnostics;

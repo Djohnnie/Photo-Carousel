@@ -7,7 +7,9 @@ trigger:
     - PhotoCarousel/.pipeline/PhotoCarousel-Api.yml
     - PhotoCarousel/PhotoCarousel.Api/*
     - PhotoCarousel/PhotoCarousel.Common/*
+    - PhotoCarousel/PhotoCarousel.Enums/*
     - PhotoCarousel/PhotoCarousel.Entities/*
+    - PhotoCarousel/PhotoCarousel.Contracts/*
     - PhotoCarousel/PhotoCarousel.DataAccess/*
 
 pool:

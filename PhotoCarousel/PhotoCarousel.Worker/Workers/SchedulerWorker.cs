@@ -28,14 +28,16 @@ namespace PhotoCarousel.Worker.Workers
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.LogInformation("SCHEDULER-WORKER WILL START IN ONE MINUTE...");
+
             await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+            
+            _logger.LogInformation("SCHEDULER-WORKER HAS STARTED");
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
                 {
-                    _logger.LogInformation("Worker running at: {time}", DateTime.Now);
-
                     using var serviceScope = _serviceScopeFactory.CreateScope();
                     var schedulerHelper = serviceScope.ServiceProvider.GetService<SchedulerHelper>();
 
@@ -53,7 +55,7 @@ namespace PhotoCarousel.Worker.Workers
                     _logger.LogCritical($"Unknown error occurred while indexing: ({ex.Message}).");
                 }
 
-                var interval = _configuration.GetIndexerIntervalInSeconds();
+                var interval = _configuration.GetSchedulerIntervalInSeconds();
                 await Task.Delay(TimeSpan.FromSeconds(interval), stoppingToken);
             }
         }

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using PhotoContract = PhotoCarousel.Api.Contracts.Photo;
+using PhotoContract = PhotoCarousel.Contracts.Photo;
 
 namespace PhotoCarousel.Api.Services
 {

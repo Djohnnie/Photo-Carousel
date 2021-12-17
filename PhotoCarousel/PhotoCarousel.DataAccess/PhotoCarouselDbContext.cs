@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using PhotoCarousel.Common.Extensions;
 using PhotoCarousel.Entities;
-using PhotoCarousel.Entities.Enums;
+using PhotoCarousel.Enums;
 
 namespace PhotoCarousel.DataAccess
 {

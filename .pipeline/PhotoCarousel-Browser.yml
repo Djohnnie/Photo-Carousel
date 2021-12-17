@@ -1,0 +1,52 @@
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - PhotoCarousel/.pipeline/PhotoCarousel-Browser.yml
+    - PhotoCarousel/PhotoCarousel.Enums/*
+    - PhotoCarousel/PhotoCarousel.Contracts/*
+    - PhotoCarousel/PhotoCarousel.Display/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK (6.0)'
+  inputs:
+    packageType: sdk
+    version: 6.0.100
+    includePreviewVersions: true
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: DotNetCoreCLI@2
+  displayName: Restore NuGet packages
+  inputs:
+    command: 'restore'
+    projects: | 
+      **/PhotoCarousel.Browser.csproj
+
+- task: DotNetCoreCLI@2
+  displayName: Build PhotoCarousel.Browser.csproj
+  inputs:
+    command: 'build'
+    projects: | 
+      **/PhotoCarousel.Browser.csproj
+
+- script: |
+    dotnet publish ./PhotoCarousel/PhotoCarousel.Browser --configuration "Release" --runtime win10-x64 --output ./PhotoCarousel/PhotoCarousel.Display/bin/Release/publish
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Browser/bin/Release/publish' 
+    includeRootFolder: false 
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/PhotoCarousel.Browser.zip' 
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: $(Build.ArtifactStagingDirectory)
+    artifactName: PhotoCarousel.Browser

@@ -6,7 +6,9 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["PhotoCarousel.Backend.sln", "./"]
 COPY ["PhotoCarousel.Common/*.csproj", "./PhotoCarousel.Common/"]
+COPY ["PhotoCarousel.Enums/*.csproj", "./PhotoCarousel.Enums/"]
 COPY ["PhotoCarousel.Entities/*.csproj", "./PhotoCarousel.Entities/"]
+COPY ["PhotoCarousel.Contracts/*.csproj", "./PhotoCarousel.Contracts/"]
 COPY ["PhotoCarousel.DataAccess/*.csproj", "./PhotoCarousel.DataAccess/"]
 COPY ["PhotoCarousel.Worker/*.csproj", "./PhotoCarousel.Worker/"]
 COPY ["PhotoCarousel.Api/*.csproj", "./PhotoCarousel.Api/"]
@@ -15,8 +17,12 @@ RUN dotnet restore
 COPY . .
 WORKDIR "/src/PhotoCarousel.Common"
 RUN dotnet build "PhotoCarousel.Common.csproj" -c Release -o /app/build
+WORKDIR "/src/PhotoCarousel.Enums"
+RUN dotnet build "PhotoCarousel.Enums.csproj" -c Release -o /app/build
 WORKDIR "/src/PhotoCarousel.Entities"
 RUN dotnet build "PhotoCarousel.Entities.csproj" -c Release -o /app/build
+WORKDIR "/src/PhotoCarousel.Contracts"
+RUN dotnet build "PhotoCarousel.Contracts.csproj" -c Release -o /app/build
 WORKDIR "/src/PhotoCarousel.DataAccess"
 RUN dotnet build "PhotoCarousel.DataAccess.csproj" -c Release -o /app/build
 WORKDIR "/src/PhotoCarousel.Worker"
