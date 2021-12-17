@@ -37,7 +37,7 @@ steps:
       **/PhotoCarousel.Browser.csproj
 
 - script: |
-    dotnet publish ./PhotoCarousel/PhotoCarousel.Browser --configuration "Release" --runtime win10-x64 --output ./PhotoCarousel/PhotoCarousel.Display/bin/Release/publish
+    dotnet publish ./PhotoCarousel/PhotoCarousel.Browser --configuration "Release" --runtime win10-x64 --output ./PhotoCarousel/PhotoCarousel.Browser/bin/Release/publish
 
 - task: ArchiveFiles@2
   inputs:
