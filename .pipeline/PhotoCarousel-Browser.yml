@@ -7,7 +7,7 @@ trigger:
     - .pipeline/PhotoCarousel-Browser.yml
     - PhotoCarousel/PhotoCarousel.Enums/*
     - PhotoCarousel/PhotoCarousel.Contracts/*
-    - PhotoCarousel/PhotoCarousel.Display/*
+    - PhotoCarousel/PhotoCarousel.Browser/*
 
 pool:
   vmImage: 'windows-latest'
