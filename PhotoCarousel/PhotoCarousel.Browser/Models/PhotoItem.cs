@@ -1,11 +1,24 @@
 ﻿using System;
+using PhotoCarousel.Browser.ViewModels;
 
 namespace PhotoCarousel.Browser.Models
 {
-    internal class PhotoItem
+    internal class PhotoItem : ViewModelBase
     {
         public Guid Id { get; set; }
-        public String Name { get; set; }
-        public byte[] Bitmap { get; set; }
+        public string Name { get; set; }
+
+
+        private byte[] _bitmap;
+
+        public byte[] Bitmap
+        {
+            get => _bitmap;
+            set
+            {
+                _bitmap = value; 
+                OnPropertyChanged();
+            }
+        }
     }
 }

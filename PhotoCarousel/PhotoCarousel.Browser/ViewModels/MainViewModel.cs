@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using PhotoCarousel.Browser.Annotations;
 using PhotoCarousel.Browser.Helpers;
 using PhotoCarousel.Browser.Models;
 using PhotoCarousel.Contracts;
 
 namespace PhotoCarousel.Browser.ViewModels;
 
-internal class MainViewModel : INotifyPropertyChanged
+internal class MainViewModel : ViewModelBase
 {
     private readonly ApiClientHelper _apiClientHelper;
 
@@ -18,10 +15,11 @@ internal class MainViewModel : INotifyPropertyChanged
 
     public Folder SelectedFolder
     {
-        get { return _selectedFolder; }
+        get => _selectedFolder;
         set
         {
             _selectedFolder = value;
+            _ = Task.Run(async () => await RefreshPhotos());
             OnPropertyChanged();
         }
     }
@@ -30,7 +28,7 @@ internal class MainViewModel : INotifyPropertyChanged
 
     public List<Folder> Folders
     {
-        get { return _folders; }
+        get => _folders;
         set
         {
             _folders = value;
@@ -42,7 +40,7 @@ internal class MainViewModel : INotifyPropertyChanged
 
     public List<PhotoItem> Photos
     {
-        get { return _photos; }
+        get => _photos;
         set
         {
             _photos = value;
@@ -57,7 +55,18 @@ internal class MainViewModel : INotifyPropertyChanged
         Task.Run(async () =>
         {
             Folders = await _apiClientHelper.GetFolders();
-            var photos = await _apiClientHelper.GetPhotos("/photo/2014/2014-09 (New York en Canada)/2014-09-21");
+        });
+    }
+
+    public async Task RefreshPhotos()
+    {
+        if (SelectedFolder == null)
+        {
+            Photos = new List<PhotoItem>();
+        }
+        else
+        {
+            var photos = await _apiClientHelper.GetPhotos(SelectedFolder.FullPath);
             Photos = photos.Select(x => new PhotoItem
             {
                 Id = x.Id,
@@ -67,15 +76,8 @@ internal class MainViewModel : INotifyPropertyChanged
             await Parallel.ForEachAsync(Photos, async (photo, _) =>
             {
                 photo.Bitmap = await _apiClientHelper.GetThumbnail(photo.Id);
+                await Task.Delay(100);
             });
-        });
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    [NotifyPropertyChangedInvocator]
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

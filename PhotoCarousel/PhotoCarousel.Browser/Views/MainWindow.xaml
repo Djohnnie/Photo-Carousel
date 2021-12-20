@@ -6,6 +6,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:viewModels="clr-namespace:PhotoCarousel.Browser.ViewModels"
         xmlns:contracts="clr-namespace:PhotoCarousel.Contracts;assembly=PhotoCarousel.Contracts"
+        xmlns:dp="clr-namespace:PhotoCarousel.Browser.DependencyProperties"
+        xmlns:browser="clr-namespace:PhotoCarousel.Browser"
         mc:Ignorable="d" Title="PhotoCarousel Browser" Height="450" Width="800" WindowState="Maximized">
     <d:Window.DataContext>
         <viewModels:MainViewModel />
@@ -36,7 +38,8 @@
                     </StackPanel>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
-            <TreeView ItemsSource="{Binding Folders}" MinWidth="220">
+            <browser:TreeViewEx ItemsSource="{Binding Folders}" MinWidth="220"
+                      SelectedItemEx="{Binding Path=SelectedFolder}" >
                 <TreeView.Resources>
                     <Style TargetType="TreeViewItem" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
                         <Setter Property="materialDesign:TreeViewAssist.ExpanderSize" Value="24" />
@@ -54,7 +57,7 @@
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.Resources>
-            </TreeView>
+            </browser:TreeViewEx>
         </GroupBox>
 
         <GroupBox Grid.Column="1" Header="Photos"
