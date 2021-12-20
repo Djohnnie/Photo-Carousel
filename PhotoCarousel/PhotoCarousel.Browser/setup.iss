@@ -36,14 +36,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "bin\Release\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\publish\MaterialDesignColors.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\publish\MaterialDesignThemes.Wpf.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\publish\PhotoCarousel.Browser.deps.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\publish\PhotoCarousel.Browser.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\publish\PhotoCarousel.Browser.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\publish\PhotoCarousel.Contracts.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\publish\PhotoCarousel.Enums.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Release\publish\RestSharp.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\Release\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
