@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using PhotoCarousel.Browser.Helpers;
 using PhotoCarousel.Browser.Models;
 using PhotoCarousel.Contracts;
@@ -9,7 +12,7 @@ namespace PhotoCarousel.Browser.ViewModels;
 
 internal class MainViewModel : ViewModelBase
 {
-    private readonly ApiClientHelper _apiClientHelper;
+    protected readonly ApiClientHelper _apiClientHelper;
 
     private Folder _selectedFolder;
 
@@ -48,6 +51,9 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
+    public ICommand ThumbsUpCommand { get; set; }
+    public ICommand ThumbsDownCommand { get; set; }
+
     public MainViewModel()
     {
         _apiClientHelper = new ApiClientHelper();
@@ -79,5 +85,7 @@ internal class MainViewModel : ViewModelBase
                 await Task.Delay(100);
             });
         }
+
+        GC.Collect();
     }
 }

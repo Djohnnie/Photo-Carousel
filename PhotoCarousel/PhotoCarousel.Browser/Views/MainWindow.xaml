@@ -4,14 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:viewModels="clr-namespace:PhotoCarousel.Browser.ViewModels"
         xmlns:contracts="clr-namespace:PhotoCarousel.Contracts;assembly=PhotoCarousel.Contracts"
-        xmlns:dp="clr-namespace:PhotoCarousel.Browser.DependencyProperties"
         xmlns:browser="clr-namespace:PhotoCarousel.Browser"
+        xmlns:design="clr-namespace:PhotoCarousel.Browser.ViewModels.Design"
+        xmlns:converters="clr-namespace:PhotoCarousel.Browser.Converters"
         mc:Ignorable="d" Title="PhotoCarousel Browser" Height="450" Width="800" WindowState="Maximized">
     <d:Window.DataContext>
-        <viewModels:MainViewModel />
+        <design:MainDesignViewModel />
     </d:Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:RatingToPackIconKindConverter x:Key="RatingToPackIconKindConverter" 
+                                                      Neutral="Circle" ThumbsDown="ThumbsDown" ThumbsUp="ThumbsUp"/>
+            <converters:BytesToBitmapImageConverter x:Key="BytesToBitmapImageConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" MinWidth="250" />
@@ -88,14 +95,14 @@
                 <ToolBarTray IsLocked="True">
                     <ToolBar Style="{DynamicResource MaterialDesignToolBar}" ClipToBounds="False">
                         <Button ToolTip="Follow me on Twitter" Padding="10"
-                                Content="{materialDesign:PackIcon Kind=ThumbUp}" />
+                                Content="{materialDesign:PackIcon Kind=ThumbUp}"
+                                Command="{Binding ThumbsUpCommand}" />
                         <Button ToolTip="Save" Padding="10"
-                                Content="{materialDesign:PackIcon Kind=ThumbDown}" />
-                        <Button ToolTip="Save" Padding="10"
-                                Content="hh fhgf hgfhg fhg fhg fhf hf hgf h" />
+                                Content="{materialDesign:PackIcon Kind=ThumbDown}"
+                                Command="{Binding ThumbsDownCommand}" />
                     </ToolBar>
                 </ToolBarTray>
-                <ListBox Grid.Row="1" ItemsSource="{Binding Photos}" VerticalAlignment="Stretch">
+                <ListBox Grid.Row="1" ItemsSource="{Binding Photos}" VerticalAlignment="Stretch" SelectionMode="Multiple">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />
@@ -103,14 +110,20 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel>
-                                <Grid Width="150" Height="150">
-                                    <materialDesign:PackIcon Kind="Image" Width="64" Height="64"
+                            <Grid>
+                                <StackPanel>
+                                    <Grid Width="150" Height="150">
+                                        <materialDesign:PackIcon Kind="Image" Width="64" Height="64"
                                                          HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    <Image Source="{Binding Bitmap}" />
-                                </Grid>
-                                <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" Padding="3" />
-                            </StackPanel>
+                                        <Image Source="{Binding Bitmap, Converter={StaticResource BytesToBitmapImageConverter}, IsAsync=True}" />
+                                    </Grid>
+                                    <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" 
+                                               HorizontalAlignment="Center" Padding="3" MaxWidth="150" />
+                                </StackPanel>
+                                <materialDesign:PackIcon Kind="{Binding Rating, Converter={StaticResource RatingToPackIconKindConverter}}" 
+                                                         Height="32" Width="32" Margin="5" Foreground="White"
+                                                         VerticalAlignment="Top" HorizontalAlignment="Right" />
+                            </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
