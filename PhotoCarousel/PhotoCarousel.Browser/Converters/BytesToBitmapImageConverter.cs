@@ -17,10 +17,10 @@ internal class BytesToBitmapImageConverter : IValueConverter
         if (imageBytes != null)
         {
             using MemoryStream memStream = new MemoryStream(imageBytes);
-            image.DecodePixelWidth = 150;
             image.BeginInit();
             image.CacheOption = BitmapCacheOption.OnLoad;
             image.StreamSource = memStream;
+            image.DecodePixelWidth = 150;
             image.EndInit();
             image.Freeze();
         }

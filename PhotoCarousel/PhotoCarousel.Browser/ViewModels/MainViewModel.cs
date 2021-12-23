@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using PhotoCarousel.Browser.Helpers;
 using PhotoCarousel.Browser.Models;
 using PhotoCarousel.Contracts;
@@ -82,7 +81,6 @@ internal class MainViewModel : ViewModelBase
             await Parallel.ForEachAsync(Photos, async (photo, _) =>
             {
                 photo.Bitmap = await _apiClientHelper.GetThumbnail(photo.Id);
-                await Task.Delay(100);
             });
         }
 
