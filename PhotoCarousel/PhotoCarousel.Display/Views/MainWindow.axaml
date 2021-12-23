@@ -13,7 +13,7 @@
 		<viewModels:MainWindowViewModel/>
 	</Design.DataContext>
 
-	<Grid Cursor="None" >
+	<Grid Cursor="None" Background="#FFFDD0">
 
 		<Grid.RowDefinitions>
 			<RowDefinition Height="1*" />
@@ -26,14 +26,25 @@
 			<ColumnDefinition Width="1*" />
 		</Grid.ColumnDefinitions>
 
-		<Border BoxShadow="0 0 20 Gray" BorderThickness="0"
+		<!--<Border BoxShadow="0 0 20 Gray" BorderThickness="0"
 				Margin="0" Padding="0" Cursor="None"
-				Grid.Row="1" Grid.Column="1">
+				Grid.Row="1" Grid.Column="1">-->
+		<Border Grid.Row="1" Grid.Column="1" Cursor="None">
+			<Grid>
+				<Viewbox Stretch="Fill">
+					<Canvas Background="#FFFDD0" Width="1600" Height="900">
+						<Path Data="M 0,0 L 1600,0 L 1600,900 L 1500,800 L 1500,100 L 100,100 Z" Fill="#eeecc0" />
+						<Path Data="M 0,0 L 0,900 L 1600,900 L 1500,800 L 100,800 L 100,100 Z" Fill="#fffff1" />
+					</Canvas>
+				</Viewbox>
+				<Border BoxShadow="0 0 20 Gray" BorderThickness="0"
+                        Margin="54,50,54,50" Padding="0" Cursor="None">
+					<Image Source="{Binding TestImage}"
+						   Stretch="UniformToFill"
+						   Cursor="None"  />
 
-			<Image Source="{Binding TestImage}"
-				   Stretch="UniformToFill"
-				   Cursor="None" />
-
+				</Border>
+			</Grid>
 		</Border>
 
 		<TextBlock Text="{Binding TestDescription}"
