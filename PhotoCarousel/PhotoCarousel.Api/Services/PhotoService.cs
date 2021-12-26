@@ -38,7 +38,8 @@ namespace PhotoCarousel.Api.Services
             return new()
             {
                 Id = photo.Id,
-                Description = photo.Description
+                Description = photo.Description,
+                Rating = photo.Rating
             };
         }
 
