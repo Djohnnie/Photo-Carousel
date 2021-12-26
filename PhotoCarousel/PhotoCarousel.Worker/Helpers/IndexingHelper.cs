@@ -91,7 +91,7 @@ namespace PhotoCarousel.Worker.Helpers
 
         private Photo GenerateIndexedPhoto(FileInfo fileInfo, byte[] hash)
         {
-            var regex = new Regex(@"[0-9]{4}-[0-9]{2}\s\(.*\)");
+            var regex = new Regex(@"[0-9]{4}-[0-9]{2}\s\(.*?\)");
             var match = regex.Match(fileInfo.FullName);
             var metadata = GetDateTaken(fileInfo);
 
