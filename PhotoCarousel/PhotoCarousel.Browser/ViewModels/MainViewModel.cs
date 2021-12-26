@@ -126,7 +126,8 @@ internal class MainViewModel : ViewModelBase
             Photos = photos.Select(x => new PhotoItem
             {
                 Id = x.Id,
-                Name = x.Description
+                Name = x.Description,
+                Rating = x.Rating
             }).ToList();
 
             await Parallel.ForEachAsync(Photos, async (photo, _) =>
