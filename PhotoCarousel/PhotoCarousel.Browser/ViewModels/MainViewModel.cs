@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using PhotoCarousel.Browser.Helpers;
 using PhotoCarousel.Browser.Models;
+using PhotoCarousel.Browser.Wpf;
 using PhotoCarousel.Contracts;
+using PhotoCarousel.Enums;
 
 namespace PhotoCarousel.Browser.ViewModels;
 
@@ -50,17 +52,66 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
-    public ICommand ThumbsUpCommand { get; set; }
-    public ICommand ThumbsDownCommand { get; set; }
+    public ICommand ThumbsUpAllCommand { get; set; }
+    public ICommand ThumbsUpSelectedCommand { get; set; }
+
+    public ICommand ResetAllCommand { get; set; }
+    public ICommand ResetSelectedCommand { get; set; }
+
+    public ICommand ThumbsDownAllCommand { get; set; }
+    public ICommand ThumbsDownSelectedCommand { get; set; }
 
     public MainViewModel()
     {
         _apiClientHelper = new ApiClientHelper();
 
+        ThumbsUpAllCommand = new RelayCommand(OnThumbsUpAll);
+        ThumbsUpSelectedCommand = new RelayCommand(OnThumbsUpSelected);
+        ResetAllCommand = new RelayCommand(OnResetAll);
+        ResetSelectedCommand = new RelayCommand(OnResetSelected);
+        ThumbsDownAllCommand = new RelayCommand(OnThumbsDownAll);
+        ThumbsDownSelectedCommand = new RelayCommand(OnThumbsDownSelected);
+
         Task.Run(async () =>
         {
             Folders = await _apiClientHelper.GetFolders();
         });
+    }
+
+    private async void OnThumbsUpAll(object args)
+    {
+        var photoIds = Photos.Select(x => x.Id).ToArray();
+        await _apiClientHelper.SetRating(photoIds, Rating.ThumbsUp);
+        await RefreshPhotos();
+    }
+
+    private async void OnThumbsUpSelected(object args)
+    {
+        throw new NotImplementedException();
+    }
+
+    private async void OnResetAll(object args)
+    {
+        var photoIds = Photos.Select(x => x.Id).ToArray();
+        await _apiClientHelper.SetRating(photoIds, Rating.None);
+        await RefreshPhotos();
+    }
+
+    private async void OnResetSelected(object args)
+    {
+        throw new NotImplementedException();
+    }
+
+    private async void OnThumbsDownAll(object args)
+    {
+        var photoIds = Photos.Select(x => x.Id).ToArray();
+        await _apiClientHelper.SetRating(photoIds, Rating.ThumbsDown);
+        await RefreshPhotos();
+    }
+
+    private async void OnThumbsDownSelected(object args)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task RefreshPhotos()

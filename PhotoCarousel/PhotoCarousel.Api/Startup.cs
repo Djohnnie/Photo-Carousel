@@ -24,6 +24,7 @@ namespace PhotoCarousel.Api
             services.AddTransient<DownloadService>();
             services.AddTransient<PhotoService>();
             services.AddTransient<FolderService>();
+            services.AddTransient<RatingService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

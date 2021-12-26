@@ -94,12 +94,48 @@
                 </Grid.RowDefinitions>
                 <ToolBarTray IsLocked="True">
                     <ToolBar Style="{DynamicResource MaterialDesignToolBar}" ClipToBounds="False">
-                        <Button ToolTip="Follow me on Twitter" Padding="10"
-                                Content="{materialDesign:PackIcon Kind=ThumbUp}"
-                                Command="{Binding ThumbsUpCommand}" />
-                        <Button ToolTip="Save" Padding="10"
-                                Content="{materialDesign:PackIcon Kind=ThumbDown}"
-                                Command="{Binding ThumbsDownCommand}" />
+                        <Button Padding="10"
+                                Command="{Binding ThumbsUpAllCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ThumbUp" />
+                                <TextBlock Text="Like All" VerticalAlignment="Center" Margin="3" />
+                            </StackPanel>
+                        </Button>
+                        <Button Padding="10"
+                                Command="{Binding ThumbsUpSelectedCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ThumbUpOutline" />
+                                <TextBlock Text="Like Selected" VerticalAlignment="Center" Margin="3" />
+                            </StackPanel>
+                        </Button>
+                        <Button Padding="10"
+                                Command="{Binding ResetAllCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Circle" />
+                                <TextBlock Text="Reset All" VerticalAlignment="Center" Margin="3" />
+                            </StackPanel>
+                        </Button>
+                        <Button Padding="10"
+                                Command="{Binding ResetSelectedCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="CircleOutline" />
+                                <TextBlock Text="Reset Selected" VerticalAlignment="Center" Margin="3" />
+                            </StackPanel>
+                        </Button>
+                        <Button Padding="10"
+                                Command="{Binding ThumbsDownAllCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ThumbDown" />
+                                <TextBlock Text="Dislike All" VerticalAlignment="Center" Margin="3" />
+                            </StackPanel>
+                        </Button>
+                        <Button Padding="10"
+                                Command="{Binding ThumbsDownSelectedCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="ThumbDownOutline" />
+                                <TextBlock Text="Dislike Selected" VerticalAlignment="Center" Margin="3" />
+                            </StackPanel>
+                        </Button>
                     </ToolBar>
                 </ToolBarTray>
                 <ListBox Grid.Row="1" ItemsSource="{Binding Photos, IsAsync=True}" 

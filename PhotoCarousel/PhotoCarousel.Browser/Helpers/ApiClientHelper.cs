@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using PhotoCarousel.Contracts;
+using PhotoCarousel.Enums;
 using RestSharp;
 
 namespace PhotoCarousel.Browser.Helpers;
@@ -38,9 +38,23 @@ internal class ApiClientHelper
     {
         var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri("http://192.168.10.2:8077");
-        
+
         var photo = await httpClient.GetByteArrayAsync($"downloads/thumbnail/{photoId}");
 
         return photo;
+    }
+
+    public async Task SetRating(Guid photoId, Rating rating)
+    {
+        var request = new RestRequest($"ratings", Method.POST);
+        request.AddJsonBody(new PhotoRating { PhotoIds = new[] { photoId }, Rating = rating });
+        var response = await _apiClient.ExecuteAsync(request);
+    }
+
+    public async Task SetRating(Guid[] photoIds, Rating rating)
+    {
+        var request = new RestRequest($"ratings", Method.POST);
+        request.AddJsonBody(new PhotoRating { PhotoIds = photoIds, Rating = rating });
+        var response = await _apiClient.ExecuteAsync(request);
     }
 }

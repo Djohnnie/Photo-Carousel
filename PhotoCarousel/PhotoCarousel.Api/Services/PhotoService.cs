@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using PhotoCarousel.Enums;
 using PhotoContract = PhotoCarousel.Contracts.Photo;
 
 namespace PhotoCarousel.Api.Services
@@ -31,7 +32,8 @@ namespace PhotoCarousel.Api.Services
         {
             var count = await _dbContext.Photos.Where(x => !string.IsNullOrEmpty(x.Description)).CountAsync();
             var skip = new Random().Next(0, count);
-            var photo = await _dbContext.Photos.Where(x => !string.IsNullOrEmpty(x.Description)).Skip(skip).FirstOrDefaultAsync();
+            var photo = await _dbContext.Photos.Where(
+                x => !string.IsNullOrEmpty(x.Description) && x.Rating != Rating.ThumbsDown).Skip(skip).FirstOrDefaultAsync();
 
             return new()
             {
