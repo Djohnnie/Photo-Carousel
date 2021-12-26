@@ -7,7 +7,7 @@ using PhotoCarousel.Contracts;
 namespace PhotoCarousel.Api.Controllers;
 
 [ApiController]
-[Route("photos")]
+[Route("ratings")]
 public class RatingsController : ControllerBase
 {
     private readonly RatingService _ratingService;
