@@ -80,41 +80,51 @@ internal class MainViewModel : ViewModelBase
 
     private async void OnThumbsUpAll(object args)
     {
-        var photoIds = Photos.Select(x => x.Id).ToArray();
-        await _apiClientHelper.SetRating(photoIds, Rating.ThumbsUp);
-        await RefreshPhotos();
+        await SetRating(GetAllPhotoIds(), Rating.ThumbsUp);
     }
 
     private async void OnThumbsUpSelected(object args)
     {
-        throw new NotImplementedException();
+        await SetRating(GetSelectedPhotoIds(), Rating.ThumbsUp);
     }
 
     private async void OnResetAll(object args)
     {
-        var photoIds = Photos.Select(x => x.Id).ToArray();
-        await _apiClientHelper.SetRating(photoIds, Rating.None);
-        await RefreshPhotos();
+        await SetRating(GetAllPhotoIds(), Rating.None);
     }
 
     private async void OnResetSelected(object args)
     {
-        throw new NotImplementedException();
+        await SetRating(GetSelectedPhotoIds(), Rating.None);
     }
 
     private async void OnThumbsDownAll(object args)
     {
-        var photoIds = Photos.Select(x => x.Id).ToArray();
-        await _apiClientHelper.SetRating(photoIds, Rating.ThumbsDown);
-        await RefreshPhotos();
+        await SetRating(GetAllPhotoIds(), Rating.ThumbsDown);
     }
 
     private async void OnThumbsDownSelected(object args)
     {
-        throw new NotImplementedException();
+        await SetRating(GetSelectedPhotoIds(), Rating.ThumbsDown);
     }
 
-    public async Task RefreshPhotos()
+    private Guid[] GetAllPhotoIds()
+    {
+        return Photos.Select(x => x.Id).ToArray();
+    }
+
+    private Guid[] GetSelectedPhotoIds()
+    {
+        return Photos.Where(x => x.IsSelected).Select(x => x.Id).ToArray();
+    }
+
+    private async Task SetRating(Guid[] photoIds, Rating rating)
+    {
+        await _apiClientHelper.SetRating(photoIds, rating);
+        await RefreshPhotos();
+    }
+
+    private async Task RefreshPhotos()
     {
         if (SelectedFolder == null)
         {

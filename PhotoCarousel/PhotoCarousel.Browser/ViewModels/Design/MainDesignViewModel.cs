@@ -18,6 +18,8 @@ internal class MainDesignViewModel : MainViewModel
                 Rating = x.Rating
             }).ToList();
 
+            Photos[1].IsSelected = true;
+
             await Parallel.ForEachAsync(Photos, async (photo, _) =>
             {
                 photo.Bitmap = await _apiClientHelper.GetThumbnail(photo.Id);

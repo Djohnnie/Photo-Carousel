@@ -22,5 +22,18 @@ namespace PhotoCarousel.Browser.Models
                 OnPropertyChanged();
             }
         }
+
+
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }
