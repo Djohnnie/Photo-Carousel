@@ -32,21 +32,42 @@ namespace PhotoCarousel.Api.Services
 
         public async Task<PhotoContract> GetRandomPhoto()
         {
-            Expression<Func<Photo, bool>> predicate = photo =>
-                !string.IsNullOrEmpty(photo.Description) &&
-                photo.Rating != Rating.ThumbsDown &&
-                photo.Orientation == Orientation.Landscape;
+            bool error;
 
-            var count = await _dbContext.Photos.Where(predicate).CountAsync();
-            var skip = new Random().Next(0, count);
-            var photo = await _dbContext.Photos.Where(predicate).Skip(skip).FirstOrDefaultAsync();
-
-            return new()
+            do
             {
-                Id = photo.Id,
-                Description = photo.Description,
-                Rating = photo.Rating
-            };
+                try
+                {
+                    Expression<Func<Photo, bool>> predicate = photo =>
+                        !string.IsNullOrEmpty(photo.Description) &&
+                        photo.Rating != Rating.ThumbsDown &&
+                        photo.Orientation == Orientation.Landscape;
+
+                    var count = await _dbContext.Photos.Where(predicate).CountAsync();
+                    var skip = new Random().Next(0, count);
+                    var photo = await _dbContext.Photos.Where(predicate).Skip(skip).FirstOrDefaultAsync();
+
+                    if (File.Exists(photo.SourcePath))
+                    {
+                        return new()
+                        {
+                            Id = photo.Id,
+                            Description = photo.Description,
+                            Rating = photo.Rating
+                        };
+                    }
+
+                    error = true;
+                }
+                catch
+                {
+                    error = true;
+                    await Task.Delay(100);
+                }
+
+            } while (error);
+
+            return null;
         }
 
         public async Task<List<PhotoContract>> GetPhotosByFolder(string folderPath)

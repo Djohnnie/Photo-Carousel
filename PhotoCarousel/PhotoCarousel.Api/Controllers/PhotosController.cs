@@ -25,11 +25,11 @@ namespace PhotoCarousel.Api.Controllers
         {
             var photo = await _photoService.GetRandomPhoto();
 
-            return Ok(photo);
+            return photo != null ? Ok(photo) : NotFound();
         }
 
         [HttpGet("byfolder")]
-        public async Task<IActionResult> GetRandomPhoto(string folderPath)
+        public async Task<IActionResult> GetPhotosByFolder(string folderPath)
         {
             var photos = await _photoService.GetPhotosByFolder(folderPath);
 
