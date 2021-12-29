@@ -8,64 +8,63 @@ using Microsoft.Extensions.Logging;
 using PhotoCarousel.Common.Extensions;
 using PhotoCarousel.Worker.Helpers;
 
-namespace PhotoCarousel.Worker.Workers
+namespace PhotoCarousel.Worker.Workers;
+
+public class ThumbnailCreationWorker : BackgroundService
 {
-    public class ThumbnailCreationWorker : BackgroundService
+    private readonly IConfiguration _configuration;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly ILogger<ThumbnailCreationWorker> _logger;
+
+    public ThumbnailCreationWorker(
+        IConfiguration configuration,
+        IServiceScopeFactory serviceScopeFactory,
+        ILogger<ThumbnailCreationWorker> logger)
     {
-        private readonly IConfiguration _configuration;
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly ILogger<ThumbnailCreationWorker> _logger;
+        _configuration = configuration;
+        _serviceScopeFactory = serviceScopeFactory;
+        _logger = logger;
+    }
 
-        public ThumbnailCreationWorker(
-            IConfiguration configuration,
-            IServiceScopeFactory serviceScopeFactory,
-            ILogger<ThumbnailCreationWorker> logger)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        _logger.LogInformation("THUMBNAIL-CREATION-WORKER WILL START IN ONE MINUTE...");
+
+        await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+
+        _logger.LogInformation("THUMBNAIL-CREATION-WORKER HAS STARTED");
+
+        while (!stoppingToken.IsCancellationRequested)
         {
-            _configuration = configuration;
-            _serviceScopeFactory = serviceScopeFactory;
-            _logger = logger;
-        }
+            int numberOfThumbnailsCreated = 0;
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            _logger.LogInformation("THUMBNAIL-CREATION-WORKER WILL START IN ONE MINUTE...");
-
-            await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
-
-            _logger.LogInformation("THUMBNAIL-CREATION-WORKER HAS STARTED");
-
-            while (!stoppingToken.IsCancellationRequested)
+            try
             {
-                int numberOfThumbnailsCreated = 0;
+                using var serviceScope = _serviceScopeFactory.CreateScope();
+                var thumbnailHelper = serviceScope.ServiceProvider.GetService<ThumbnailCreationHelper>();
 
-                try
+                if (thumbnailHelper != null)
                 {
-                    using var serviceScope = _serviceScopeFactory.CreateScope();
-                    var thumbnailHelper = serviceScope.ServiceProvider.GetService<ThumbnailCreationHelper>();
-
-                    if (thumbnailHelper != null)
-                    {
-                        numberOfThumbnailsCreated = await thumbnailHelper.Go(stoppingToken);
-                    }
-                    else
-                    {
-                        _logger.LogCritical("THUMBNAIL-CREATION-HELPER COULD NOT BE CONSTRUCTED!!!");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogCritical($"Unknown error occurred while creating thumbnails: ({ex.Message}).");
-                }
-
-                if(numberOfThumbnailsCreated > 0)
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+                    numberOfThumbnailsCreated = await thumbnailHelper.Go(stoppingToken);
                 }
                 else
                 {
-                    var interval = _configuration.GetThumbnailerIntervalInSeconds();
-                    await Task.Delay(TimeSpan.FromSeconds(interval), stoppingToken);
+                    _logger.LogCritical("THUMBNAIL-CREATION-HELPER COULD NOT BE CONSTRUCTED!!!");
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical($"Unknown error occurred while creating thumbnails: ({ex.Message}).");
+            }
+
+            if(numberOfThumbnailsCreated > 0)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
+            }
+            else
+            {
+                var interval = _configuration.GetThumbnailerIntervalInSeconds();
+                await Task.Delay(TimeSpan.FromSeconds(interval), stoppingToken);
             }
         }
     }

@@ -7,46 +7,45 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PhotoCarousel.DataAccess;
 
-namespace PhotoCarousel.Worker.Workers
+namespace PhotoCarousel.Worker.Workers;
+
+public class StartupWorker : BackgroundService
 {
-    public class StartupWorker : BackgroundService
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly ILogger<StartupWorker> _logger;
+
+    public StartupWorker(
+        IServiceScopeFactory serviceScopeFactory,
+        ILogger<StartupWorker> logger)
     {
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly ILogger<StartupWorker> _logger;
+        _serviceScopeFactory = serviceScopeFactory;
+        _logger = logger;
+    }
 
-        public StartupWorker(
-            IServiceScopeFactory serviceScopeFactory,
-            ILogger<StartupWorker> logger)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        using var serviceScope = _serviceScopeFactory.CreateScope();
+        var dbContext = serviceScope.ServiceProvider.GetService<PhotoCarouselDbContext>();
+
+        if (dbContext != null)
         {
-            _serviceScopeFactory = serviceScopeFactory;
-            _logger = logger;
-        }
+            var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync(stoppingToken);
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            using var serviceScope = _serviceScopeFactory.CreateScope();
-            var dbContext = serviceScope.ServiceProvider.GetService<PhotoCarouselDbContext>();
-
-            if (dbContext != null)
+            if (pendingMigrations.Any())
             {
-                var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync(stoppingToken);
+                _logger.LogInformation($"There are {pendingMigrations.Count()} database migrations.");
 
-                if (pendingMigrations.Any())
-                {
-                    _logger.LogInformation($"There are {pendingMigrations.Count()} database migrations.");
-
-                    await dbContext.Database.MigrateAsync(stoppingToken);
-                    _logger.LogInformation("Database has been successfully migrated.");
-                }
-                else
-                {
-                    _logger.LogInformation("Database is up-to-date.");
-                }
+                await dbContext.Database.MigrateAsync(stoppingToken);
+                _logger.LogInformation("Database has been successfully migrated.");
             }
             else
             {
-                _logger.LogCritical("DATABASE-CONTEXT COULD NOT BE CONSTRUCTED!!!");
+                _logger.LogInformation("Database is up-to-date.");
             }
+        }
+        else
+        {
+            _logger.LogCritical("DATABASE-CONTEXT COULD NOT BE CONSTRUCTED!!!");
         }
     }
 }

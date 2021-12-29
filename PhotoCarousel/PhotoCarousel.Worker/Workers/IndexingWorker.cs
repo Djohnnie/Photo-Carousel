@@ -8,56 +8,55 @@ using Microsoft.Extensions.Logging;
 using PhotoCarousel.Common.Extensions;
 using PhotoCarousel.Worker.Helpers;
 
-namespace PhotoCarousel.Worker.Workers
+namespace PhotoCarousel.Worker.Workers;
+
+public class IndexingWorker : BackgroundService
 {
-    public class IndexingWorker : BackgroundService
+    private readonly IConfiguration _configuration;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly ILogger<IndexingWorker> _logger;
+
+    public IndexingWorker(
+        IConfiguration configuration,
+        IServiceScopeFactory serviceScopeFactory,
+        ILogger<IndexingWorker> logger)
     {
-        private readonly IConfiguration _configuration;
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly ILogger<IndexingWorker> _logger;
+        _configuration = configuration;
+        _serviceScopeFactory = serviceScopeFactory;
+        _logger = logger;
+    }
 
-        public IndexingWorker(
-            IConfiguration configuration,
-            IServiceScopeFactory serviceScopeFactory,
-            ILogger<IndexingWorker> logger)
-        {
-            _configuration = configuration;
-            _serviceScopeFactory = serviceScopeFactory;
-            _logger = logger;
-        }
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        _logger.LogInformation("INDEXING-WORKER WILL START IN ONE MINUTE...");
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            _logger.LogInformation("INDEXING-WORKER WILL START IN ONE MINUTE...");
-
-            await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+        await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             
-            _logger.LogInformation("INDEXING-WORKER HAS STARTED");
+        _logger.LogInformation("INDEXING-WORKER HAS STARTED");
 
-            while (!stoppingToken.IsCancellationRequested)
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            try
             {
-                try
-                {
-                    using var serviceScope = _serviceScopeFactory.CreateScope();
-                    var indexingHelper = serviceScope.ServiceProvider.GetService<IndexingHelper>();
+                using var serviceScope = _serviceScopeFactory.CreateScope();
+                var indexingHelper = serviceScope.ServiceProvider.GetService<IndexingHelper>();
 
-                    if (indexingHelper != null)
-                    {
-                        await indexingHelper.Go(stoppingToken);
-                    }
-                    else
-                    {
-                        _logger.LogCritical("PHOTO-INDEXING-HELPER COULD NOT BE CONSTRUCTED!!!");
-                    }
-                }
-                catch (Exception ex)
+                if (indexingHelper != null)
                 {
-                    _logger.LogCritical($"Unknown error occurred while indexing: ({ex.Message}).");
+                    await indexingHelper.Go(stoppingToken);
                 }
-
-                var interval = _configuration.GetIndexerIntervalInSeconds();
-                await Task.Delay(TimeSpan.FromSeconds(interval), stoppingToken);
+                else
+                {
+                    _logger.LogCritical("PHOTO-INDEXING-HELPER COULD NOT BE CONSTRUCTED!!!");
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.LogCritical($"Unknown error occurred while indexing: ({ex.Message}).");
+            }
+
+            var interval = _configuration.GetIndexerIntervalInSeconds();
+            await Task.Delay(TimeSpan.FromSeconds(interval), stoppingToken);
         }
     }
 }
