@@ -38,21 +38,29 @@ namespace PhotoCarousel.Display.ViewModels
             {
                 do
                 {
-                    try
+                    var error = false;
+                    do
                     {
-
-
-                        var response = httpClient.GetFromJsonAsync<Photo>("photos/random").Result;
-                        var photo = httpClient.GetByteArrayAsync($"downloads/photo/{response.Id}").Result;
-
-                        _synchronizationContext.Post((x) =>
+                        try
                         {
-                            using var stream = new MemoryStream(photo);
-                            TestImage = new Bitmap(stream);
-                            TestDescription = response.Description;
-                        }, null);
-                    }
-                    catch { }
+                            var response = httpClient.GetFromJsonAsync<Photo>("photos/random").Result;
+                            var photo = httpClient.GetByteArrayAsync($"downloads/photo/{response.Id}").Result;
+
+                            _synchronizationContext.Post((x) =>
+                            {
+                                using var stream = new MemoryStream(photo);
+                                TestImage = new Bitmap(stream);
+                                TestDescription = response.Description;
+                            }, null);
+                            
+                            error = false;
+                        }
+                        catch
+                        {
+                            error = true;
+                            await Task.Delay(1000);
+                        }
+                    } while (error);
                 } while (await _timer.WaitForNextTickAsync());
             });
         }
