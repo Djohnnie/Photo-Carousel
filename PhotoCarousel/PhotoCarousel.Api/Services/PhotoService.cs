@@ -6,7 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using PhotoCarousel.Entities;
 using PhotoCarousel.Enums;
 using PhotoContract = PhotoCarousel.Contracts.Photo;
 
@@ -30,10 +32,14 @@ namespace PhotoCarousel.Api.Services
 
         public async Task<PhotoContract> GetRandomPhoto()
         {
-            var count = await _dbContext.Photos.Where(x => !string.IsNullOrEmpty(x.Description)).CountAsync();
+            Expression<Func<Photo, bool>> predicate = photo =>
+                !string.IsNullOrEmpty(photo.Description) &&
+                photo.Rating != Rating.ThumbsDown &&
+                photo.Orientation == Orientation.Landscape;
+
+            var count = await _dbContext.Photos.Where(predicate).CountAsync();
             var skip = new Random().Next(0, count);
-            var photo = await _dbContext.Photos.Where(
-                x => !string.IsNullOrEmpty(x.Description) && x.Rating != Rating.ThumbsDown).Skip(skip).FirstOrDefaultAsync();
+            var photo = await _dbContext.Photos.Where(predicate).Skip(skip).FirstOrDefaultAsync();
 
             return new()
             {
