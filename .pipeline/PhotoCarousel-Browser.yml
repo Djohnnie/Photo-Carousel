@@ -76,7 +76,7 @@ steps:
 - task: AzureFileCopy@4
   inputs:
     sourcePath: '$(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Browser/Output/PhotoCarousel.Browser.$(Build.BuildNumber).Setup.exe'
-    connectedServiceNameARM: djohnnieke-storage
-    destination: azureBlob
+    azureSubscription: 'djohnnieke-storage'
+    destination: AzureBlob
     storage: djohnnieke
-    containerName: photo-carousel
+    containerName: 'photo-carousel'
