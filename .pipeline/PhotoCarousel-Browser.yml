@@ -73,12 +73,10 @@ steps:
     pathToPublish: $(Build.ArtifactStagingDirectory)
     artifactName: PhotoCarousel.Browser
 
-- task: AzureCLI@2
-  displayName: Azure CLI
+- task: AzureFileCopy@4
   inputs:
-    azureSubscription: djohnnieke-storage
-    scriptType: ps
-    scriptLocation: inlineScript
-    inlineScript: |
-      az --version
-      az account show
+    sourcePath: '$(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Browser/Output/PhotoCarousel.Browser.$(Build.BuildNumber).Setup.exe'
+    connectedServiceNameARM: djohnnieke-storage
+    destination: azureBlob
+    storage: djohnnieke-storage
+    containerName: photo-carousel
