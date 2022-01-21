@@ -78,5 +78,5 @@ steps:
     sourcePath: '$(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Browser/Output/PhotoCarousel.Browser.$(Build.BuildNumber).Setup.exe'
     connectedServiceNameARM: djohnnieke-storage
     destination: azureBlob
-    storage: djohnnieke-storage
+    storage: djohnnieke
     containerName: photo-carousel
