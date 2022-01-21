@@ -1,4 +1,4 @@
-name: $(Major).$(Minor).$(Date:yyyyMMdd).$(Build.BuildId)
+name: $(Date:yyyy).$(Date:MM).$(Date:dd).$(Build.BuildId)
 
 trigger:
   branches:
@@ -59,7 +59,7 @@ steps:
   displayName: 'Execute Inno Setup script'
   inputs:
     targetType: 'inline'
-    script: 'iscc.exe $(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Browser/setup.iss'
+    script: 'iscc.exe $(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Browser/setup.iss /DMyAppVersion=$(Build.BuildNumber)'
 
 - task: CopyFiles@2
   displayName: 'Copy setup to artifact'

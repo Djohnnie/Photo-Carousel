@@ -2,7 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "PhotoCarousel Browser"
-#define MyAppVersion "0.1"
+#ifndef MyAppVersion
+#define MyAppVersion "1.2.3.4"
+#endif
 #define MyAppPublisher "Johnny Hooyberghs"
 #define MyAppURL "https://github.com/Djohnnie/Photo-Carousel"
 #define MyAppExeName "PhotoCarousel.Browser.exe"
