@@ -1,3 +1,5 @@
+name: $(Major).$(Minor).$(Date:yyyyMMdd).$(Build.BuildId)
+
 trigger:
   branches:
     include:
@@ -13,6 +15,7 @@ pool:
   vmImage: 'windows-latest'
 
 steps:
+- script: echo '$(Build.BuildNumber)'
 
 - task: UseDotNet@2
   displayName: 'Use .NET SDK (6.0.101)'
@@ -43,7 +46,7 @@ steps:
       **/PhotoCarousel.Browser.csproj
 
 - script: |
-    dotnet publish ./PhotoCarousel/PhotoCarousel.Browser --configuration "Release" --runtime win10-x64 --output ./PhotoCarousel/PhotoCarousel.Browser/bin/Release/publish
+    dotnet publish ./PhotoCarousel/PhotoCarousel.Browser --configuration "Release" --runtime win10-x64 --output ./PhotoCarousel/PhotoCarousel.Browser/bin/Release/publish /p:AssemblyVersion=$(Build.BuildNumber)
 
 - task: ArchiveFiles@2
   inputs:
