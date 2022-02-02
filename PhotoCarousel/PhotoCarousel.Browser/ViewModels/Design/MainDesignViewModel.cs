@@ -10,6 +10,8 @@ internal class MainDesignViewModel : MainViewModel
     {
         Task.Run(async () =>
         {
+            Title = "PhotoCarousel Browser (1.2.3.4)";
+            UpdateAvailable = true;
             var photos = await _apiClientHelper.GetPhotos("/photo/2014/2014-10 (Schilderen Willebroek)");
             Photos = photos.Select(x => new PhotoItem
             {

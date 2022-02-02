@@ -12,6 +12,7 @@ internal class ApiClientHelper
 {
     private readonly string _baseUri;
 
+
     public ApiClientHelper()
     {
         _baseUri = "http://192.168.10.2:8077";

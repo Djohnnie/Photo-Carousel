@@ -14,6 +14,31 @@ namespace PhotoCarousel.Browser.ViewModels;
 internal class MainViewModel : ViewModelBase
 {
     protected readonly ApiClientHelper _apiClientHelper;
+    protected readonly UpdateHelper _updateHelper;
+
+    private string _title;
+
+    public string Title
+    {
+        get => _title;
+        set
+        {
+            _title = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _updateAvailable;
+
+    public bool UpdateAvailable
+    {
+        get => _updateAvailable;
+        set
+        {
+            _updateAvailable = value;
+            OnPropertyChanged();
+        }
+    }
 
     private Folder _selectedFolder;
 
@@ -61,9 +86,12 @@ internal class MainViewModel : ViewModelBase
     public ICommand ThumbsDownAllCommand { get; set; }
     public ICommand ThumbsDownSelectedCommand { get; set; }
 
+    public ICommand UpdateCommand { get; set; }
+
     public MainViewModel()
     {
         _apiClientHelper = new ApiClientHelper();
+        _updateHelper = new UpdateHelper();
 
         ThumbsUpAllCommand = new RelayCommand(OnThumbsUpAll);
         ThumbsUpSelectedCommand = new RelayCommand(OnThumbsUpSelected);
@@ -71,10 +99,17 @@ internal class MainViewModel : ViewModelBase
         ResetSelectedCommand = new RelayCommand(OnResetSelected);
         ThumbsDownAllCommand = new RelayCommand(OnThumbsDownAll);
         ThumbsDownSelectedCommand = new RelayCommand(OnThumbsDownSelected);
+        UpdateCommand = new RelayCommand(OnUpdate);
 
         Task.Run(async () =>
         {
+            var currentVersion = _updateHelper.GetCurrentVersion();
+            var availableVersion = await _updateHelper.GetAvailableVersion();
+            Title = $"PhotoCarousel Browser ({currentVersion})";
+
             Folders = await _apiClientHelper.GetFolders();
+
+            UpdateAvailable = _updateHelper.IsAvailableNewer(currentVersion, availableVersion);
         });
     }
 
@@ -106,6 +141,13 @@ internal class MainViewModel : ViewModelBase
     private async void OnThumbsDownSelected(object args)
     {
         await SetRating(GetSelectedPhotoIds(), Rating.ThumbsDown);
+    }
+
+    private async void OnUpdate(object args)
+    {
+        var availableVersion = await _updateHelper.GetAvailableVersion();
+        var updatePath = await _updateHelper.DownloadAvailableVersion(availableVersion);
+        _updateHelper.InstallUpdate(updatePath);
     }
 
     private Guid[] GetAllPhotoIds()

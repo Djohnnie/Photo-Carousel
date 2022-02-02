@@ -10,8 +10,5 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext = new MainViewModel();
-        
-        var version = Assembly.GetExecutingAssembly().GetName().Version;
-        Title = $"{Title} ({version})";
     }
 }
