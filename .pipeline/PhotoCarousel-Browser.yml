@@ -73,9 +73,17 @@ steps:
     pathToPublish: $(Build.ArtifactStagingDirectory)
     artifactName: PhotoCarousel.Browser
 
+- task: PowerShell@2
+  displayName: 'Create text file with build number'
+  inputs:
+    targetType: 'inline'
+    script: |
+      New-Item $(Build.SourcesDirectory)/PhotoCarousel.Browser.Version.txt
+      Set-Content $(Build.SourcesDirectory)/PhotoCarousel.Browser.Version.txt '$(Build.BuildNumber)'
+
 - task: AzureFileCopy@4
   inputs:
-    sourcePath: '$(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Browser/Output/PhotoCarousel.Browser.$(Build.BuildNumber).Setup.exe'
+    sourcePath: '$(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Browser/Output/PhotoCarousel.Browser.$(Build.BuildNumber).Setup.exe; $(Build.SourcesDirectory)/PhotoCarousel.Browser.Version.txt'
     azureSubscription: 'djohnnieke-storage'
     destination: AzureBlob
     storage: djohnnieke
