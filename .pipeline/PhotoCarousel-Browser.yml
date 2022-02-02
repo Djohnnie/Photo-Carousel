@@ -83,7 +83,15 @@ steps:
 
 - task: AzureFileCopy@4
   inputs:
-    sourcePath: '$(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Browser/Output/PhotoCarousel.Browser.$(Build.BuildNumber).Setup.exe; $(Build.SourcesDirectory)/PhotoCarousel.Browser.Version.txt'
+    sourcePath: '$(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Browser/Output/PhotoCarousel.Browser.$(Build.BuildNumber).Setup.exe'
+    azureSubscription: 'djohnnieke-storage'
+    destination: AzureBlob
+    storage: djohnnieke
+    containerName: 'photo-carousel'
+
+- task: AzureFileCopy@4
+  inputs:
+    sourcePath: '$(Build.SourcesDirectory)/PhotoCarousel.Browser.Version.txt'
     azureSubscription: 'djohnnieke-storage'
     destination: AzureBlob
     storage: djohnnieke
