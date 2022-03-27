@@ -31,7 +31,7 @@ public class SchedulerWorker : BackgroundService
         _logger.LogInformation("SCHEDULER-WORKER WILL START IN ONE MINUTE...");
 
         await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
-            
+
         _logger.LogInformation("SCHEDULER-WORKER HAS STARTED");
 
         while (!stoppingToken.IsCancellationRequested)
@@ -53,6 +53,7 @@ public class SchedulerWorker : BackgroundService
             catch (Exception ex)
             {
                 _logger.LogCritical($"Unknown error occurred while indexing: ({ex.Message}).");
+                _logger.LogCritical($"{ex}");
             }
 
             var interval = _configuration.GetSchedulerIntervalInSeconds();
