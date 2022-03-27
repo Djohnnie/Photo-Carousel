@@ -37,6 +37,33 @@ internal class ApiClientHelper
         return response.Data;
     }
 
+    public async Task<Photo> GetPreviousPhoto()
+    {
+        var apiClient = new RestClient(_baseUri);
+        var request = new RestRequest($"photos/previous", Method.GET);
+        var response = await apiClient.ExecuteAsync<Photo>(request);
+
+        return response.Data;
+    }
+
+    public async Task<Photo> GetCurrentPhoto()
+    {
+        var apiClient = new RestClient(_baseUri);
+        var request = new RestRequest($"photos/current", Method.GET);
+        var response = await apiClient.ExecuteAsync<Photo>(request);
+
+        return response.Data;
+    }
+
+    public async Task<Photo> GetNextPhoto()
+    {
+        var apiClient = new RestClient(_baseUri);
+        var request = new RestRequest($"photos/next", Method.GET);
+        var response = await apiClient.ExecuteAsync<Photo>(request);
+
+        return response.Data;
+    }
+
     public async Task<byte[]> GetThumbnail(Guid photoId)
     {
         using var httpClient = new HttpClient();

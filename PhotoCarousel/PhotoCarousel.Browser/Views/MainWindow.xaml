@@ -8,7 +8,8 @@
         xmlns:browser="clr-namespace:PhotoCarousel.Browser"
         xmlns:design="clr-namespace:PhotoCarousel.Browser.ViewModels.Design"
         xmlns:converters="clr-namespace:PhotoCarousel.Browser.Converters"
-        mc:Ignorable="d" Title="{Binding Title}" Height="450" Width="800" WindowState="Maximized">
+        mc:Ignorable="d" Title="{Binding Title}" Height="450" Width="800" WindowState="Maximized"
+        Icon="/Views/icon.ico">
     <d:Window.DataContext>
         <design:MainDesignViewModel />
     </d:Window.DataContext>
@@ -22,15 +23,12 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" MinWidth="250" />
-            <ColumnDefinition Width="2*" />
-        </Grid.ColumnDefinitions>
 
         <materialDesign:Card
-            Grid.ColumnSpan="2" Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Visibility="{Binding UpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"
             Background="{DynamicResource SecondaryHueDarkBrush}"
             Foreground="{DynamicResource SecondaryHueDarkForegroundBrush}"
             Height="30" Padding="0" Margin="10,10,10,0">
@@ -42,154 +40,286 @@
             </Button>
         </materialDesign:Card>
 
-        <GroupBox Grid.Row="1" Grid.Column="0" Header="Folders"
-            Style="{DynamicResource MaterialDesignCardGroupBox}"
-            Margin="10,10,5,10">
-            <GroupBox.HeaderTemplate>
-                <DataTemplate>
-                    <StackPanel
-                        Orientation="Horizontal">
-                        <materialDesign:PackIcon
-                            Kind="Folder"
-                            Height="32"
-                            Width="32"
-                            VerticalAlignment="Center" />
-                        <TextBlock
-                            Margin="8,0,0,0"
-                            VerticalAlignment="Center"
-                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                            Text="{Binding}" />
-                    </StackPanel>
-                </DataTemplate>
-            </GroupBox.HeaderTemplate>
-            <browser:TreeViewEx ItemsSource="{Binding Folders}" MinWidth="220"
-                      SelectedItemEx="{Binding Path=SelectedFolder}" >
-                <TreeView.Resources>
-                    <Style TargetType="TreeViewItem" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
-                        <Setter Property="materialDesign:TreeViewAssist.ExpanderSize" Value="24" />
-                        <Setter Property="materialDesign:TreeViewAssist.ShowSelection" Value="True" />
-                    </Style>
-                    <HierarchicalDataTemplate DataType="{x:Type contracts:Folder}"
-                                              ItemsSource="{Binding ChildFolders}">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="FolderOutline"
-                                                     Height="24" Width="24"
-                                                     VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding Name}"
-                                       VerticalAlignment="Center"
-                                       Margin="5,3,3,3" />
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                </TreeView.Resources>
-            </browser:TreeViewEx>
-        </GroupBox>
-
-        <GroupBox Grid.Row="1" Grid.Column="1" Header="Photos"
-                  Style="{DynamicResource MaterialDesignCardGroupBox}"
-                  Margin="5,10,10,10">
-            <GroupBox.HeaderTemplate>
-                <DataTemplate>
-                    <StackPanel
-                        Orientation="Horizontal">
-                        <materialDesign:PackIcon
-                            Kind="ImageArea"
-                            Height="32"
-                            Width="32"
-                            VerticalAlignment="Center" />
-                        <TextBlock
-                            Margin="8,0,0,0"
-                            VerticalAlignment="Center"
-                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                            Text="{Binding}" />
-                    </StackPanel>
-                </DataTemplate>
-            </GroupBox.HeaderTemplate>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <ToolBarTray IsLocked="True">
-                    <ToolBar Style="{DynamicResource MaterialDesignToolBar}" ClipToBounds="False">
-                        <Button Padding="10"
-                                Command="{Binding ThumbsUpAllCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="ThumbUp" />
-                                <TextBlock Text="Like All" VerticalAlignment="Center" Margin="3" />
-                            </StackPanel>
-                        </Button>
-                        <Button Padding="10"
-                                Command="{Binding ThumbsUpSelectedCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="ThumbUpOutline" />
-                                <TextBlock Text="Like Selected" VerticalAlignment="Center" Margin="3" />
-                            </StackPanel>
-                        </Button>
-                        <Button Padding="10"
-                                Command="{Binding ResetAllCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Circle" />
-                                <TextBlock Text="Reset All" VerticalAlignment="Center" Margin="3" />
-                            </StackPanel>
-                        </Button>
-                        <Button Padding="10"
-                                Command="{Binding ResetSelectedCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="CircleOutline" />
-                                <TextBlock Text="Reset Selected" VerticalAlignment="Center" Margin="3" />
-                            </StackPanel>
-                        </Button>
-                        <Button Padding="10"
-                                Command="{Binding ThumbsDownAllCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="ThumbDown" />
-                                <TextBlock Text="Dislike All" VerticalAlignment="Center" Margin="3" />
-                            </StackPanel>
-                        </Button>
-                        <Button Padding="10"
-                                Command="{Binding ThumbsDownSelectedCommand}">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="ThumbDownOutline" />
-                                <TextBlock Text="Dislike Selected" VerticalAlignment="Center" Margin="3" />
-                            </StackPanel>
-                        </Button>
-                    </ToolBar>
-                </ToolBarTray>
-                <ListBox Grid.Row="1" ItemsSource="{Binding Photos, IsAsync=True}" 
-                         VerticalAlignment="Stretch" SelectionMode="Multiple">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource MaterialDesignToolToggleListBoxItem2}">
-                            <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
+        <materialDesign:Card
+            Grid.Row="1"
+            Padding="0" Margin="10,10,10,0">
+            <StackPanel>
+                <Expander Grid.Row="0" HorizontalAlignment="Stretch" Header="Scheduled Photos"
+                          Background="{DynamicResource PrimaryHueMidBrush}"
+                          Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+                    <Expander.HeaderTemplate>
                         <DataTemplate>
-                            <Grid Margin="0,7,0,0">
-                                <StackPanel>
-                                    <Grid Width="150" Height="150">
-                                        <materialDesign:PackIcon Kind="Image" Width="64" Height="64"
+                            <StackPanel
+                                        Orientation="Horizontal">
+                                <materialDesign:PackIcon
+                                            Kind="ViewCarousel"
+                                            Height="32"
+                                            Width="32"
+                                            VerticalAlignment="Center" />
+                                <TextBlock
+                                            Margin="8,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                            Text="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </Expander.HeaderTemplate>
+                    <Grid Height="220" Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Row="0" Grid.Column="0" Margin="0,10,0,0">
+                            <StackPanel>
+                                <Grid Width="150" Height="150">
+                                    <materialDesign:PackIcon Kind="Image" Width="64" Height="64"
                                                          HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        <Image Source="{Binding Bitmap, Converter={StaticResource BytesToBitmapImageConverter}, IsAsync=True}" />
-                                    </Grid>
-                                    <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" 
-                                               HorizontalAlignment="Center" Padding="3" MaxWidth="150" />
-                                </StackPanel>
-                                <materialDesign:PackIcon Kind="{Binding Rating, Converter={StaticResource RatingToPackIconKindConverter}}" 
+                                    <Image Source="{Binding PreviousPhoto, Converter={StaticResource BytesToBitmapImageConverter}, IsAsync=True}" />
+                                </Grid>
+                            </StackPanel>
+                            <materialDesign:PackIcon Kind="{Binding PreviousPhotoRating, Converter={StaticResource RatingToPackIconKindConverter}}" 
                                                          Height="32" Width="32" Margin="7" Foreground="Black"
                                                          VerticalAlignment="Top" HorizontalAlignment="Right" />
-                                <materialDesign:PackIcon Kind="{Binding Rating, Converter={StaticResource RatingToPackIconKindConverter}}" 
+                        </Grid>
+
+                        <StackPanel Grid.Row="1" Grid.Column="0" ClipToBounds="True" Orientation="Horizontal"
+                                    HorizontalAlignment="Center" Margin="5">
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
+                                    Margin="5" Command="{Binding PreviousPhotoThumbsUpCommand}">
+                                <materialDesign:PackIcon Kind="ThumbsUp" Foreground="White" />
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
+                                    Margin="5" Command="{Binding PreviousPhotoResetCommand}">
+                                <materialDesign:PackIcon Kind="Circle" Foreground="White" />
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
+                                    Margin="5" Command="{Binding PreviousPhotoThumbsDownCommand}">
+                                <materialDesign:PackIcon Kind="ThumbsDown" Foreground="White" />
+                            </Button>
+                        </StackPanel>
+
+                        <Grid Grid.Row="0" Grid.Column="1" Margin="0,10,0,0">
+                            <StackPanel>
+                                <Grid Width="150" Height="150">
+                                    <materialDesign:PackIcon Kind="Image" Width="64" Height="64"
+                                                         HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <Image Source="{Binding CurrentPhoto, Converter={StaticResource BytesToBitmapImageConverter}, IsAsync=True}" />
+                                </Grid>
+                            </StackPanel>
+                            <materialDesign:PackIcon Kind="{Binding CurrentPhotoRating, Converter={StaticResource RatingToPackIconKindConverter}}" 
+                                                         Height="32" Width="32" Margin="7" Foreground="Black"
+                                                         VerticalAlignment="Top" HorizontalAlignment="Right" />
+                        </Grid>
+
+                        <StackPanel Grid.Row="1" Grid.Column="1" ClipToBounds="True" Orientation="Horizontal"
+                                    HorizontalAlignment="Center" Margin="5">
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
+                                    Margin="5" Command="{Binding CurrentPhotoThumbsUpCommand}">
+                                <materialDesign:PackIcon Kind="ThumbsUp" Foreground="White" />
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
+                                    Margin="5" Command="{Binding CurrentPhotoResetCommand}">
+                                <materialDesign:PackIcon Kind="Circle" Foreground="White" />
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
+                                    Margin="5" Command="{Binding CurrentPhotoThumbsDownCommand}">
+                                <materialDesign:PackIcon Kind="ThumbsDown" Foreground="White" />
+                            </Button>
+                        </StackPanel>
+
+                        <Grid Grid.Row="0" Grid.Column="2" Margin="0,10,0,0">
+                            <StackPanel>
+                                <Grid Width="150" Height="150">
+                                    <materialDesign:PackIcon Kind="Image" Width="64" Height="64"
+                                                         HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    <Image Source="{Binding NextPhoto, Converter={StaticResource BytesToBitmapImageConverter}, IsAsync=True}" />
+                                </Grid>
+                            </StackPanel>
+                            <materialDesign:PackIcon Kind="{Binding NextPhotoRating, Converter={StaticResource RatingToPackIconKindConverter}}" 
+                                                         Height="32" Width="32" Margin="7" Foreground="Black"
+                                                         VerticalAlignment="Top" HorizontalAlignment="Right" />
+                        </Grid>
+
+                        <StackPanel Grid.Row="1" Grid.Column="2" ClipToBounds="True" Orientation="Horizontal"
+                                    HorizontalAlignment="Center" Margin="5">
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
+                                    Margin="5" Command="{Binding NextPhotoThumbsUpCommand}">
+                                <materialDesign:PackIcon Kind="ThumbsUp" Foreground="White" />
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
+                                    Margin="5" Command="{Binding NextPhotoResetCommand}">
+                                <materialDesign:PackIcon Kind="Circle" Foreground="White" />
+                            </Button>
+                            <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
+                                    Margin="5" Command="{Binding NextPhotoThumbsDownCommand}">
+                                <materialDesign:PackIcon Kind="ThumbsDown" Foreground="White" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Expander>
+            </StackPanel>
+        </materialDesign:Card>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" MinWidth="250" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Row="1" Grid.Column="0" Header="Folders"
+                                  Style="{DynamicResource MaterialDesignCardGroupBox}"
+                                  Margin="10,10,5,10">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel
+                                        Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                            Kind="Folder"
+                                            Height="32"
+                                            Width="32"
+                                            VerticalAlignment="Center" />
+                            <TextBlock
+                                            Margin="8,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                            Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <browser:TreeViewEx ItemsSource="{Binding Folders}" MinWidth="220"
+                                                SelectedItemEx="{Binding Path=SelectedFolder}" >
+                    <TreeView.Resources>
+                        <Style TargetType="TreeViewItem" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+                            <Setter Property="materialDesign:TreeViewAssist.ExpanderSize" Value="24" />
+                            <Setter Property="materialDesign:TreeViewAssist.ShowSelection" Value="True" />
+                        </Style>
+                        <HierarchicalDataTemplate DataType="{x:Type contracts:Folder}"
+                                              ItemsSource="{Binding ChildFolders}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="FolderOutline"
+                                                     Height="24" Width="24"
+                                                     VerticalAlignment="Center" />
+                                <TextBlock Text="{Binding Name}"
+                                       VerticalAlignment="Center"
+                                       Margin="5,3,3,3" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.Resources>
+                </browser:TreeViewEx>
+            </GroupBox>
+
+            <GroupBox Grid.Row="1" Grid.Column="1" Header="Photos"
+                                  Style="{DynamicResource MaterialDesignCardGroupBox}"
+                                  Margin="5,10,10,10">
+                <GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel
+                                        Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                            Kind="ImageArea"
+                                            Height="32"
+                                            Width="32"
+                                            VerticalAlignment="Center" />
+                            <TextBlock
+                                            Margin="8,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                            Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </GroupBox.HeaderTemplate>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <ToolBarTray IsLocked="True">
+                        <ToolBar Style="{DynamicResource MaterialDesignToolBar}" ClipToBounds="False">
+                            <Button Padding="10"
+                                                Command="{Binding ThumbsUpAllCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ThumbUp" />
+                                    <TextBlock Text="Like All" VerticalAlignment="Center" Margin="3" />
+                                </StackPanel>
+                            </Button>
+                            <Button Padding="10"
+                                                Command="{Binding ThumbsUpSelectedCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ThumbUpOutline" />
+                                    <TextBlock Text="Like Selected" VerticalAlignment="Center" Margin="3" />
+                                </StackPanel>
+                            </Button>
+                            <Button Padding="10"
+                                                Command="{Binding ResetAllCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Circle" />
+                                    <TextBlock Text="Reset All" VerticalAlignment="Center" Margin="3" />
+                                </StackPanel>
+                            </Button>
+                            <Button Padding="10"
+                                                Command="{Binding ResetSelectedCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="CircleOutline" />
+                                    <TextBlock Text="Reset Selected" VerticalAlignment="Center" Margin="3" />
+                                </StackPanel>
+                            </Button>
+                            <Button Padding="10"
+                                                Command="{Binding ThumbsDownAllCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ThumbDown" />
+                                    <TextBlock Text="Dislike All" VerticalAlignment="Center" Margin="3" />
+                                </StackPanel>
+                            </Button>
+                            <Button Padding="10"
+                                                Command="{Binding ThumbsDownSelectedCommand}">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="ThumbDownOutline" />
+                                    <TextBlock Text="Dislike Selected" VerticalAlignment="Center" Margin="3" />
+                                </StackPanel>
+                            </Button>
+                        </ToolBar>
+                    </ToolBarTray>
+                    <ListBox Grid.Row="1" ItemsSource="{Binding Photos, IsAsync=True}" 
+                                         VerticalAlignment="Stretch" SelectionMode="Multiple">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource MaterialDesignToolToggleListBoxItem2}">
+                                <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,7,0,0">
+                                    <StackPanel>
+                                        <Grid Width="150" Height="150">
+                                            <materialDesign:PackIcon Kind="Image" Width="64" Height="64"
+                                                         HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            <Image Source="{Binding Bitmap, Converter={StaticResource BytesToBitmapImageConverter}, IsAsync=True}" />
+                                        </Grid>
+                                        <TextBlock Text="{Binding Name}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" 
+                                               HorizontalAlignment="Center" Padding="3" MaxWidth="150" />
+                                    </StackPanel>
+                                    <materialDesign:PackIcon Kind="{Binding Rating, Converter={StaticResource RatingToPackIconKindConverter}}" 
+                                                         Height="32" Width="32" Margin="7" Foreground="Black"
+                                                         VerticalAlignment="Top" HorizontalAlignment="Right" />
+                                    <materialDesign:PackIcon Kind="{Binding Rating, Converter={StaticResource RatingToPackIconKindConverter}}" 
                                                          Height="32" Width="32" Margin="5" Foreground="White"
                                                          VerticalAlignment="Top" HorizontalAlignment="Right" />
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
-        </GroupBox>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </GroupBox>
+        </Grid>
     </Grid>
 </Window>

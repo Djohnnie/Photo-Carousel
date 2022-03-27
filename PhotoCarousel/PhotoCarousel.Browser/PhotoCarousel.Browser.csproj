@@ -6,7 +6,16 @@
 		<RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
 		<UseWPF>true</UseWPF>
 		<Version>0.1.2.3</Version>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Views\icon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="icon.ico" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
@@ -15,6 +24,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\PhotoCarousel.Contracts\PhotoCarousel.Contracts.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Views\icon.ico" />
 	</ItemGroup>
 
 </Project>

@@ -25,6 +25,9 @@ internal class MainDesignViewModel : MainViewModel
             await Parallel.ForEachAsync(Photos, async (photo, _) =>
             {
                 photo.Bitmap = await _apiClientHelper.GetThumbnail(photo.Id);
+                PreviousPhoto = photo.Bitmap;
+                CurrentPhoto = photo.Bitmap;
+                NextPhoto = photo.Bitmap;
             });
         });
     }
