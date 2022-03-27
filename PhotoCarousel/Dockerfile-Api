@@ -39,5 +39,6 @@ EXPOSE 5000
 
 ENV TZ=Europe/Brussels
 ENV DB_CONNECTION_STRING=...
+ENV PHOTO_SLIDESHOW_DURATION=...
 
 ENTRYPOINT ["dotnet", "PhotoCarousel.Api.dll"]
