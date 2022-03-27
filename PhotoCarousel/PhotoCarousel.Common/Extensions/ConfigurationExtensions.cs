@@ -12,6 +12,7 @@ namespace PhotoCarousel.Common.Extensions
         private const string SCHEDULER_INTERVAL_IN_SECONDS = nameof(SCHEDULER_INTERVAL_IN_SECONDS);
         private const string CLEANUP_INTERVAL_IN_SECONDS = nameof(CLEANUP_INTERVAL_IN_SECONDS);
         private const string THUMBNAIL_SIZE = nameof(THUMBNAIL_SIZE);
+        private const string PHOTO_SLIDESHOW_DURATION = nameof(PHOTO_SLIDESHOW_DURATION);
 
         public static string GetConnectionString(this IConfiguration configuration)
         {
@@ -51,6 +52,11 @@ namespace PhotoCarousel.Common.Extensions
         public static int GetThumbnailSize(this IConfiguration configuration)
         {
             return configuration.GetValue<int>(THUMBNAIL_SIZE);
+        }
+
+        public static int GetPhotoSlideshowDuration(this IConfiguration configuration)
+        {
+            return configuration.GetValue<int>(PHOTO_SLIDESHOW_DURATION);
         }
     }
 }

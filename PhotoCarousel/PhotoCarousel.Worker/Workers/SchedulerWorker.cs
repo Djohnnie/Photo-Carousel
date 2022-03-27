@@ -43,7 +43,7 @@ public class SchedulerWorker : BackgroundService
 
                 if (schedulerHelper != null)
                 {
-                    //await schedulerHelper.Go(stoppingToken);
+                    await schedulerHelper.Go(stoppingToken);
                 }
                 else
                 {
