@@ -29,6 +29,13 @@ namespace PhotoCarousel.Display.ViewModels
             set => this.RaiseAndSetIfChanged(ref _testDescription, value);
         }
 
+        private string _errorDescription;
+        public string ErrorDescription
+        {
+            get => _errorDescription;
+            set => this.RaiseAndSetIfChanged(ref _errorDescription, value);
+        }
+
         public MainWindowViewModel()
         {
             var httpClient = new HttpClient();
@@ -51,12 +58,18 @@ namespace PhotoCarousel.Display.ViewModels
                                 using var stream = new MemoryStream(photo);
                                 TestImage = new Bitmap(stream);
                                 TestDescription = response.Description;
+                                ErrorDescription = string.Empty;
                             }, null);
                             
                             error = false;
                         }
-                        catch
+                        catch(Exception ex)
                         {
+                            _synchronizationContext.Post((x) =>
+                            {
+                                ErrorDescription = ex.Message;
+                            }, null);
+
                             error = true;
                             await Task.Delay(1000);
                         }

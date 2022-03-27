@@ -70,6 +70,14 @@
 				   Foreground="Gray"
 				   Grid.Row="2" Grid.Column="1"/>
 
+		<TextBlock Text="{Binding ErrorDescription}"
+				   HorizontalAlignment="Center" VerticalAlignment="Center"
+				   Margin="0 20 0 0"
+				   FontFamily="Segoe Print"
+				   FontSize="20"
+				   Foreground="Gray"
+				   Grid.Row="0" Grid.Column="1"/>
+
 	</Grid>
 
 </Window>
