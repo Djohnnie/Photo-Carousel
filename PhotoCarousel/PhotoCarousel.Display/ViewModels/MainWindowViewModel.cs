@@ -43,7 +43,7 @@ namespace PhotoCarousel.Display.ViewModels
                     {
                         try
                         {
-                            var response = httpClient.GetFromJsonAsync<Photo>("photos/random").Result;
+                            var response = httpClient.GetFromJsonAsync<Photo>("photos/current").Result;
                             var photo = httpClient.GetByteArrayAsync($"downloads/photo/{response.Id}").Result;
 
                             _synchronizationContext.Post((x) =>
