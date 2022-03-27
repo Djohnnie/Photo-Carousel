@@ -213,7 +213,6 @@ internal class MainViewModel : ViewModelBase
             do
             {
                 await RefreshScheduledPhotos();
-
             } while (await _timer.WaitForNextTickAsync());
         });
     }
@@ -327,49 +326,70 @@ internal class MainViewModel : ViewModelBase
 
     private async Task SetRating(Guid[] photoIds, Rating rating)
     {
-        await _apiClientHelper.SetRating(photoIds, rating);
+        try
+        {
+            await _apiClientHelper.SetRating(photoIds, rating);
+        }
+        catch
+        {
+            // Nothing we can do...
+        }
     }
 
     private async Task RefreshScheduledPhotos()
     {
-        var previousPhoto = await _apiClientHelper.GetPreviousPhoto();
-        _previousPhotoId = previousPhoto.Id;
-        PreviousPhoto = await _apiClientHelper.GetThumbnail(previousPhoto.Id);
-        PreviousPhotoRating = previousPhoto.Rating;
+        try
+        {
+            var previousPhoto = await _apiClientHelper.GetPreviousPhoto();
+            _previousPhotoId = previousPhoto.Id;
+            PreviousPhoto = await _apiClientHelper.GetThumbnail(previousPhoto.Id);
+            PreviousPhotoRating = previousPhoto.Rating;
 
-        var currentPhoto = await _apiClientHelper.GetCurrentPhoto();
-        _currentPhotoId = currentPhoto.Id;
-        CurrentPhoto = await _apiClientHelper.GetThumbnail(currentPhoto.Id);
-        CurrentPhotoRating = currentPhoto.Rating;
+            var currentPhoto = await _apiClientHelper.GetCurrentPhoto();
+            _currentPhotoId = currentPhoto.Id;
+            CurrentPhoto = await _apiClientHelper.GetThumbnail(currentPhoto.Id);
+            CurrentPhotoRating = currentPhoto.Rating;
 
-        var nextPhoto = await _apiClientHelper.GetNextPhoto();
-        _nextPhotoId = nextPhoto.Id;
-        NextPhoto = await _apiClientHelper.GetThumbnail(nextPhoto.Id);
-        NextPhotoRating = nextPhoto.Rating;
+            var nextPhoto = await _apiClientHelper.GetNextPhoto();
+            _nextPhotoId = nextPhoto.Id;
+            NextPhoto = await _apiClientHelper.GetThumbnail(nextPhoto.Id);
+            NextPhotoRating = nextPhoto.Rating;
+        }
+        catch
+        {
+            // Nothing we can do...
+        }
     }
 
     private async Task RefreshPhotos()
     {
-        if (SelectedFolder == null)
+        try
         {
-            Photos = new List<PhotoItem>();
+            if (SelectedFolder == null)
+            {
+                Photos = new List<PhotoItem>();
+            }
+            else
+            {
+                var photos = await _apiClientHelper.GetPhotos(SelectedFolder.FullPath);
+                Photos = photos.Select(x => new PhotoItem
+                {
+                    Id = x.Id,
+                    Name = x.Description,
+                    Rating = x.Rating
+                }).ToList();
+
+                await Parallel.ForEachAsync(Photos, async (photo, _) =>
+                {
+                    photo.Bitmap = await _apiClientHelper.GetThumbnail(photo.Id);
+                });
+            }
+
+            GC.Collect();
         }
-        else
+        catch
         {
-            var photos = await _apiClientHelper.GetPhotos(SelectedFolder.FullPath);
-            Photos = photos.Select(x => new PhotoItem
-            {
-                Id = x.Id,
-                Name = x.Description,
-                Rating = x.Rating
-            }).ToList();
-
-            await Parallel.ForEachAsync(Photos, async (photo, _) =>
-            {
-                photo.Bitmap = await _apiClientHelper.GetThumbnail(photo.Id);
-            });
+            // Nothing we can do...
         }
-
-        GC.Collect();
     }
 }
