@@ -41,7 +41,7 @@ public class SchedulerHelper
         // Get random photos
         var randomPhotos = await _dbContext.Photos
             .Where(x => !string.IsNullOrEmpty(x.Description))
-            .Where(x => x.Rating == Rating.ThumbsUp)
+            .Where(x => x.Rating != Rating.ThumbsDown)
             .Where(x => !historicPhotoIds.Contains(x.Id))
             .OrderBy(x => Guid.NewGuid())
             .Take(2).ToListAsync();
