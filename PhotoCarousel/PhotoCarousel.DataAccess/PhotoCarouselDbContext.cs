@@ -49,8 +49,8 @@ namespace PhotoCarousel.DataAccess
                 a.ToTable("HISTORY");
                 a.HasKey(p => p.Id).IsClustered(false);
                 a.HasIndex(p => p.SysId).IsUnique().IsClustered();
-                a.HasIndex(p => p.Scheduled);
                 a.Property(p => p.SysId).ValueGeneratedOnAdd();
+                a.HasIndex(p => p.Scheduled);
             });
         }
     }

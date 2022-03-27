@@ -12,8 +12,8 @@ using PhotoCarousel.DataAccess;
 namespace PhotoCarousel.DataAccess.Migrations
 {
     [DbContext(typeof(PhotoCarouselDbContext))]
-    [Migration("20220327203850_Fixed-ValueGeneratedOnAdd-For-History-SysId")]
-    partial class FixedValueGeneratedOnAddForHistorySysId
+    [Migration("20220327205543_Remove-History-Table")]
+    partial class RemoveHistoryTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,38 +24,6 @@ namespace PhotoCarousel.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("PhotoCarousel.Entities.History", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PhotoId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Scheduled")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SysId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SysId"), 1L, 1);
-
-                    b.HasKey("Id");
-
-                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"), false);
-
-                    b.HasIndex("Scheduled");
-
-                    b.HasIndex("SysId")
-                        .IsUnique();
-
-                    SqlServerIndexBuilderExtensions.IsClustered(b.HasIndex("SysId"));
-
-                    b.ToTable("HISTORY", (string)null);
-                });
-
             modelBuilder.Entity("PhotoCarousel.Entities.Photo", b =>
                 {
                     b.Property<Guid>("Id")
@@ -65,7 +33,7 @@ namespace PhotoCarousel.DataAccess.Migrations
                     b.Property<DateTime>("DateIndexed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 27, 20, 38, 50, 652, DateTimeKind.Utc).AddTicks(8166));
+                        .HasDefaultValue(new DateTime(2022, 3, 27, 20, 55, 43, 588, DateTimeKind.Utc).AddTicks(9742));
 
                     b.Property<DateTime>("DateTaken")
                         .HasColumnType("datetime2");
