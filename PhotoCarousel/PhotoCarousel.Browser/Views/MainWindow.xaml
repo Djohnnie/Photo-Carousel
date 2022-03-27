@@ -64,9 +64,10 @@
                             </StackPanel>
                         </DataTemplate>
                     </Expander.HeaderTemplate>
-                    <Grid Height="220" Background="White">
+                    <Grid Height="250" Background="White">
                         <Grid.RowDefinitions>
                             <RowDefinition />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -88,7 +89,10 @@
                                                          VerticalAlignment="Top" HorizontalAlignment="Right" />
                         </Grid>
 
-                        <StackPanel Grid.Row="1" Grid.Column="0" ClipToBounds="True" Orientation="Horizontal"
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding PreviousPhotoDescription}" Margin="5"
+                                   Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                        <StackPanel Grid.Row="2" Grid.Column="0" ClipToBounds="True" Orientation="Horizontal"
                                     HorizontalAlignment="Center" Margin="5">
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
                                     Margin="5" Command="{Binding PreviousPhotoThumbsUpCommand}">
@@ -117,7 +121,10 @@
                                                          VerticalAlignment="Top" HorizontalAlignment="Right" />
                         </Grid>
 
-                        <StackPanel Grid.Row="1" Grid.Column="1" ClipToBounds="True" Orientation="Horizontal"
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CurrentPhotoDescription}" Margin="5"
+                                   Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                        <StackPanel Grid.Row="2" Grid.Column="1" ClipToBounds="True" Orientation="Horizontal"
                                     HorizontalAlignment="Center" Margin="5">
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
                                     Margin="5" Command="{Binding CurrentPhotoThumbsUpCommand}">
@@ -146,7 +153,10 @@
                                                          VerticalAlignment="Top" HorizontalAlignment="Right" />
                         </Grid>
 
-                        <StackPanel Grid.Row="1" Grid.Column="2" ClipToBounds="True" Orientation="Horizontal"
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding NextPhotoDescription}" Margin="5"
+                                   Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                        <StackPanel Grid.Row="2" Grid.Column="2" ClipToBounds="True" Orientation="Horizontal"
                                     HorizontalAlignment="Center" Margin="5">
                             <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" 
                                     Margin="5" Command="{Binding NextPhotoThumbsUpCommand}">

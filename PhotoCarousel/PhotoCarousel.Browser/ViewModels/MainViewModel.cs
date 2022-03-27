@@ -55,6 +55,18 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
+    private string _previousPhotoDescription;
+
+    public string PreviousPhotoDescription
+    {
+        get => _previousPhotoDescription;
+        set
+        {
+            _previousPhotoDescription = value;
+            OnPropertyChanged();
+        }
+    }
+
     private Rating _previousPhotoRating;
 
     public Rating PreviousPhotoRating
@@ -80,6 +92,18 @@ internal class MainViewModel : ViewModelBase
         }
     }
 
+    private string _currentPhotoDescription;
+
+    public string CurrentPhotoDescription
+    {
+        get => _currentPhotoDescription;
+        set
+        {
+            _currentPhotoDescription = value;
+            OnPropertyChanged();
+        }
+    }
+
     private Rating _currentPhotoRating;
 
     public Rating CurrentPhotoRating
@@ -101,6 +125,18 @@ internal class MainViewModel : ViewModelBase
         set
         {
             _nextPhoto = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _nextPhotoDescription;
+
+    public string NextPhotoDescription
+    {
+        get => _nextPhotoDescription;
+        set
+        {
+            _nextPhotoDescription = value;
             OnPropertyChanged();
         }
     }
@@ -344,16 +380,19 @@ internal class MainViewModel : ViewModelBase
             _previousPhotoId = previousPhoto.Id;
             PreviousPhoto = await _apiClientHelper.GetThumbnail(previousPhoto.Id);
             PreviousPhotoRating = previousPhoto.Rating;
+            PreviousPhotoDescription = previousPhoto.Description;
 
             var currentPhoto = await _apiClientHelper.GetCurrentPhoto();
             _currentPhotoId = currentPhoto.Id;
             CurrentPhoto = await _apiClientHelper.GetThumbnail(currentPhoto.Id);
             CurrentPhotoRating = currentPhoto.Rating;
+            CurrentPhotoDescription = currentPhoto.Description;
 
             var nextPhoto = await _apiClientHelper.GetNextPhoto();
             _nextPhotoId = nextPhoto.Id;
             NextPhoto = await _apiClientHelper.GetThumbnail(nextPhoto.Id);
             NextPhotoRating = nextPhoto.Rating;
+            NextPhotoDescription = nextPhoto.Description;
         }
         catch
         {
