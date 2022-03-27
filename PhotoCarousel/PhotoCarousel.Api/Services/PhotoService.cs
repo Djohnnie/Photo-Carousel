@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using PhotoCarousel.Entities;
 using PhotoCarousel.Enums;
 using PhotoContract = PhotoCarousel.Contracts.Photo;
+using PhotoCarousel.Common.Extensions;
 
 namespace PhotoCarousel.Api.Services
 {
@@ -80,6 +81,59 @@ namespace PhotoCarousel.Api.Services
                 Description = Path.GetFileName(photo.SourcePath),
                 Rating = photo.Rating
             }).ToList();
+        }
+
+        public async Task<PhotoContract> GetPreviousPhoto()
+        {
+            var slideshowDuration = _configuration.GetPhotoSlideshowDuration();
+
+            var historicPhoto = await _dbContext.History
+                .OrderByDescending(x => x.SysId)
+                .Where(x => x.Scheduled < DateTime.UtcNow.AddMinutes(-slideshowDuration))
+                .Where(x => x.Scheduled > DateTime.UtcNow.AddMinutes(-slideshowDuration * 2))
+                .FirstOrDefaultAsync();
+
+            return await GetPhoto(historicPhoto);
+        }
+
+        public async Task<PhotoContract> GetCurrentPhoto()
+        {
+            var slideshowDuration = _configuration.GetPhotoSlideshowDuration();
+
+            var historicPhoto = await _dbContext.History
+                .OrderByDescending(x => x.SysId)
+                .Where(x => x.Scheduled < DateTime.UtcNow)
+                .Where(x => x.Scheduled > DateTime.UtcNow.AddMinutes(-slideshowDuration))
+                .FirstOrDefaultAsync();
+
+            return await GetPhoto(historicPhoto);
+        }
+
+        public async Task<PhotoContract> GetNextPhoto()
+        {
+            var historicPhoto = await _dbContext.History
+                .OrderByDescending(x => x.SysId)
+                .Where(x => x.Scheduled > DateTime.UtcNow)
+                .FirstOrDefaultAsync();
+
+            return await GetPhoto(historicPhoto);
+        }
+
+        private async Task<PhotoContract> GetPhoto(History historicPhoto)
+        {
+            if (historicPhoto != null)
+            {
+                var photo = await _dbContext.Photos.SingleOrDefaultAsync(x => x.Id == historicPhoto.PhotoId);
+
+                return new PhotoContract
+                {
+                    Id = photo.Id,
+                    Description = photo.Description,
+                    Rating = photo.Rating
+                };
+            }
+
+            return null;
         }
     }
 }

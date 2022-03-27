@@ -35,5 +35,29 @@ namespace PhotoCarousel.Api.Controllers
 
             return Ok(photos);
         }
+
+        [HttpGet("previous")]
+        public async Task<IActionResult> GetPreviousPhoto()
+        {
+            var photo = await _photoService.GetPreviousPhoto();
+
+            return photo != null ? Ok(photo) : NotFound();
+        }
+
+        [HttpGet("current")]
+        public async Task<IActionResult> GetCurrentPhoto()
+        {
+            var photo = await _photoService.GetCurrentPhoto();
+
+            return photo != null ? Ok(photo) : NotFound();
+        }
+
+        [HttpGet("next")]
+        public async Task<IActionResult> GetNextPhoto()
+        {
+            var photo = await _photoService.GetNextPhoto();
+
+            return photo != null ? Ok(photo) : NotFound();
+        }
     }
 }
