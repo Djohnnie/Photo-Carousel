@@ -13,7 +13,7 @@ namespace PhotoCarousel.Display.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
-        private readonly PeriodicTimer _timer = new(TimeSpan.FromMinutes(5));
+        private readonly PeriodicTimer _timer = new(TimeSpan.FromMinutes(1));
 
         private IBitmap _testImage;
         public IBitmap TestImage
