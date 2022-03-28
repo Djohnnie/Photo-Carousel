@@ -1,4 +1,6 @@
-﻿namespace PhotoCarousel.Voting
+﻿using PhotoCarousel.Voting.Views;
+
+namespace PhotoCarousel.Voting
 {
     public partial class App : Application
     {

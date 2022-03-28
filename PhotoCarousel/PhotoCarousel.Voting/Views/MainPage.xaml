@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:PhotoCarousel.Voting.Converters"
+             x:Class="PhotoCarousel.Voting.Views.MainPage"
+             BackgroundColor="{DynamicResource PrimaryColor}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BytesToBitmapImageConverter x:Key="BytesToBitmapImageConverter" />
+            <converters:RatingToFontAwesomeConverter x:Key="RatingToFontAwesomeConverter"
+                                                     ThumbsDown="&#xF165;"
+                                                     Neutral="&#xF111;"
+                                                     ThumbsUp="&#xF164;" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
+
+        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+            <Image Aspect="AspectFit" Margin="10"
+                   Source="{Binding CurrentPhoto, Converter={StaticResource BytesToBitmapImageConverter}}">
+                <Image.Shadow>
+                    <Shadow Brush="Black" Offset="0,0"
+                            Radius="50" />
+                </Image.Shadow>
+            </Image>
+
+            <Label Text="{Binding CurrentPhotoRating, Converter={StaticResource RatingToFontAwesomeConverter}}" 
+                   FontSize="30" FontFamily="FontAwesomeSolid"
+                   VerticalOptions="Start" HorizontalOptions="End" Margin="22"
+                   TextColor="Black" />
+            <Label Text="{Binding CurrentPhotoRating, Converter={StaticResource RatingToFontAwesomeConverter}}" 
+                   FontSize="30" FontFamily="FontAwesomeSolid"
+                   VerticalOptions="Start" HorizontalOptions="End" Margin="20"
+                   TextColor="White" />
+
+            <HorizontalStackLayout HorizontalOptions="Center" HeightRequest="55" VerticalOptions="End" Margin="15">
+                <Button Text="&#xF165;" FontSize="Large" FontFamily="FontAwesomeSolid" 
+                        Margin="3" BackgroundColor="#2B0B98" Command="{Binding CurrentPhotoThumbsDownCommand}" />
+                <Button Text="&#xF111;" FontSize="Default" FontFamily="FontAwesomeSolid" 
+                        Margin="3" BackgroundColor="#2B0B98" Command="{Binding CurrentPhotoResetCommand}" />
+                <Button Text="&#xF164;" FontSize="Large" FontFamily="FontAwesomeSolid" 
+                        Margin="3" BackgroundColor="#2B0B98" Command="{Binding CurrentPhotoThumbsUpCommand}" />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Image Aspect="AspectFit" Margin="10"
+                   Source="{Binding PreviousPhoto, Converter={StaticResource BytesToBitmapImageConverter}}">
+                <Image.Shadow>
+                    <Shadow Brush="Black" Offset="0,0"
+                            Radius="50" />
+                </Image.Shadow>
+            </Image>
+            
+            <HorizontalStackLayout HorizontalOptions="Center" HeightRequest="55" VerticalOptions="End" Margin="10">
+                <Button Text="&#xF165;" FontSize="Large" FontFamily="FontAwesomeSolid" 
+                        Margin="3" BackgroundColor="#2B0B98" Command="{Binding PreviousPhotoThumbsDownCommand}" />
+                <Button Text="&#xF111;" FontSize="Default" FontFamily="FontAwesomeSolid" 
+                        Margin="3" BackgroundColor="#2B0B98" Command="{Binding PreviousPhotoResetCommand}" />
+                <Button Text="&#xF164;" FontSize="Large" FontFamily="FontAwesomeSolid" 
+                        Margin="3" BackgroundColor="#2B0B98" Command="{Binding PreviousPhotoThumbsUpCommand}" />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Image Aspect="AspectFit" Margin="10"
+                   Source="{Binding NextPhoto, Converter={StaticResource BytesToBitmapImageConverter}}">
+                <Image.Shadow>
+                    <Shadow Brush="Black" Offset="0,0"
+                            Radius="50" />
+                </Image.Shadow>
+            </Image>
+            
+            <HorizontalStackLayout HorizontalOptions="Center" HeightRequest="55" VerticalOptions="End" Margin="10">
+                <Button Text="&#xF165;" FontSize="Large" FontFamily="FontAwesomeSolid" 
+                        Margin="3" BackgroundColor="#2B0B98" Command="{Binding NextPhotoThumbsDownCommand}" />
+                <Button Text="&#xF111;" FontSize="Default" FontFamily="FontAwesomeSolid" 
+                        Margin="3" BackgroundColor="#2B0B98" Command="{Binding NextPhotoResetCommand}" />
+                <Button Text="&#xF164;" FontSize="Large" FontFamily="FontAwesomeSolid" 
+                        Margin="3" BackgroundColor="#2B0B98" Command="{Binding NextPhotoThumbsUpCommand}" />
+            </HorizontalStackLayout>
+        </Grid>
+        
+    </Grid>
+
+</ContentPage>

@@ -54,7 +54,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Views\" />
+	  <None Remove="Fonts\fa6-free-regular-400.otf" />
+	  <None Remove="Fonts\fa6-free-solid-900.otf" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiFont Include="Fonts\fa6-free-regular-400.otf" />
+	  <MauiFont Include="Fonts\fa6-free-solid-900.otf" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="RestSharp" Version="106.15.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\PhotoCarousel.Contracts\PhotoCarousel.Contracts.csproj" />
+	  <ProjectReference Include="..\PhotoCarousel.Enums\PhotoCarousel.Enums.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">

@@ -1,6 +1,6 @@
 ﻿using PhotoCarousel.Voting.ViewModels;
 
-namespace PhotoCarousel.Voting
+namespace PhotoCarousel.Voting.Views
 {
     public partial class MainPage : ContentPage
     {
