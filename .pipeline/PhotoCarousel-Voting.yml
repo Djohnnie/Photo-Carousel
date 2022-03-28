@@ -1,0 +1,35 @@
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - .pipeline/PhotoCarousel-Voting.yml
+    - PhotoCarousel/PhotoCarousel.Voting/*
+
+pool:
+  vmImage: 'windows-2022'
+
+steps:
+
+- task: CmdLine@2
+  inputs:
+    script: 'dotnet workload install maui'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: 'PhotoCarousel\PhotoCarousel.Voting\PhotoCarousel.Voting.csproj'
+    arguments: '-c Release -f net6.0-android'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(agent.builddirectory)'
+    Contents: '**/*-Signed.aab'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    flattenFolders: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: PhotoCarousel.Voting
