@@ -25,7 +25,7 @@ steps:
     arguments: '-c Release -f net6.0-android'
 
 - task: CopyFiles@2
-  displayName: 'Copy signed *.aab to ArtifactStagingDirectory'
+  displayName: 'Copy signed packages to ArtifactStagingDirectory'
   inputs:
     SourceFolder: '$(agent.builddirectory)'
     Contents: |
@@ -35,7 +35,7 @@ steps:
     flattenFolders: true
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish signed *.aab to ArtifactStagingDirectory'
+  displayName: 'Publish signed packages to ArtifactStagingDirectory'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: PhotoCarousel.Voting
