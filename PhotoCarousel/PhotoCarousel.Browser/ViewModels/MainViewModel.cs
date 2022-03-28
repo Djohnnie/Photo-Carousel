@@ -16,7 +16,7 @@ internal class MainViewModel : ViewModelBase
 {
     protected readonly ApiClientHelper _apiClientHelper;
     protected readonly UpdateHelper _updateHelper;
-    private readonly PeriodicTimer _timer = new(TimeSpan.FromSeconds(2));
+    private readonly PeriodicTimer _timer = new(TimeSpan.FromMinutes(1));
 
     private string _title;
 
