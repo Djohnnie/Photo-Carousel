@@ -13,23 +13,29 @@ pool:
 steps:
 
 - task: CmdLine@2
+  displayName: 'Install MAUI workload for dotnet CLI'
   inputs:
     script: 'dotnet workload install maui'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Build PhotoCarousel.Voting.csproj for net6.0-android'
   inputs:
     command: 'build'
     projects: 'PhotoCarousel\PhotoCarousel.Voting\PhotoCarousel.Voting.csproj'
     arguments: '-c Release -f net6.0-android'
 
 - task: CopyFiles@2
+  displayName: 'Copy signed *.aab to ArtifactStagingDirectory'
   inputs:
     SourceFolder: '$(agent.builddirectory)'
-    Contents: '**/*-Signed.aab'
+    Contents: |
+      **/*-Signed.aab
+      **/*-Signed.apk
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
     flattenFolders: true
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish signed *.aab to ArtifactStagingDirectory'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: PhotoCarousel.Voting
