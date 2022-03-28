@@ -16,6 +16,8 @@
 
     <Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
 
+        
+        
         <Grid Grid.Row="0" Grid.ColumnSpan="2">
             <Image Aspect="AspectFit" Margin="10"
                    Source="{Binding CurrentPhoto, Converter={StaticResource BytesToBitmapImageConverter}}">
@@ -81,7 +83,9 @@
                         Margin="3" BackgroundColor="#2B0B98" Command="{Binding NextPhotoThumbsUpCommand}" />
             </HorizontalStackLayout>
         </Grid>
-        
+
+        <Label Text="{Binding ErrorDescription}" Grid.Row="0" FontSize="Large" HorizontalOptions="Center" />
+
     </Grid>
 
 </ContentPage>

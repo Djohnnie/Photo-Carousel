@@ -11,6 +11,17 @@ namespace PhotoCarousel.Voting.ViewModels
         private readonly ApiClientHelper _apiClientHelper;
         private readonly PeriodicTimer _timer = new(TimeSpan.FromMinutes(1));
 
+        private string _errorDescription;
+        public string ErrorDescription
+        {
+            get => _errorDescription;
+            set
+            {
+                _errorDescription = value;
+                OnPropertyChanged(nameof(ErrorDescription));
+            }
+        }
+
         private Guid _previousPhotoId;
         private byte[] _previousPhoto;
         public byte[] PreviousPhoto
@@ -149,7 +160,7 @@ namespace PhotoCarousel.Voting.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        Debugger.Break();
+                        ErrorDescription = ex.Message;
                     }
                 }
                 while (await _timer.WaitForNextTickAsync());
@@ -224,56 +235,49 @@ namespace PhotoCarousel.Voting.ViewModels
 
         private async Task RefreshScheduledPhotos()
         {
-            try
+            var previousPhoto = await _apiClientHelper.GetPreviousPhoto();
+            if (previousPhoto.Id != Guid.Empty)
             {
-                var previousPhoto = await _apiClientHelper.GetPreviousPhoto();
-                if (previousPhoto.Id != Guid.Empty)
-                {
-                    _previousPhotoId = previousPhoto.Id;
-                    PreviousPhoto = await _apiClientHelper.GetThumbnail(previousPhoto.Id);
-                    PreviousPhotoRating = previousPhoto.Rating;
-                    PreviousPhotoDescription = previousPhoto.Description;
-                }
-                else
-                {
-                    PreviousPhotoRating = Rating.None;
-                    PreviousPhoto = null;
-                    PreviousPhotoDescription = string.Empty;
-                }
-
-                var currentPhoto = await _apiClientHelper.GetCurrentPhoto();
-                if (currentPhoto.Id != Guid.Empty)
-                {
-                    _currentPhotoId = currentPhoto.Id;
-                    CurrentPhoto = await _apiClientHelper.GetThumbnail(currentPhoto.Id);
-                    CurrentPhotoRating = currentPhoto.Rating;
-                    CurrentPhotoDescription = currentPhoto.Description;
-                }
-                else
-                {
-                    CurrentPhotoRating = Rating.None;
-                    CurrentPhoto = null;
-                    CurrentPhotoDescription = string.Empty;
-                }
-
-                var nextPhoto = await _apiClientHelper.GetNextPhoto();
-                if (nextPhoto.Id != Guid.Empty)
-                {
-                    _nextPhotoId = nextPhoto.Id;
-                    NextPhoto = await _apiClientHelper.GetThumbnail(nextPhoto.Id);
-                    NextPhotoRating = nextPhoto.Rating;
-                    NextPhotoDescription = nextPhoto.Description;
-                }
-                else
-                {
-                    NextPhotoRating = Rating.None;
-                    NextPhoto = null;
-                    NextPhotoDescription = string.Empty;
-                }
+                _previousPhotoId = previousPhoto.Id;
+                PreviousPhoto = await _apiClientHelper.GetThumbnail(previousPhoto.Id);
+                PreviousPhotoRating = previousPhoto.Rating;
+                PreviousPhotoDescription = previousPhoto.Description;
             }
-            catch
+            else
             {
-                // Nothing we can do...
+                PreviousPhotoRating = Rating.None;
+                PreviousPhoto = null;
+                PreviousPhotoDescription = string.Empty;
+            }
+
+            var currentPhoto = await _apiClientHelper.GetCurrentPhoto();
+            if (currentPhoto.Id != Guid.Empty)
+            {
+                _currentPhotoId = currentPhoto.Id;
+                CurrentPhoto = await _apiClientHelper.GetThumbnail(currentPhoto.Id);
+                CurrentPhotoRating = currentPhoto.Rating;
+                CurrentPhotoDescription = currentPhoto.Description;
+            }
+            else
+            {
+                CurrentPhotoRating = Rating.None;
+                CurrentPhoto = null;
+                CurrentPhotoDescription = string.Empty;
+            }
+
+            var nextPhoto = await _apiClientHelper.GetNextPhoto();
+            if (nextPhoto.Id != Guid.Empty)
+            {
+                _nextPhotoId = nextPhoto.Id;
+                NextPhoto = await _apiClientHelper.GetThumbnail(nextPhoto.Id);
+                NextPhotoRating = nextPhoto.Rating;
+                NextPhotoDescription = nextPhoto.Description;
+            }
+            else
+            {
+                NextPhotoRating = Rating.None;
+                NextPhoto = null;
+                NextPhotoDescription = string.Empty;
             }
         }
     }
