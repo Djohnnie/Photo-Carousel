@@ -7,48 +7,47 @@ using Microsoft.OpenApi.Models;
 using PhotoCarousel.Api.Services;
 using PhotoCarousel.DataAccess;
 
-namespace PhotoCarousel.Api
+namespace PhotoCarousel.Api;
+
+public class Startup
 {
-    public class Startup
+    private readonly IConfiguration _configuration;
+
+    public Startup(IConfiguration configuration)
     {
-        private readonly IConfiguration _configuration;
+        _configuration = configuration;
+    }
 
-        public Startup(IConfiguration configuration)
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddDbContext<PhotoCarouselDbContext>();
+        services.AddTransient<DownloadService>();
+        services.AddTransient<PhotoService>();
+        services.AddTransient<FolderService>();
+        services.AddTransient<RatingService>();
+        services.AddControllers();
+        services.AddSwaggerGen(c =>
         {
-            _configuration = configuration;
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "PhotoCarousel.Api", Version = "v1" });
+        });
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PhotoCarousel.Api v1"));
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        app.UseRouting();
+
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints =>
         {
-            services.AddDbContext<PhotoCarouselDbContext>();
-            services.AddTransient<DownloadService>();
-            services.AddTransient<PhotoService>();
-            services.AddTransient<FolderService>();
-            services.AddTransient<RatingService>();
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PhotoCarousel.Api", Version = "v1" });
-            });
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PhotoCarousel.Api v1"));
-            }
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
+            endpoints.MapControllers();
+        });
     }
 }
