@@ -10,7 +10,7 @@ namespace PhotoCarousel.Voting.Helpers
 
         public ApiClientHelper()
         {
-            _baseUri = "http://192.168.10.2:8077";
+            _baseUri = "https://api.djohnnie.be:8077";
         }
 
         public async Task<List<Folder>> GetFolders()

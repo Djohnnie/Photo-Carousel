@@ -39,7 +39,7 @@ namespace PhotoCarousel.Display.ViewModels
         public MainWindowViewModel()
         {
             var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("http://192.168.10.2:8077");
+            httpClient.BaseAddress = new Uri("https://api.djohnnie.be:8077");
 
             _ = Task.Run(async () =>
             {
