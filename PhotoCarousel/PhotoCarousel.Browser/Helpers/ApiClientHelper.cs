@@ -67,7 +67,7 @@ internal class ApiClientHelper
     public async Task<byte[]> GetThumbnail(Guid photoId)
     {
         using var httpClient = new HttpClient();
-        httpClient.BaseAddress = new Uri("http://192.168.10.2:8077");
+        httpClient.BaseAddress = new Uri(_baseUri);
 
         var photo = await httpClient.GetByteArrayAsync($"downloads/thumbnail/{photoId}");
 
