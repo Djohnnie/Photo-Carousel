@@ -14,11 +14,19 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
+    <Grid RowDefinitions="100,*,*" ColumnDefinitions="*,*">
 
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,15"
+              BackgroundColor="#2B0B98">
+            <Grid.Shadow>
+                <Shadow Brush="Black" Offset="0,0"
+                        Radius="50" />
+            </Grid.Shadow>
+            <Label Text="PhotoCarousel.Voting" TextColor="White" FontSize="Large"
+                   HorizontalOptions="Center" VerticalOptions="Center" />
+        </Grid>
         
-        
-        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
             <Image Aspect="AspectFit" Margin="10"
                    Source="{Binding CurrentPhoto, Converter={StaticResource BytesToBitmapImageConverter}}">
                 <Image.Shadow>
@@ -46,7 +54,7 @@
             </HorizontalStackLayout>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="0">
+        <Grid Grid.Row="2" Grid.Column="0">
             <Image Aspect="AspectFit" Margin="10"
                    Source="{Binding PreviousPhoto, Converter={StaticResource BytesToBitmapImageConverter}}">
                 <Image.Shadow>
@@ -54,6 +62,15 @@
                             Radius="50" />
                 </Image.Shadow>
             </Image>
+
+            <Label Text="{Binding PreviousPhotoRating, Converter={StaticResource RatingToFontAwesomeConverter}}" 
+                   FontSize="30" FontFamily="FontAwesomeSolid"
+                   VerticalOptions="Start" HorizontalOptions="End" Margin="22"
+                   TextColor="Black" />
+            <Label Text="{Binding PreviousPhotoRating, Converter={StaticResource RatingToFontAwesomeConverter}}" 
+                   FontSize="30" FontFamily="FontAwesomeSolid"
+                   VerticalOptions="Start" HorizontalOptions="End" Margin="20"
+                   TextColor="White" />
             
             <HorizontalStackLayout HorizontalOptions="Center" HeightRequest="55" VerticalOptions="End" Margin="10">
                 <Button Text="&#xF165;" FontSize="Large" FontFamily="FontAwesomeSolid" 
@@ -65,7 +82,7 @@
             </HorizontalStackLayout>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="1">
+        <Grid Grid.Row="2" Grid.Column="1">
             <Image Aspect="AspectFit" Margin="10"
                    Source="{Binding NextPhoto, Converter={StaticResource BytesToBitmapImageConverter}}">
                 <Image.Shadow>
@@ -73,6 +90,15 @@
                             Radius="50" />
                 </Image.Shadow>
             </Image>
+
+            <Label Text="{Binding NextPhotoRating, Converter={StaticResource RatingToFontAwesomeConverter}}" 
+                   FontSize="30" FontFamily="FontAwesomeSolid"
+                   VerticalOptions="Start" HorizontalOptions="End" Margin="22"
+                   TextColor="Black" />
+            <Label Text="{Binding NextPhotoRating, Converter={StaticResource RatingToFontAwesomeConverter}}" 
+                   FontSize="30" FontFamily="FontAwesomeSolid"
+                   VerticalOptions="Start" HorizontalOptions="End" Margin="20"
+                   TextColor="White" />
             
             <HorizontalStackLayout HorizontalOptions="Center" HeightRequest="55" VerticalOptions="End" Margin="10">
                 <Button Text="&#xF165;" FontSize="Large" FontFamily="FontAwesomeSolid" 
