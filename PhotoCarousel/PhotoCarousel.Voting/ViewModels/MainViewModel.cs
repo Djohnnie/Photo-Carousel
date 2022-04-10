@@ -157,6 +157,7 @@ namespace PhotoCarousel.Voting.ViewModels
                     try
                     {
                         await RefreshScheduledPhotos();
+                        //throw new ArgumentNullException(nameof(apiClientHelper));
                     }
                     catch (Exception ex)
                     {

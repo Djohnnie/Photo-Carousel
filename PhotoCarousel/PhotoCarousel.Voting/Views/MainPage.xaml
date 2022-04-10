@@ -84,7 +84,7 @@
             </HorizontalStackLayout>
         </Grid>
 
-        <Label Text="{Binding ErrorDescription}" Grid.Row="0" FontSize="Large" HorizontalOptions="Center" />
+        <Label Text="{Binding ErrorDescription}" Grid.ColumnSpan="2"  TextColor="White" BackgroundColor="Black"  Grid.Row="0" FontSize="Large" HorizontalOptions="Center" />
 
     </Grid>
 
