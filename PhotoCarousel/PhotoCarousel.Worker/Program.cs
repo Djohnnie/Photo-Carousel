@@ -31,6 +31,6 @@ public class Program
                 services.AddHostedService<IndexingWorker>();
                 services.AddHostedService<ThumbnailCreationWorker>();
                 services.AddHostedService<SchedulerWorker>();
-                services.AddHostedService<CleanupWorker>();
+                //services.AddHostedService<CleanupWorker>();
             });
 }
