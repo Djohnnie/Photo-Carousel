@@ -3,61 +3,73 @@ using Microsoft.Extensions.Logging;
 using PhotoCarousel.Api.Services;
 using System.Threading.Tasks;
 
-namespace PhotoCarousel.Api.Controllers
+namespace PhotoCarousel.Api.Controllers;
+
+[ApiController]
+[Route("photos")]
+public class PhotosController : BaseController<PhotosController>
 {
-    [ApiController]
-    [Route("photos")]
-    public class PhotosController : ControllerBase
+    private readonly PhotoService _photoService;
+
+    public PhotosController(
+        PhotoService photoService,
+        ILogger<PhotosController> logger) : base(logger)
     {
-        private readonly PhotoService _photoService;
-        private readonly ILogger<PhotosController> _logger;
+        _photoService = photoService;
+    }
 
-        public PhotosController(
-            PhotoService photoService,
-            ILogger<PhotosController> logger)
-        {
-            _photoService = photoService;
-            _logger = logger;
-        }
-
-        [HttpGet("random")]
-        public async Task<IActionResult> GetRandomPhoto()
+    [HttpGet("random")]
+    public async Task<IActionResult> GetRandomPhoto()
+    {
+        return await Log<IActionResult>(async () =>
         {
             var photo = await _photoService.GetRandomPhoto();
 
             return photo != null ? Ok(photo) : NotFound();
-        }
+        });
+    }
 
-        [HttpGet("byfolder")]
-        public async Task<IActionResult> GetPhotosByFolder(string folderPath)
+    [HttpGet("byfolder")]
+    public async Task<IActionResult> GetPhotosByFolder(string folderPath)
+    {
+        return await Log<IActionResult>(async () =>
         {
             var photos = await _photoService.GetPhotosByFolder(folderPath);
 
             return Ok(photos);
-        }
+        });
+    }
 
-        [HttpGet("previous")]
-        public async Task<IActionResult> GetPreviousPhoto()
+    [HttpGet("previous")]
+    public async Task<IActionResult> GetPreviousPhoto()
+    {
+        return await Log<IActionResult>(async () =>
         {
             var photo = await _photoService.GetPreviousPhoto();
 
             return photo != null ? Ok(photo) : NotFound();
-        }
+        });
+    }
 
-        [HttpGet("current")]
-        public async Task<IActionResult> GetCurrentPhoto()
+    [HttpGet("current")]
+    public async Task<IActionResult> GetCurrentPhoto()
+    {
+        return await Log<IActionResult>(async () =>
         {
             var photo = await _photoService.GetCurrentPhoto();
 
             return photo != null ? Ok(photo) : NotFound();
-        }
+        });
+    }
 
-        [HttpGet("next")]
-        public async Task<IActionResult> GetNextPhoto()
+    [HttpGet("next")]
+    public async Task<IActionResult> GetNextPhoto()
+    {
+        return await Log<IActionResult>(async () =>
         {
             var photo = await _photoService.GetNextPhoto();
 
             return photo != null ? Ok(photo) : NotFound();
-        }
+        });
     }
 }

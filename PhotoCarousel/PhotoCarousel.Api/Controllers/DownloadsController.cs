@@ -4,37 +4,40 @@ using PhotoCarousel.Api.Services;
 using System;
 using System.Threading.Tasks;
 
-namespace PhotoCarousel.Api.Controllers
+namespace PhotoCarousel.Api.Controllers;
+
+[ApiController]
+[Route("downloads")]
+public class DownloadsController : BaseController<DownloadsController>
 {
-    [ApiController]
-    [Route("downloads")]
-    public class DownloadsController : ControllerBase
+    private readonly DownloadService _downloadService;
+
+    public DownloadsController(
+        DownloadService downloadService,
+        ILogger<DownloadsController> logger) : base(logger)
     {
-        private readonly DownloadService _downloadService;
-        private readonly ILogger<DownloadsController> _logger;
+        _downloadService = downloadService;
+    }
 
-        public DownloadsController(
-            DownloadService downloadService,
-            ILogger<DownloadsController> logger)
-        {
-            _downloadService = downloadService;
-            _logger = logger;
-        }
-
-        [HttpGet("photo/{id}")]
-        public async Task<IActionResult> DownloadPhotoById(Guid id)
+    [HttpGet("photo/{id}")]
+    public async Task<IActionResult> DownloadPhotoById(Guid id)
+    {
+        return await Log<IActionResult>(async () =>
         {
             var stream = await _downloadService.GetPhotoStreamByPhotoId(id);
 
             return File(stream, "application/octet-stream", $"{id}.jpg");
-        }
+        });
+    }
 
-        [HttpGet("thumbnail/{id}")]
-        public async Task<IActionResult> DownloadThumbnailById(Guid id)
+    [HttpGet("thumbnail/{id}")]
+    public async Task<IActionResult> DownloadThumbnailById(Guid id)
+    {
+        return await Log<IActionResult>(async () =>
         {
             var stream = await _downloadService.GetThumbnailStreamByPhotoId(id);
 
             return File(stream, "application/octet-stream", $"{id}.thumbnail.jpg");
-        }
+        });
     }
 }

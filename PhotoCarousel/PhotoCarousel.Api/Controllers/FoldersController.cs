@@ -3,29 +3,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PhotoCarousel.Api.Services;
 
-namespace PhotoCarousel.Api.Controllers
+namespace PhotoCarousel.Api.Controllers;
+
+[ApiController]
+[Route("folders")]
+public class FoldersController : BaseController<FoldersController>
 {
-    [ApiController]
-    [Route("folders")]
-    public class FoldersController : ControllerBase
+    private readonly FolderService _folderService;
+
+    public FoldersController(
+        FolderService folderService,
+        ILogger<FoldersController> logger) : base(logger)
     {
-        private readonly FolderService _folderService;
-        private readonly ILogger<FoldersController> _logger;
+        _folderService = folderService;
+    }
 
-        public FoldersController(
-            FolderService folderService,
-            ILogger<FoldersController> logger)
-        {
-            _folderService = folderService;
-            _logger = logger;
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetFolders()
+    [HttpGet]
+    public async Task<IActionResult> GetFolders()
+    {
+        return await Log<IActionResult>(async () =>
         {
             var folders = await _folderService.GetFolders();
 
             return folders != null ? Ok(folders) : NotFound();
-        }
+        });
     }
 }

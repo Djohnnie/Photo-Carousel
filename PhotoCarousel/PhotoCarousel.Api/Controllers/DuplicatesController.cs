@@ -7,24 +7,25 @@ namespace PhotoCarousel.Api.Controllers;
 
 [ApiController]
 [Route("duplicates")]
-public class DuplicatesController : ControllerBase
+public class DuplicatesController : BaseController<DuplicatesController>
 {
     private readonly DuplicatesService _duplicatesService;
-    private readonly ILogger<DuplicatesController> _logger;
 
     public DuplicatesController(
         DuplicatesService duplicatesService,
-        ILogger<DuplicatesController> logger)
+        ILogger<DuplicatesController> logger) : base(logger)
     {
         _duplicatesService = duplicatesService;
-        _logger = logger;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetDuplicates()
     {
-        var duplicates = await _duplicatesService.GetDuplicates();
+        return await Log<IActionResult>(async () =>
+        {
+            var duplicates = await _duplicatesService.GetDuplicates();
 
-        return duplicates != null ? Ok(duplicates) : NotFound();
+            return duplicates != null ? Ok(duplicates) : NotFound();
+        });
     }
 }

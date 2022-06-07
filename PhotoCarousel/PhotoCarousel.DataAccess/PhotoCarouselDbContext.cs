@@ -23,7 +23,7 @@ namespace PhotoCarousel.DataAccess
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string connectionString = _configuration.GetConnectionString();
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseSqlServer("Server=my.djohnnie.be;Database=PhotoCarousel;User Id=sa;Password=kISk#&@w4W5#9iK8THqAI*$8ryYm7OzC;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

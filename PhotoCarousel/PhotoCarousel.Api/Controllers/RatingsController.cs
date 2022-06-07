@@ -8,24 +8,25 @@ namespace PhotoCarousel.Api.Controllers;
 
 [ApiController]
 [Route("ratings")]
-public class RatingsController : ControllerBase
+public class RatingsController : BaseController<RatingsController>
 {
     private readonly RatingService _ratingService;
-    private readonly ILogger<RatingsController> _logger;
 
     public RatingsController(
         RatingService ratingService,
-        ILogger<RatingsController> logger)
+        ILogger<RatingsController> logger) : base(logger)
     {
         _ratingService = ratingService;
-        _logger = logger;
     }
 
     [HttpPost]
     public async Task<IActionResult> SetRating(PhotoRating photoRating)
     {
-        await _ratingService.SetRating(photoRating);
+        return await Log<IActionResult>(async () =>
+        {
+            await _ratingService.SetRating(photoRating);
 
-        return Ok();
+            return Ok();
+        });
     }
 }
