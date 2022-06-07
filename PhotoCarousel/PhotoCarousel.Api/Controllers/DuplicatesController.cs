@@ -20,7 +20,7 @@ public class DuplicatesController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet("random")]
+    [HttpGet]
     public async Task<IActionResult> GetDuplicates()
     {
         var duplicates = await _duplicatesService.GetDuplicates();

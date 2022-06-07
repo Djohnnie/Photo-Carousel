@@ -25,6 +25,7 @@ public class Startup
         services.AddTransient<PhotoService>();
         services.AddTransient<FolderService>();
         services.AddTransient<RatingService>();
+        services.AddTransient<DuplicatesService>();
         services.AddControllers();
         services.AddSwaggerGen(c =>
         {
