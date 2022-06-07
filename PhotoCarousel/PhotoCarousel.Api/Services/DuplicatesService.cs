@@ -31,11 +31,6 @@ public class DuplicatesService
             .GroupBy(x => x.Sha256Hash)
             .Where(x => x.Count() > 1)
             .OrderByDescending(x => x.Count())
-            .Select(x => x.Key)
-            .ToListAsync();
-
-        var photos = await _dbContext.Photos
-            .Where(x => duplicateHashes.Contains(x.Sha256Hash))
             .ToListAsync();
 
         var duplicates = new List<Duplicates>();
@@ -44,11 +39,11 @@ public class DuplicatesService
         {
             var duplicate = new Duplicates
             {
-                Sha256Hash = duplicateHash,
+                Sha256Hash = duplicateHash.Key,
                 Photos = new List<DuplicatePhoto>()
             };
 
-            foreach (var photo in photos.Where(x => x.Sha256Hash == duplicateHash))
+            foreach (var photo in duplicateHash)
             {
                 duplicate.Photos.Add(new DuplicatePhoto
                 {
