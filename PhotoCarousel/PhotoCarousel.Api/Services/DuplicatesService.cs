@@ -30,7 +30,6 @@ public class DuplicatesService
         var duplicateHashes = await _dbContext.Photos
             .GroupBy(x => x.Sha256Hash)
             .Where(x => x.Count() > 1)
-            .OrderByDescending(x => x.Count())
             .ToListAsync();
 
         var duplicates = new List<Duplicates>();
