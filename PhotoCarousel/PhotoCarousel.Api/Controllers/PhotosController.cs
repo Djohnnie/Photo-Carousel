@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PhotoCarousel.Api.Services;
+using PhotoCarousel.Contracts;
 using System.Threading.Tasks;
 
 namespace PhotoCarousel.Api.Controllers;
@@ -70,6 +71,17 @@ public class PhotosController : BaseController<PhotosController>
             var photo = await _photoService.GetNextPhoto();
 
             return photo != null ? Ok(photo) : NotFound();
+        });
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete([FromBody] PhotosToDelete request)
+    {
+        return await Log<IActionResult>(async () =>
+        {
+            await _photoService.DeletePhotos(request.PhotoIds);
+
+            return Ok();
         });
     }
 }

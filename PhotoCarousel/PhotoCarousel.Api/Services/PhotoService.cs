@@ -109,6 +109,13 @@ namespace PhotoCarousel.Api.Services
             return await GetPhoto(historicPhoto);
         }
 
+        public async Task DeletePhotos(Guid[] photoIds)
+        {
+            var photosToRemove = await _dbContext.Photos.Where(x => photoIds.Contains(x.Id)).ToListAsync();
+            _dbContext.RemoveRange(photosToRemove);
+            await _dbContext.AddRangeAsync();
+        }
+
         public async Task<PhotoContract> GetNextPhoto()
         {
             var historicPhoto = await _dbContext.History
