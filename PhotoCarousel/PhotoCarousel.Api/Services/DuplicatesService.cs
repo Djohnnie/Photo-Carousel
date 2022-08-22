@@ -47,6 +47,8 @@ public class DuplicatesService
 
         foreach (var duplicateHash in duplicateHashes)
         {
+            if (duplicateHash.Photos.Count() < 2) continue;
+
             var duplicate = new Duplicates
             {
                 Sha256Hash = duplicateHash.Sha256Hash,
