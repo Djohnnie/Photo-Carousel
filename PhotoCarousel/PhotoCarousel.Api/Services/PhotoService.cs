@@ -112,8 +112,20 @@ namespace PhotoCarousel.Api.Services
         public async Task DeletePhotos(Guid[] photoIds)
         {
             var photosToRemove = await _dbContext.Photos.Where(x => photoIds.Contains(x.Id)).ToListAsync();
-            _dbContext.RemoveRange(photosToRemove);
-            await _dbContext.AddRangeAsync();
+
+            foreach (var photo in photosToRemove)
+            {
+                try
+                {
+                    File.Delete(photo.SourcePath);
+                    _dbContext.Remove(photo);
+                    await _dbContext.AddRangeAsync();
+                }
+                catch
+                {
+                    // Nothing we can do...
+                }
+            }
         }
 
         public async Task<PhotoContract> GetNextPhoto()
