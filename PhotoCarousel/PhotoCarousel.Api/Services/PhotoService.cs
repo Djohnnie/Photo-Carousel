@@ -117,9 +117,13 @@ namespace PhotoCarousel.Api.Services
             {
                 try
                 {
-                    File.Delete(photo.SourcePath);
+                    if (File.Exists(photo.SourcePath))
+                    {
+                        File.Delete(photo.SourcePath);
+                    }
+
                     _dbContext.Remove(photo);
-                    await _dbContext.AddRangeAsync();
+                    await _dbContext.SaveChangesAsync();
                 }
                 catch
                 {
