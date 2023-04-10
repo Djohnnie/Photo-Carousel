@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <RuntimeIdentifiers>win10-x64;linux-arm</RuntimeIdentifiers>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -9,10 +9,10 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="0.10.11" />
-    <PackageReference Include="Avalonia.Desktop" Version="0.10.11" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.11" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.11" />
+    <PackageReference Include="Avalonia" Version="0.10.19" />
+    <PackageReference Include="Avalonia.Desktop" Version="0.10.19" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="0.10.19" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.19" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PhotoCarousel.Contracts\PhotoCarousel.Contracts.csproj" />

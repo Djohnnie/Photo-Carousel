@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,21 +26,9 @@ public class CleanupHelper
     {
         var sw = Stopwatch.StartNew();
 
-        var photoIds = await _dbContext.Photos.Select(x => x.Id).ToListAsync(stoppingToken);
-
-        foreach (var photoId in photoIds)
-        {
-            var photo = await _dbContext.Photos.SingleOrDefaultAsync(x => x.Id == photoId, stoppingToken);
-
-            if (!File.Exists(photo.SourcePath))
-            {
-                _dbContext.Photos.Remove(photo);
-                await _dbContext.SaveChangesAsync(stoppingToken);
-                _logger.LogInformation($"Photo '{photo.SourcePath}' does not exist and was cleaned.");
-            }
-        }
+        var recordsRemoved = await _dbContext.History.Where(x => x.Scheduled < DateTime.UtcNow.Date.AddDays(28)).ExecuteDeleteAsync();
 
         sw.Stop();
-        _logger.LogInformation($"Whole photo library cleaned successfully: {sw.Elapsed.TotalSeconds:F0} sec");
+        _logger.LogInformation($"{recordsRemoved} history records cleaned successfully: {sw.Elapsed.TotalSeconds:F0}s");
     }
 }

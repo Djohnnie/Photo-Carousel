@@ -18,10 +18,10 @@ pool:
 steps:
 
 - task: UseDotNet@2
-  displayName: 'Use .NET SDK (6.0.101)'
+  displayName: 'Use .NET SDK (7.0.202)'
   inputs:
     packageType: sdk
-    version: 6.0.101
+    version: 7.0.202
     includePreviewVersions: true
     installationPath: $(Agent.ToolsDirectory)/dotnet
 

@@ -43,6 +43,7 @@ public class SchedulerHelper
             .Where(x => !string.IsNullOrEmpty(x.Description))
             .Where(x => x.Rating != Rating.ThumbsDown)
             .Where(x => !historicPhotoIds.Contains(x.Id))
+            .Where(x => x.Orientation == Orientation.Landscape)
             .OrderBy(x => Guid.NewGuid())
             .Take(2).ToListAsync();
 
