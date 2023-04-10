@@ -40,6 +40,6 @@ steps:
 - script: |
     cd ./PhotoCarousel
     docker build -t djohnnie/photocarousel-api -f Dockerfile-Api .
-    docker login -u $(dockerId) -p $(dockerPwd)
+    docker login -u '$(dockerId)' -p '$(dockerPwd)'
     docker push djohnnie/photocarousel-api
   displayName: Build & Push djohnnie/photocarousel-api
