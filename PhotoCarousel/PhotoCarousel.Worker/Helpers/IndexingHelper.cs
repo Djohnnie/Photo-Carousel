@@ -72,7 +72,7 @@ public class IndexingHelper
                         await _dbContext.SaveChangesAsync(stoppingToken);
 
                         sw.Stop();
-                        _logger.LogInformation($"Photo indexed successfully: {sw.ElapsedMilliseconds}ms");
+                        _logger.LogInformation($"Photo '{indexedPhoto.SourcePath}' indexed successfully: {sw.ElapsedMilliseconds}ms");
                     }
                 }
             }
@@ -97,7 +97,7 @@ public class IndexingHelper
         folderSw.Stop();
         if (isAlbumFolder)
         {
-            _logger.LogInformation($"Album folder '{match.Value}' with {numberOfPhotosInAlbumFolder} photos indexed successfully: {folderSw.ElapsedMilliseconds}ms");
+            _logger.LogInformation($"Album folder '{match.Value}' with {numberOfPhotosInAlbumFolder} photos indexed successfully: {Math.Round(folderSw.Elapsed.TotalSeconds)}s");
         }
 
         return numberOfPhotosInAlbumFolder;
