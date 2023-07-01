@@ -43,10 +43,10 @@ public class IndexingHelper
         _logger.LogInformation($"Whole photo library indexed successfully: {sw.Elapsed.TotalMinutes:F0} min");
     }
 
-    private async Task IndexPhotos(DirectoryInfo directoryInfo, CancellationToken stoppingToken)
+    private async Task<int> IndexPhotos(DirectoryInfo directoryInfo, CancellationToken stoppingToken)
     {
         var regex = new Regex(@"[0-9]{4}-[0-9]{2}\s\(.*?\)");
-        var match = regex.Match(directoryInfo.FullName);
+        var match = regex.Match(directoryInfo.Name);
         bool isAlbumFolder = match.Success;
         int numberOfPhotosInAlbumFolder = 0;
 
@@ -82,23 +82,25 @@ public class IndexingHelper
             }
         }
 
-        folderSw.Stop();
-        if (isAlbumFolder)
-        {
-            _logger.LogInformation($"Album folder '{match.Value}' with {numberOfPhotosInAlbumFolder} photos indexed successfully: {folderSw.ElapsedMilliseconds}ms");
-        }
-
         foreach (var childDirectoryInfo in directoryInfo.GetDirectories())
         {
             try
             {
-                await IndexPhotos(childDirectoryInfo, stoppingToken);
+                numberOfPhotosInAlbumFolder += await IndexPhotos(childDirectoryInfo, stoppingToken);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error while indexing directory '{childDirectoryInfo.FullName}': {ex.Message}");
             }
         }
+
+        folderSw.Stop();
+        if (isAlbumFolder)
+        {
+            _logger.LogInformation($"Album folder '{match.Value}' with {numberOfPhotosInAlbumFolder} photos indexed successfully: {folderSw.ElapsedMilliseconds}ms");
+        }
+
+        return numberOfPhotosInAlbumFolder;
     }
 
     private Photo GenerateIndexedPhoto(FileInfo fileInfo, byte[] hash)
