@@ -7,14 +7,12 @@ using PhotoCarousel.Entities;
 using PhotoCarousel.Enums;
 using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using TagLib.Image;
 
 namespace PhotoCarousel.Worker.Helpers;
 
@@ -93,7 +91,7 @@ public class IndexingHelper
     {
         var regex = new Regex(@"[0-9]{4}-[0-9]{2}\s\(.*?\)");
         var match = regex.Match(fileInfo.FullName);
-        var metadata = GetDateTaken(fileInfo);
+        var metadata = GetMetaData(fileInfo);
 
         return new()
         {
@@ -120,25 +118,39 @@ public class IndexingHelper
         return hash;
     }
 
-    private (DateTime, Orientation) GetDateTaken(FileInfo fileInfo)
+    private (DateTime, Orientation) GetMetaData(FileInfo fileInfo)
     {
-        Regex r = new Regex(":");
-        using var fs = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
-        using Image myImage = Image.FromStream(fs, false, false);
-        var orientation = myImage.Width > myImage.Height ? Orientation.Landscape : Orientation.Portrait;
+        var file = TagLib.File.Create(fileInfo.FullName);
+        var imageTags = file.Tag as TagLib.Image.CombinedImageTag;
 
         try
         {
-            PropertyItem propItem = myImage.GetPropertyItem(36867);
-            if (propItem != null)
-            {
-                var str = Encoding.UTF8.GetString(propItem.Value);
-                string dateTaken = r.Replace(str, "-", 2);
-                return (DateTime.Parse(dateTaken), orientation);
-            }
-        }
-        catch { }
+            var orientation = Orientation.Landscape;
 
-        return (fileInfo.LastWriteTime, orientation);
+            if (imageTags != null && imageTags.Orientation != ImageOrientation.None)
+            {
+                switch (imageTags.Orientation)
+                {
+                    case ImageOrientation.TopLeft:
+                    case ImageOrientation.TopRight:
+                    case ImageOrientation.BottomLeft:
+                    case ImageOrientation.BottomRight:
+                        orientation = Orientation.Landscape;
+                        break;
+                    case ImageOrientation.LeftTop:
+                    case ImageOrientation.RightTop:
+                    case ImageOrientation.LeftBottom:
+                    case ImageOrientation.RightBottom:
+                        orientation = Orientation.Portrait;
+                        break;
+                }
+            }
+
+            return (imageTags is { DateTime: not null } ? imageTags.DateTime.Value : fileInfo.LastWriteTime, orientation);
+        }
+        catch
+        {
+            return (fileInfo.LastWriteTime, Orientation.Landscape);
+        }
     }
 }
