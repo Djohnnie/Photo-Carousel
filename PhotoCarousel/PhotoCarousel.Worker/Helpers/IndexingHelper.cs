@@ -45,6 +45,13 @@ public class IndexingHelper
 
     private async Task IndexPhotos(DirectoryInfo directoryInfo, CancellationToken stoppingToken)
     {
+        var regex = new Regex(@"[0-9]{4}-[0-9]{2}\s\(.*?\)");
+        var match = regex.Match(directoryInfo.FullName);
+        bool isAlbumFolder = match.Success;
+        int numberOfPhotosInAlbumFolder = 0;
+
+        var folderSw = Stopwatch.StartNew();
+
         foreach (var fileInfo in directoryInfo.GetFiles())
         {
             try
@@ -53,6 +60,7 @@ public class IndexingHelper
                 {
                     var sw = Stopwatch.StartNew();
 
+                    numberOfPhotosInAlbumFolder++;
                     var hash = await CalculateSha256(fileInfo, stoppingToken);
 
                     if (!await _dbContext.Photos.AnyAsync(
@@ -72,6 +80,12 @@ public class IndexingHelper
             {
                 _logger.LogError($"Error while indexing file '{fileInfo.FullName}': {ex.Message}");
             }
+        }
+
+        folderSw.Stop();
+        if (isAlbumFolder)
+        {
+            _logger.LogInformation($"Album folder '{match.Value}' with {numberOfPhotosInAlbumFolder} photos indexed successfully: {folderSw.ElapsedMilliseconds}ms");
         }
 
         foreach (var childDirectoryInfo in directoryInfo.GetDirectories())
