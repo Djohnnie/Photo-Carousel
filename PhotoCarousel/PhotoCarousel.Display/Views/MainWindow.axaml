@@ -19,14 +19,14 @@
 						   Cursor="None" />
 		<TextBlock Text="{Binding TestDescription}"
 					   HorizontalAlignment="Right" VerticalAlignment="Bottom"
-					   Margin="0 0 40 20"
+					   Margin="0 0 40 10"
 					   FontFamily="{StaticResource PurisaFont}"
 					   FontSize="80"
 					   Foreground="Black"
 					   Grid.Row="2" Grid.Column="1"/>
 		<TextBlock Text="{Binding TestDescription}"
 					   HorizontalAlignment="Right" VerticalAlignment="Bottom"
-					   Margin="0 0 45 25"
+					   Margin="0 0 45 15"
 					   FontFamily="{StaticResource PurisaFont}"
 					   FontSize="80"
 					   Foreground="White"

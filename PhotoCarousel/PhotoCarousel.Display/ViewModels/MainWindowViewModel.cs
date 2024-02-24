@@ -57,13 +57,13 @@ namespace PhotoCarousel.Display.ViewModels
                             {
                                 using var stream = new MemoryStream(photo);
                                 TestImage = new Bitmap(stream);
-                                TestDescription = response.Description;
+                                TestDescription = ConvertDescription(response.Description);
                                 ErrorDescription = string.Empty;
                             }, null);
-                            
+
                             error = false;
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             _synchronizationContext.Post((x) =>
                             {
@@ -76,6 +76,16 @@ namespace PhotoCarousel.Display.ViewModels
                     } while (error);
                 } while (await _timer.WaitForNextTickAsync());
             });
+        }
+
+        private string ConvertDescription(string description)
+        {
+            var parts = description.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var datePart = parts[0];
+            var descriptionPart = string.Join(' ', parts[1..]);
+
+            return $"{descriptionPart.Replace("(", "").Replace(")", "")} ({datePart})";
         }
     }
 }
