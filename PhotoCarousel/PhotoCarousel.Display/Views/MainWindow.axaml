@@ -18,16 +18,16 @@
 						   Stretch="UniformToFill"
 						   Cursor="None" />
 		<TextBlock Text="{Binding TestDescription}"
-					   HorizontalAlignment="Center" VerticalAlignment="Bottom"
+					   HorizontalAlignment="Right" VerticalAlignment="Bottom"
 					   Margin="0 0 0 40"
-					   FontFamily="Segoe Print"
+					   FontFamily="Purisa Medium"
 					   FontSize="80"
 					   Foreground="Black"
 					   Grid.Row="2" Grid.Column="1"/>
 		<TextBlock Text="{Binding TestDescription}"
-					   HorizontalAlignment="Center" VerticalAlignment="Bottom"
-					   Margin="0 0 0 45"
-					   FontFamily="Segoe Print"
+					   HorizontalAlignment="Right" VerticalAlignment="Bottom"
+					   Margin="0 0 5 45"
+					   FontFamily="Purisa Medium"
 					   FontSize="80"
 					   Foreground="White"
 					   Grid.Row="2" Grid.Column="1"/>
