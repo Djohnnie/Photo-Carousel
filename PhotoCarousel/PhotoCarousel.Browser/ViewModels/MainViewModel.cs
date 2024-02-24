@@ -487,11 +487,6 @@ internal class MainViewModel : ViewModelBase
                     Rating = x.Rating
                 }).ToList();
 
-                //await Parallel.ForEachAsync(Photos, async (photo, _) =>
-                //{
-                //    photo.Bitmap = await _apiClientHelper.GetThumbnail(photo.Id);
-                //});
-
                 foreach (var photo in Photos)
                 {
                     photo.Bitmap = await _apiClientHelper.GetThumbnail(photo.Id);

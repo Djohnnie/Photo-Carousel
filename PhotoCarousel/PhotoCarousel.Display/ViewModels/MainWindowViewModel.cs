@@ -15,8 +15,8 @@ namespace PhotoCarousel.Display.ViewModels
         private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
         private readonly PeriodicTimer _timer = new(TimeSpan.FromMinutes(1));
 
-        private IBitmap _testImage;
-        public IBitmap TestImage
+        private Bitmap _testImage;
+        public Bitmap TestImage
         {
             get => _testImage;
             set => this.RaiseAndSetIfChanged(ref _testImage, value);

@@ -6,14 +6,42 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="PhotoCarousel.Display.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaApplication1"
+        Title="PhotoCarousel Display"
         Cursor="None">
 
 	<Design.DataContext>
 		<viewModels:MainWindowViewModel/>
 	</Design.DataContext>
 
-	<Grid Cursor="None" Background="#FFFDD0">
+	<Grid Cursor="None">
+		<Image Source="{Binding TestImage}"
+						   Stretch="UniformToFill"
+						   Cursor="None" />
+		<TextBlock Text="{Binding TestDescription}"
+					   HorizontalAlignment="Center" VerticalAlignment="Bottom"
+					   Margin="0 0 0 40"
+					   FontFamily="Segoe Print"
+					   FontSize="65"
+					   Foreground="Black"
+					   Grid.Row="2" Grid.Column="1"/>
+		<TextBlock Text="{Binding TestDescription}"
+					   HorizontalAlignment="Center" VerticalAlignment="Bottom"
+					   Margin="0 0 0 45"
+					   FontFamily="Segoe Print"
+					   FontSize="65"
+					   Foreground="White"
+					   Grid.Row="2" Grid.Column="1"/>
+
+		<TextBlock Text="{Binding ErrorDescription}"
+				   HorizontalAlignment="Center" VerticalAlignment="Center"
+				   Margin="0 20 0 0"
+				   FontFamily="Segoe Print"
+				   FontSize="20"
+				   Foreground="Gray"
+				   Grid.Row="0" Grid.Column="1"/>
+	</Grid>
+
+	<!--<Grid Cursor="None" Background="#FFFDD0">
 
 		<Grid.RowDefinitions>
 			<RowDefinition Height="1*" />
@@ -36,8 +64,6 @@
                         <Path Data="M 0,900 L 0,0 L 100,100 L 100,800 Z" Fill="#dedcb0" />
 					</Canvas>
 				</Viewbox>
-				<!--<Border BoxShadow="0 0 20 Gray" BorderThickness="0"
-                        Margin="54,50,54,50" Padding="0" Cursor="None">-->
                 
 				<Image Source="{Binding TestImage}"
                        Stretch="UniformToFill"
@@ -58,7 +84,9 @@
                 <Border Background="Transparent" VerticalAlignment="Bottom" BorderThickness="0"
                         Height="1" Margin="24,0,24,14"
                         BoxShadow="0 -6 6 Black" />
-                <!--</Border>-->
+                -->
+	<!--</Border>-->
+	<!--
 			</Grid>
 		</Border>
 
@@ -78,6 +106,6 @@
 				   Foreground="Gray"
 				   Grid.Row="0" Grid.Column="1"/>
 
-	</Grid>
+	</Grid>-->
 
 </Window>
