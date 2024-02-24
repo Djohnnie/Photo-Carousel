@@ -19,15 +19,15 @@
 						   Cursor="None" />
 		<TextBlock Text="{Binding TestDescription}"
 					   HorizontalAlignment="Right" VerticalAlignment="Bottom"
-					   Margin="0 0 0 40"
-					   FontFamily="Purisa Medium"
+					   Margin="0 0 40 40"
+					   FontFamily="{StaticResource PurisaFont}"
 					   FontSize="80"
 					   Foreground="Black"
 					   Grid.Row="2" Grid.Column="1"/>
 		<TextBlock Text="{Binding TestDescription}"
 					   HorizontalAlignment="Right" VerticalAlignment="Bottom"
-					   Margin="0 0 5 45"
-					   FontFamily="Purisa Medium"
+					   Margin="0 0 45 45"
+					   FontFamily="{StaticResource PurisaFont}"
 					   FontSize="80"
 					   Foreground="White"
 					   Grid.Row="2" Grid.Column="1"/>
@@ -35,7 +35,7 @@
 		<TextBlock Text="{Binding ErrorDescription}"
 				   HorizontalAlignment="Center" VerticalAlignment="Center"
 				   Margin="0 20 0 0"
-				   FontFamily="Segoe Print"
+				   FontFamily="{StaticResource PurisaFont}"
 				   FontSize="20"
 				   Foreground="Gray"
 				   Grid.Row="0" Grid.Column="1"/>
