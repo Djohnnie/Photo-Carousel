@@ -80,12 +80,19 @@ namespace PhotoCarousel.Display.ViewModels
 
         private string ConvertDescription(string description)
         {
-            var parts = description.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            try
+            {
+                var parts = description.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var datePart = parts[0];
-            var descriptionPart = string.Join(' ', parts[1..]);
+                var datePart = parts[0];
+                var descriptionPart = string.Join(' ', parts[1..]);
 
-            return $"{descriptionPart.Replace("(", "").Replace(")", "")} ({datePart})";
+                return $"{descriptionPart.Replace("(", "").Replace(")", "")} ({datePart})";
+            }
+            catch
+            {
+                return description;
+            }
         }
     }
 }
