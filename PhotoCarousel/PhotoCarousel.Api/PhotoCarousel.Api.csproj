@@ -1,19 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PhotoCarousel.Common\PhotoCarousel.Common.csproj" />
-    <ProjectReference Include="..\PhotoCarousel.Contracts\PhotoCarousel.Contracts.csproj" />
-    <ProjectReference Include="..\PhotoCarousel.DataAccess\PhotoCarousel.DataAccess.csproj" />
-    <ProjectReference Include="..\PhotoCarousel.Entities\PhotoCarousel.Entities.csproj" />
-    <ProjectReference Include="..\PhotoCarousel.Enums\PhotoCarousel.Enums.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\PhotoCarousel.Common\PhotoCarousel.Common.csproj" />
+		<ProjectReference Include="..\PhotoCarousel.Contracts\PhotoCarousel.Contracts.csproj" />
+		<ProjectReference Include="..\PhotoCarousel.DataAccess\PhotoCarousel.DataAccess.csproj" />
+		<ProjectReference Include="..\PhotoCarousel.Entities\PhotoCarousel.Entities.csproj" />
+		<ProjectReference Include="..\PhotoCarousel.Enums\PhotoCarousel.Enums.csproj" />
+	</ItemGroup>
 
 </Project>

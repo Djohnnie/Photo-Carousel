@@ -1,23 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net7.0</TargetFramework>
-		<RuntimeIdentifiers>win10-x64;linux-arm</RuntimeIdentifiers>
+		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<AvaloniaResource Include="Assets\**" />
 	</ItemGroup>
+
 	<ItemGroup>
-	  <None Remove="Assets\purisa.ttf" />
+		<None Remove="Assets\purisa.ttf" />
 	</ItemGroup>
+
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="0.10.19" />
-		<PackageReference Include="Avalonia.Desktop" Version="0.10.19" />
-		<PackageReference Include="Avalonia.Diagnostics" Version="0.10.19" />
-		<PackageReference Include="Avalonia.ReactiveUI" Version="0.10.19" />
+		<PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+		<PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+		<PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
+		<PackageReference Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
+		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\PhotoCarousel.Contracts\PhotoCarousel.Contracts.csproj" />
 	</ItemGroup>
+
 </Project>

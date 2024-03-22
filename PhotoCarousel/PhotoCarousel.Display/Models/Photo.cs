@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace PhotoCarousel.Display.Models
+namespace PhotoCarousel.Display.Models;
+
+public class Photo
 {
-    public class Photo
-    {
-        public Guid Id { get; set; }
-        public string Description { get; set; }
-    }
+    public Guid Id { get; set; }
+    public string Description { get; set; }
 }

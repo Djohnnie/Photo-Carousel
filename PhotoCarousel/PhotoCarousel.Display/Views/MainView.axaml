@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:PhotoCarousel.Display.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="PhotoCarousel.Display.Views.MainView"
+             x:DataType="viewModels:MainViewModel">
+	
+	<Design.DataContext>
+		<viewModels:MainViewModel/>
+	</Design.DataContext>
+
+	<Grid Cursor="None">
+		<Image Source="{Binding TestImage}"
+						   Stretch="UniformToFill"
+						   Cursor="None" />
+		<TextBlock Text="{Binding TestDescription}"
+					   HorizontalAlignment="Right" VerticalAlignment="Bottom"
+					   Margin="0 0 40 10"
+					   FontFamily="{StaticResource PurisaFont}"
+					   FontSize="80"
+					   Foreground="Black"
+					   Grid.Row="2" Grid.Column="1"/>
+		<TextBlock Text="{Binding TestDescription}"
+					   HorizontalAlignment="Right" VerticalAlignment="Bottom"
+					   Margin="0 0 45 15"
+					   FontFamily="{StaticResource PurisaFont}"
+					   FontSize="80"
+					   Foreground="White"
+					   Grid.Row="2" Grid.Column="1"/>
+
+		<TextBlock Text="{Binding ErrorDescription}"
+				   HorizontalAlignment="Center" VerticalAlignment="Center"
+				   Margin="0 20 0 0"
+				   FontFamily="{StaticResource PurisaFont}"
+				   FontSize="20"
+				   Foreground="Gray"
+				   Grid.Row="0" Grid.Column="1"/>
+	</Grid>
+
+</UserControl>

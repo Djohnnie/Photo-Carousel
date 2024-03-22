@@ -6,6 +6,7 @@ trigger:
     include:
     - .pipeline/PhotoCarousel-Display.yml
     - PhotoCarousel/PhotoCarousel.Display/*
+    - PhotoCarousel/PhotoCarousel.Display.Desktop/*
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -13,10 +14,10 @@ pool:
 steps:
 
 - task: UseDotNet@2
-  displayName: 'Use .NET SDK (7.0.202)'
+  displayName: 'Use .NET SDK (8.0.203)'
   inputs:
     packageType: sdk
-    version: 7.0.202
+    version: 8.0.203
     includePreviewVersions: true
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
@@ -28,18 +29,18 @@ steps:
       **/PhotoCarousel.Display.csproj
 
 - task: DotNetCoreCLI@2
-  displayName: Build PhotoCarousel.Display.csproj
+  displayName: Build PhotoCarousel.Display.Desktop.csproj
   inputs:
     command: 'build'
     projects: | 
-      **/PhotoCarousel.Display.csproj
+      **/PhotoCarousel.Display.Desktop.csproj
 
 - script: |
-    dotnet publish ./PhotoCarousel/PhotoCarousel.Display --configuration "Release" --runtime linux-arm --output ./PhotoCarousel/PhotoCarousel.Display/bin/Release/publish
+    dotnet publish ./PhotoCarousel/PhotoCarousel.Display.Desktop --configuration "Release" --runtime linux-arm --output ./PhotoCarousel/PhotoCarousel.Display.Desktop/bin/Release/publish
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Display/bin/Release/publish' 
+    rootFolderOrFile: '$(Build.SourcesDirectory)/PhotoCarousel/PhotoCarousel.Display.Desktop/bin/Release/publish' 
     includeRootFolder: false 
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/PhotoCarousel.Display.zip' 

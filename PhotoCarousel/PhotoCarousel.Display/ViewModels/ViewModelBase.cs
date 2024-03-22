@@ -1,8 +1,7 @@
-using ReactiveUI;
+﻿using ReactiveUI;
 
-namespace PhotoCarousel.Display.ViewModels
+namespace PhotoCarousel.Display.ViewModels;
+
+public class ViewModelBase : ReactiveObject
 {
-    public class ViewModelBase : ReactiveObject
-    {
-    }
 }

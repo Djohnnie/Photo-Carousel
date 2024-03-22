@@ -1,29 +1,36 @@
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+
 using PhotoCarousel.Display.ViewModels;
 using PhotoCarousel.Display.Views;
 
-namespace PhotoCarousel.Display
+namespace PhotoCarousel.Display;
+
+public partial class App : Application
 {
-    public class App : Application
+    public override void Initialize()
     {
-        public override void Initialize()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        AvaloniaXamlLoader.Load(this);
+    }
 
-        public override void OnFrameworkInitializationCompleted()
+    public override void OnFrameworkInitializationCompleted()
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            desktop.MainWindow = new MainWindow
             {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel(),
-                };
-            }
-
-            base.OnFrameworkInitializationCompleted();
+                DataContext = new MainViewModel()
+            };
         }
+        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+        {
+            singleViewPlatform.MainView = new MainView
+            {
+                DataContext = new MainViewModel()
+            };
+        }
+
+        base.OnFrameworkInitializationCompleted();
     }
 }
