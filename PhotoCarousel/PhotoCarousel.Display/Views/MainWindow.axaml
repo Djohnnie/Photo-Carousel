@@ -8,6 +8,6 @@
         x:Class="PhotoCarousel.Display.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="PhotoCarousel Display"
-        Cursor="None">
+        Cursor="None" WindowState="FullScreen">
         <views:MainView />
 </Window>
