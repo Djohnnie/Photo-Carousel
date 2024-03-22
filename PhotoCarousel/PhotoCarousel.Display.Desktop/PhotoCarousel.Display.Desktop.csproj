@@ -8,6 +8,8 @@
 		<Nullable>enable</Nullable>
 		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<RuntimeIdentifiers>win-x64;linux-arm</RuntimeIdentifiers>
+		<SelfContained>true</SelfContained>
 	</PropertyGroup>
 
 	<ItemGroup>
