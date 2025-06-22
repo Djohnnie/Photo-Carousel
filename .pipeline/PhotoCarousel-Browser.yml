@@ -18,10 +18,10 @@ steps:
 - script: echo '$(Build.BuildNumber)'
 
 - task: UseDotNet@2
-  displayName: 'Use .NET SDK (8.0.203)'
+  displayName: 'Use .NET SDK (9.0.301)'
   inputs:
     packageType: sdk
-    version: 8.0.203
+    version: 9.0.301
     includePreviewVersions: true
     installationPath: $(Agent.ToolsDirectory)/dotnet
   
