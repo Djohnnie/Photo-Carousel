@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PhotoCarousel.DataAccess;
@@ -32,5 +32,6 @@ public class Program
                 services.AddHostedService<ThumbnailCreationWorker>();
                 services.AddHostedService<SchedulerWorker>();
                 services.AddHostedService<CleanupWorker>();
+                //services.AddHostedService<OrientationVerifierWorker>();
             });
 }
