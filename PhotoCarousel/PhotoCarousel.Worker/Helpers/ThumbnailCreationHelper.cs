@@ -33,6 +33,7 @@ public class ThumbnailCreationHelper
     public async Task<int> Go(CancellationToken stoppingToken)
     {
         var photoBatch = await _dbContext.Photos
+            .AsNoTracking()
             .Where(x => string.IsNullOrEmpty(x.ThumbnailPath))
             .Take(16)
             .ToListAsync(stoppingToken);

@@ -30,7 +30,7 @@ public class CleanupWorker : BackgroundService
     {
         _logger.LogInformation("CLEANUP-WORKER WILL START IN ONE MINUTE...");
 
-        //await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+        await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
 
         _logger.LogInformation("CLEANUP-WORKER HAS STARTED");
 

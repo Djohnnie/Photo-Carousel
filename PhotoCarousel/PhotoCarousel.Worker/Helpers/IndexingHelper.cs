@@ -115,6 +115,7 @@ public class IndexingHelper
             Id = Guid.NewGuid(),
             SourcePath = fileInfo.FullName,
             FolderPath = Path.GetDirectoryName(fileInfo.FullName),
+            ThumbnailPath = string.Empty,
             Sha256Hash = hash,
             Rating = Rating.None,
             DateTaken = metadata.Item1,

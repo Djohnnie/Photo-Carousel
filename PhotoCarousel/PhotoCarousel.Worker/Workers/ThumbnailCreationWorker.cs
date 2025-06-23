@@ -57,7 +57,7 @@ public class ThumbnailCreationWorker : BackgroundService
                 _logger.LogCritical($"Unknown error occurred while creating thumbnails: ({ex.Message}).");
             }
 
-            if(numberOfThumbnailsCreated > 0)
+            if (numberOfThumbnailsCreated > 0)
             {
                 await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
             }
