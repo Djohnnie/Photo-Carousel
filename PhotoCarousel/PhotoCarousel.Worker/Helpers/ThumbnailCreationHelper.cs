@@ -63,7 +63,10 @@ public class ThumbnailCreationHelper
                 using var thumbnailTarget = new SKBitmap(destinationBounds.Width, destinationBounds.Height);
                 using var canvasTarget = new SKCanvas(thumbnailTarget);
                 canvasTarget.DrawBitmap(sourceBitmap, sourceBounds, destinationBounds);
-                using var destinationBitmap = thumbnailTarget.Resize(new SKSizeI(thumbnailSize, thumbnailSize), SKFilterQuality.High);
+                using var destinationBitmap = thumbnailTarget.Resize(
+                    new SKSizeI(thumbnailSize, thumbnailSize),
+                    new SKSamplingOptions(SKFilterMode.Linear, SKMipmapMode.None)
+                );
 
                 var thumbnailDestinationPath = Path.Combine(thumbnailPath, $"{photo.Id}.thumbnail.jpg");
 

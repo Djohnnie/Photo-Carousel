@@ -49,6 +49,7 @@ public class IndexingHelper
         var match = regex.Match(directoryInfo.Name);
         bool isAlbumFolder = match.Success;
         int numberOfPhotosInAlbumFolder = 0;
+        var numberOfPhotosIndexed = 0;
 
         var folderSw = Stopwatch.StartNew();
 
@@ -67,7 +68,7 @@ public class IndexingHelper
                             x => x.Sha256Hash == hash && x.SourcePath == fileInfo.FullName, stoppingToken))
                     {
                         var indexedPhoto = GenerateIndexedPhoto(fileInfo, hash);
-
+                        numberOfPhotosIndexed++;
                         await _dbContext.Photos.AddAsync(indexedPhoto, stoppingToken);
                         await _dbContext.SaveChangesAsync(stoppingToken);
 
@@ -95,9 +96,9 @@ public class IndexingHelper
         }
 
         folderSw.Stop();
-        if (isAlbumFolder)
+        if (isAlbumFolder && numberOfPhotosIndexed > 0)
         {
-            _logger.LogInformation($"Album folder '{match.Value}' with {numberOfPhotosInAlbumFolder} photos indexed successfully: {Math.Round(folderSw.Elapsed.TotalSeconds)}s");
+            _logger.LogInformation($"Album folder '{match.Value}' with {numberOfPhotosIndexed} of {numberOfPhotosInAlbumFolder} photos indexed successfully: {Math.Round(folderSw.Elapsed.TotalSeconds)}s");
         }
 
         return numberOfPhotosInAlbumFolder;
