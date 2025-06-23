@@ -33,7 +33,6 @@ public class ThumbnailCreationHelper
     public async Task<int> Go(CancellationToken stoppingToken)
     {
         var photoBatch = await _dbContext.Photos
-            .AsNoTracking()
             .Where(x => string.IsNullOrEmpty(x.ThumbnailPath))
             .Take(16)
             .ToListAsync(stoppingToken);
@@ -71,7 +70,7 @@ public class ThumbnailCreationHelper
 
                 var thumbnailDestinationPath = Path.Combine(thumbnailPath, $"{photo.Id}.thumbnail.jpg");
 
-                await using var destinationFileStream = new FileStream(thumbnailDestinationPath, FileMode.CreateNew);
+                await using var destinationFileStream = new FileStream(thumbnailDestinationPath, FileMode.Create);
                 destinationBitmap.Encode(destinationFileStream, SKEncodedImageFormat.Jpeg, 90);
 
                 photo.ThumbnailPath = thumbnailDestinationPath;
