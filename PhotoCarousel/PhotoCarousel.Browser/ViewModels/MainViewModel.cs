@@ -272,7 +272,7 @@ internal class MainViewModel : ViewModelBase
         ThumbsDownSelectedCommand = new RelayCommand(OnThumbsDownSelected);
         UpdateCommand = new RelayCommand(OnUpdate);
 
-        Task.Run(async () =>
+        _ = Task.Run(async () =>
         {
             var currentVersion = _updateHelper.GetCurrentVersion();
             var availableVersion = await _updateHelper.GetAvailableVersion();

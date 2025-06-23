@@ -1,6 +1,5 @@
-﻿using System.Reflection;
+﻿using PhotoCarousel.Browser.ViewModels;
 using System.Windows;
-using PhotoCarousel.Browser.ViewModels;
 
 namespace PhotoCarousel.Browser.Views;
 

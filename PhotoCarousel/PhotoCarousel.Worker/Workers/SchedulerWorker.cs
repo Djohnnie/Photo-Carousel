@@ -57,7 +57,7 @@ public class SchedulerWorker : BackgroundService
             }
 
             var interval = _configuration.GetSchedulerIntervalInSeconds();
-            await Task.Delay(TimeSpan.FromSeconds(interval), stoppingToken);
+            await Task.Delay(TimeSpan.FromHours(interval), stoppingToken);
         }
     }
 }
