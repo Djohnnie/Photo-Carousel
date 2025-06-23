@@ -39,8 +39,7 @@ public class CleanupHelper
 
         foreach (var photo in await _dbContext.Photos.AsNoTracking().Select(x => new { x.Id, x.SourcePath }).ToListAsync())
         {
-            var fullPath = photo.SourcePath.Replace("/", @"\");
-            if (!File.Exists(fullPath))
+            if (!File.Exists(photo.SourcePath))
             {
                 photosToRemove.Add(photo.Id);
             }
