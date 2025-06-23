@@ -45,7 +45,7 @@ public class CleanupHelper
             }
         }
 
-        //await _dbContext.Photos.Where(x => photosToRemove.Contains(x.Id)).ExecuteDeleteAsync();
+        await _dbContext.Photos.Where(x => photosToRemove.Contains(x.Id)).ExecuteDeleteAsync();
 
         sw.Stop();
         _logger.LogInformation($"{photosToRemove.Count} photos that do not exist removed from database successfully: {sw.Elapsed.TotalSeconds:F0}s");
