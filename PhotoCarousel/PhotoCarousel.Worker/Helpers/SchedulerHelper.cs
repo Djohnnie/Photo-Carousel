@@ -53,7 +53,7 @@ public class SchedulerHelper
             .Take(2).ToListAsync();
 
         // If there are no historic photos,
-        // Schedule a current one and a next one.q
+        // Schedule a current one and a next one.
         if (!historicPhotos.Any())
         {
             var utcNow = DateTime.UtcNow.RoundToMinutes();
