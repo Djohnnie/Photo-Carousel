@@ -55,32 +55,46 @@ public class IndexingHelper
 
         foreach (var fileInfo in directoryInfo.GetFiles())
         {
-            try
+            var retries = 0;
+            var error = false;
+
+            do
             {
-                if (!fileInfo.FullName.Contains("@eaDir") && fileInfo.Extension.Equals(".jpg", StringComparison.InvariantCultureIgnoreCase))
+                try
                 {
-                    var sw = Stopwatch.StartNew();
-
-                    numberOfPhotosInAlbumFolder++;
-                    var hash = await CalculateSha256(fileInfo, stoppingToken);
-
-                    if (!await _dbContext.Photos.AnyAsync(
-                            x => x.Sha256Hash == hash && x.SourcePath == fileInfo.FullName, stoppingToken))
+                    if (!fileInfo.FullName.Contains("@eaDir") && fileInfo.Extension.Equals(".jpg", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        var indexedPhoto = GenerateIndexedPhoto(fileInfo, hash);
-                        numberOfPhotosIndexed++;
-                        await _dbContext.Photos.AddAsync(indexedPhoto, stoppingToken);
-                        await _dbContext.SaveChangesAsync(stoppingToken);
+                        var sw = Stopwatch.StartNew();
 
-                        sw.Stop();
-                        _logger.LogInformation($"Photo '{indexedPhoto.SourcePath}' indexed successfully: {sw.ElapsedMilliseconds}ms");
+                        numberOfPhotosInAlbumFolder++;
+                        var hash = await CalculateSha256(fileInfo, stoppingToken);
+
+                        if (!await _dbContext.Photos.AnyAsync(
+                                x => x.Sha256Hash == hash && x.SourcePath == fileInfo.FullName, stoppingToken))
+                        {
+                            var indexedPhoto = GenerateIndexedPhoto(fileInfo, hash);
+                            numberOfPhotosIndexed++;
+                            await _dbContext.Photos.AddAsync(indexedPhoto, stoppingToken);
+                            await _dbContext.SaveChangesAsync(stoppingToken);
+
+                            sw.Stop();
+                            _logger.LogInformation($"Photo '{indexedPhoto.SourcePath}' indexed successfully: {sw.ElapsedMilliseconds}ms");
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error while indexing file '{fileInfo.FullName}': {ex.Message}");
-            }
+                catch (Exception ex)
+                {
+                    await Task.Delay(5000, stoppingToken);
+
+                    error = true;
+                    retries++;
+                    if (retries >= 5)
+                    {
+                        _logger.LogError($"Error while indexing file '{fileInfo.FullName}': {ex.Message}");
+                        break;
+                    }
+                }
+            } while (error && retries < 5);
         }
 
         foreach (var childDirectoryInfo in directoryInfo.GetDirectories())
