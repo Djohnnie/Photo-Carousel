@@ -36,7 +36,7 @@ steps:
       **/PhotoCarousel.Display.Desktop.csproj
 
 - script: |
-    dotnet publish ./PhotoCarousel/PhotoCarousel.Display.Desktop --configuration "Release" --runtime linux-arm --output ./PhotoCarousel/PhotoCarousel.Display.Desktop/bin/Release/publish
+    dotnet publish ./PhotoCarousel/PhotoCarousel.Display.Desktop --configuration "Release" --runtime linux-arm64 --output ./PhotoCarousel/PhotoCarousel.Display.Desktop/bin/Release/publish
 
 - task: ArchiveFiles@2
   inputs:
