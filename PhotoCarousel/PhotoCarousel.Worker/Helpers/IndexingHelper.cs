@@ -117,7 +117,7 @@ public class IndexingHelper
             FolderPath = Path.GetDirectoryName(fileInfo.FullName),
             ThumbnailPath = string.Empty,
             Sha256Hash = hash,
-            Rating = Rating.None,
+            Rating = string.IsNullOrWhiteSpace(match.Value) ? Rating.ThumbsDown : Rating.None,
             DateTaken = metadata.Item1,
             DateIndexed = DateTime.UtcNow,
             Description = match.Value,
