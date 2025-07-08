@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
-		<Nullable>disable</Nullable>
+		<Nullable>enable</Nullable>
 		<UserSecretsId>dotnet-PhotoCarousel.Worker-42322908-D787-421B-9C18-7F0A89185227</UserSecretsId>
 	</PropertyGroup>
 

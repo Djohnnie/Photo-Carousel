@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PhotoCarousel.DataAccess;
 
@@ -11,9 +12,11 @@ using PhotoCarousel.DataAccess;
 namespace PhotoCarousel.DataAccess.Migrations
 {
     [DbContext(typeof(PhotoCarouselDbContext))]
-    partial class PhotoCarouselDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250708072724_Added-Flags")]
+    partial class AddedFlags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,15 +99,17 @@ namespace PhotoCarousel.DataAccess.Migrations
                     b.Property<DateTime>("DateIndexed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 27, 20, 57, 28, 536, DateTimeKind.Utc).AddTicks(772));
+                        .HasDefaultValue(new DateTime(2025, 7, 8, 7, 27, 23, 782, DateTimeKind.Utc).AddTicks(4428));
 
                     b.Property<DateTime>("DateTaken")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FolderPath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Orientation")
@@ -116,10 +121,12 @@ namespace PhotoCarousel.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Sha256Hash")
+                        .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("varbinary(32)");
 
                     b.Property<string>("SourcePath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("SysId")
@@ -129,6 +136,7 @@ namespace PhotoCarousel.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SysId"));
 
                     b.Property<string>("ThumbnailPath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

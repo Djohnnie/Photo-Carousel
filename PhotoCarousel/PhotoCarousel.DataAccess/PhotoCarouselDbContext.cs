@@ -1,10 +1,12 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using PhotoCarousel.Common.Extensions;
 using PhotoCarousel.Entities;
 using PhotoCarousel.Enums;
+using System;
 
 namespace PhotoCarousel.DataAccess
 {
@@ -12,6 +14,7 @@ namespace PhotoCarousel.DataAccess
     {
         private readonly IConfiguration _configuration;
 
+        public DbSet<Flag> Flags { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<History> History { get; set; }
 
@@ -24,10 +27,20 @@ namespace PhotoCarousel.DataAccess
         {
             string connectionString = _configuration.GetConnectionString();
             optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Flag>(entityBuilder =>
+            {
+                entityBuilder.ToTable("FLAGS");
+                entityBuilder.HasKey(x => x.Id).IsClustered(false);
+                entityBuilder.Property(x => x.SysId).ValueGeneratedOnAdd();
+                entityBuilder.HasIndex(x => x.SysId).IsClustered();
+                entityBuilder.HasIndex(x => x.Name);
+            });
+
             modelBuilder.Entity<Photo>(a =>
             {
                 a.ToTable("PHOTOS");
