@@ -19,7 +19,7 @@ public class FlagsController : BaseController<FlagsController>
         _flagsService = flagsService;
     }
 
-    [HttpPost]
+    [HttpPost("set")]
     public async Task<IActionResult> SetFlag(Flag flag)
     {
         return await Log<IActionResult>(async () =>
