@@ -7,6 +7,7 @@ using System;
 using System.Net.Http.Json;
 using System.IO;
 using PhotoCarousel.Contracts;
+using System.Text;
 
 namespace PhotoCarousel.Display.ViewModels;
 
@@ -50,25 +51,42 @@ public class MainViewModel : ViewModelBase
                 {
                     try
                     {
-                        var response = httpClient.GetFromJsonAsync<Photo>("photos/current").Result;
-                        var photo = httpClient.GetByteArrayAsync($"downloads/photo/{response.Id}").Result;
+                        var response = await httpClient.GetFromJsonAsync<Photo>("photos/current");
+                        var photo = await httpClient.GetByteArrayAsync($"downloads/photo/{response.Id}");
 
-                        _synchronizationContext.Post((x) =>
+                        var flag = new DisplayPingFlag
                         {
-                            using var stream = new MemoryStream(photo);
-                            TestImage = new Bitmap(stream);
-                            TestDescription = ConvertDescription(response.Description);
-                            ErrorDescription = string.Empty;
-                        }, null);
+                            LastPing = DateTime.Now
+                        };
+
+                        await httpClient.PostAsJsonAsync("flags/set", new Flag
+                        {
+                            Name = DisplayPingFlag.Name,
+                            Value = Convert.ToBase64String(Encoding.UTF8.GetBytes(flag.Serialize()))
+                        });
+
+                        if (_synchronizationContext != null)
+                        {
+                            _synchronizationContext.Post((x) =>
+                            {
+                                using var stream = new MemoryStream(photo);
+                                TestImage = new Bitmap(stream);
+                                TestDescription = ConvertDescription(response.Description);
+                                ErrorDescription = string.Empty;
+                            }, null);
+                        }
 
                         error = false;
                     }
                     catch (Exception ex)
                     {
-                        _synchronizationContext.Post((x) =>
+                        if (_synchronizationContext != null)
                         {
-                            ErrorDescription = ex.Message;
-                        }, null);
+                            _synchronizationContext.Post((x) =>
+                            {
+                                ErrorDescription = ex.Message;
+                            }, null);
+                        }
 
                         error = true;
                         await Task.Delay(1000);
