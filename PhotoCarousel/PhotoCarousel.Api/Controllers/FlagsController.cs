@@ -19,6 +19,17 @@ public class FlagsController : BaseController<FlagsController>
         _flagsService = flagsService;
     }
 
+    [HttpGet("{name}")]
+    public async Task<IActionResult> GetFlag(string name)
+    {
+        return await Log<IActionResult>(async () =>
+        {
+            var flag = await _flagsService.GetFlag(name);
+
+            return flag is not null ? Ok(flag) : NotFound();
+        });
+    }
+
     [HttpPost("set")]
     public async Task<IActionResult> SetFlag(Flag flag)
     {

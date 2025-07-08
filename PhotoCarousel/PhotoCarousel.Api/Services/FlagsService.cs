@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PhotoCarousel.Contracts;
 using PhotoCarousel.DataAccess;
 using PhotoCarousel.Entities;
 using System;
@@ -27,6 +28,21 @@ public class FlagsService
         _logger = logger;
     }
 
+    public async Task<IFlag> GetFlag(string name)
+    {
+        var flag = await _dbContext.Flags
+            .FirstOrDefaultAsync(f => f.Name == name);
+
+        switch (name)
+        {
+            case DisplayPingFlag.Name:
+                return flag is null ? DisplayPingFlag.Default : DisplayPingFlag.Deserialize(flag.Value);
+            default:
+                _logger.LogWarning($"Unknown flag requested: {name}");
+                return null;
+        }
+    }
+
     public async Task SetFlag(string name, string value)
     {
         var binary = Convert.FromBase64String(value);
@@ -37,7 +53,7 @@ public class FlagsService
 
         if (existingFlag is null)
         {
-            _dbContext.Flags.Add(new Flag
+            _dbContext.Flags.Add(new Entities.Flag
             {
                 Id = Guid.NewGuid(),
                 Name = name,

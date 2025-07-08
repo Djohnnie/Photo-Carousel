@@ -2,15 +2,20 @@
 
 namespace PhotoCarousel.Contracts;
 
+public interface IFlag
+{
+    string Serialize();
+}
+
 public class Flag
 {
     public string Name { get; set; }
     public string Value { get; set; }
 }
 
-public class DisplayPingFlag
+public class DisplayPingFlag : IFlag
 {
-    public static string Name => "DisplayPingFlag";
+    public const string Name = "DisplayPingFlag";
 
     public static DisplayPingFlag Default => new DisplayPingFlag();
 
