@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +26,7 @@ public class Startup
         services.AddTransient<FolderService>();
         services.AddTransient<RatingService>();
         services.AddTransient<DuplicatesService>();
+        services.AddTransient<FlagsService>();
         services.AddControllers();
         services.AddSwaggerGen(c =>
         {
