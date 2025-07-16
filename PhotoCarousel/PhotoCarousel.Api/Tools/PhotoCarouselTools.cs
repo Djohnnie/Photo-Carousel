@@ -26,6 +26,22 @@ public class PhotoCarouselTools
     }
 
     [McpServerTool]
+    [Description("Gets the id for the photo that was previously shown.")]
+    public async Task<Guid> GetPreviousPhotoId()
+    {
+        var photo = await _photoService.GetPreviousPhoto();
+        return photo.Id;
+    }
+
+    [McpServerTool]
+    [Description("Gets the id for the photo that will be shown next.")]
+    public async Task<Guid> GetNextPhotoId()
+    {
+        var photo = await _photoService.GetNextPhoto();
+        return photo.Id;
+    }
+
+    [McpServerTool]
     [Description("Gets information about the photo with given id.")]
     [return: Description("Information, formatted in JSON containing a short description that should be used if the info is empty and a date that the photo is taken.")]
     public async Task<string> GetPhotoInformation(
