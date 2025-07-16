@@ -61,3 +61,5 @@ app.UseEndpoints(endpoints =>
 });
 
 app.MapMcp();
+
+app.Run();
