@@ -148,15 +148,35 @@ namespace PhotoCarousel.Api.Services
             {
                 var photo = await _dbContext.Photos.SingleOrDefaultAsync(x => x.Id == historicPhoto.PhotoId);
 
+                var info = await GetInfo(photo);
+
                 return new PhotoContract
                 {
                     Id = photo.Id,
                     Description = photo.Description,
-                    Rating = photo.Rating
+                    Rating = photo.Rating,
+                    Info = info
                 };
             }
 
             return null;
+        }
+
+        private async Task<string> GetInfo(Photo photo)
+        {
+            var info = string.Empty;
+
+            if (photo != null && !string.IsNullOrEmpty(photo.FolderPath))
+            {
+                var infoFilePath = $"{photo.FolderPath}/info.nfo";
+
+                if (File.Exists(infoFilePath))
+                {
+                    info = await File.ReadAllTextAsync(infoFilePath);
+                }
+            }
+
+            return info;
         }
     }
 }
