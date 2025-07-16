@@ -27,11 +27,42 @@ public class PhotoCarouselTools
 
     [McpServerTool]
     [Description("Gets information about the photo with given id.")]
+    [return: Description("Information, formatted in JSON containing a short description that should be used if the info is empty and a date that the photo is taken.")]
     public async Task<string> GetPhotoInformation(
         [Description("The id of the photo to get the information for.")]
         Guid photoId)
     {
         var photo = await _photoService.GetPhotoById(photoId);
-        return JsonSerializer.Serialize(photo);
+        var (description, dateTaken) = SplitDescription(photo.Description);
+        return JsonSerializer.Serialize(new PhotoInfo
+        {
+            Description = description,
+            DateTaken = dateTaken,
+            Info = photo.Info
+        });
+    }
+
+    private (string, string) SplitDescription(string description)
+    {
+        try
+        {
+            var parts = description.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var datePart = parts[0];
+            var descriptionPart = string.Join(' ', parts[1..]);
+
+            return ($"{descriptionPart.Replace("(", "").Replace(")", "")}", datePart);
+        }
+        catch
+        {
+            return (description, string.Empty);
+        }
+    }
+
+    private class PhotoInfo
+    {
+        public string Description { get; set; }
+        public string DateTaken { get; set; }
+        public string Info { get; set; }
     }
 }
