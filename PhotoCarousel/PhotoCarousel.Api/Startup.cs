@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using PhotoCarousel.Api.Services;
+using PhotoCarousel.Api.Tools;
 using PhotoCarousel.DataAccess;
 
 namespace PhotoCarousel.Api;
@@ -20,6 +21,9 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddMcpServer()
+            .WithHttpTransport()
+            .WithTools<PhotoCarouselTools>();
         services.AddDbContext<PhotoCarouselDbContext>();
         services.AddTransient<DownloadService>();
         services.AddTransient<PhotoService>();

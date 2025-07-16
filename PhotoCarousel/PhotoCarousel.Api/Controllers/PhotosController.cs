@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using PhotoCarousel.Api.Services;
 using PhotoCarousel.Contracts;
+using System;
 using System.Threading.Tasks;
 
 namespace PhotoCarousel.Api.Controllers;
@@ -17,6 +18,17 @@ public class PhotosController : BaseController<PhotosController>
         ILogger<PhotosController> logger) : base(logger)
     {
         _photoService = photoService;
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetPhoto(Guid id)
+    {
+        return await Log<IActionResult>(async () =>
+        {
+            var photo = await _photoService.GetPhotoById(id);
+
+            return photo != null ? Ok(photo) : NotFound();
+        });
     }
 
     [HttpGet("random")]

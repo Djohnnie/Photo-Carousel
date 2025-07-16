@@ -31,6 +31,30 @@ namespace PhotoCarousel.Api.Services
             _logger = logger;
         }
 
+        public async Task<PhotoContract> GetPhotoById(Guid photoId)
+        {
+            try
+            {
+                var photo = await _dbContext.Photos.SingleOrDefaultAsync(x => x.Id == photoId);
+
+                if (photo != null && File.Exists(photo.SourcePath))
+                {
+                    var info = await GetInfo(photo);
+
+                    return new PhotoContract
+                    {
+                        Id = photo.Id,
+                        Description = photo.Description,
+                        Rating = photo.Rating,
+                        Info = info
+                    };
+                }
+            }
+            catch { }
+
+            return null;
+        }
+
         public async Task<PhotoContract> GetRandomPhoto()
         {
             bool error;
