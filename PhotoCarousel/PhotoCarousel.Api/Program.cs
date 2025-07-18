@@ -60,6 +60,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 
-app.MapMcp();
+app.MapMcp("mcp");
 
 app.Run();
