@@ -17,36 +17,34 @@ public class PhotoCarouselTools
         _photoService = photoService;
     }
 
-    [McpServerTool(Name = $"photocarousel_{nameof(GetCurrentPhotoId)}", ReadOnly = true)]
-    [Description("Gets the id for the photo currently shown.")]
-    public async Task<Guid> GetCurrentPhotoId()
-    {
-        var photo = await _photoService.GetCurrentPhoto();
-        return photo.Id;
-    }
-
-    [McpServerTool(Name = $"photocarousel_{nameof(GetPreviousPhotoId)}", ReadOnly = true)]
-    [Description("Gets the id for the photo that was previously shown.")]
-    public async Task<Guid> GetPreviousPhotoId()
-    {
-        var photo = await _photoService.GetPreviousPhoto();
-        return photo.Id;
-    }
-
-    [McpServerTool(Name = $"photocarousel_{nameof(GetNextPhotoId)}", ReadOnly = true)]
-    [Description("Gets the id for the photo that will be shown next.")]
-    public async Task<Guid> GetNextPhotoId()
-    {
-        var photo = await _photoService.GetNextPhoto();
-        return photo.Id;
-    }
-
-    [McpServerTool(Name = $"photocarousel_{nameof(GetPhotoInformation)}", ReadOnly = true)]
-    [Description("Gets information about the photo with given id.")]
+    [McpServerTool(Name = $"photocarousel_{nameof(GetCurrentPhotoInformation)}", ReadOnly = true)]
+    [Description("Gets information about the current displayed photo.")]
     [return: Description("Information, formatted in JSON containing a short description that should be used if the info is empty and a date that the photo is taken.")]
-    public async Task<string> GetPhotoInformation(
-        [Description("The id of the photo to get the information for.")]
-        Guid photoId)
+    public async Task<string> GetCurrentPhotoInformation()
+    {
+        var currentPhoto = await _photoService.GetCurrentPhoto();
+        return await GetPhotoDescription(currentPhoto.Id);
+    }
+
+    [McpServerTool(Name = $"photocarousel_{nameof(GetPreviousPhotoInformation)}", ReadOnly = true)]
+    [Description("Gets information about the previously displayed photo.")]
+    [return: Description("Information, formatted in JSON containing a short description that should be used if the info is empty and a date that the photo is taken.")]
+    public async Task<string> GetPreviousPhotoInformation()
+    {
+        var previousPhoto = await _photoService.GetPreviousPhoto();
+        return await GetPhotoDescription(previousPhoto.Id);
+    }
+
+    [McpServerTool(Name = $"photocarousel_{nameof(GetNextPhotoInformation)}", ReadOnly = true)]
+    [Description("Gets information about the photo that will be shown next.")]
+    [return: Description("Information, formatted in JSON containing a short description that should be used if the info is empty and a date that the photo is taken.")]
+    public async Task<string> GetNextPhotoInformation()
+    {
+        var nextPhoto = await _photoService.GetPreviousPhoto();
+        return await GetPhotoDescription(nextPhoto.Id);
+    }
+
+    private async Task<string> GetPhotoDescription(Guid photoId)
     {
         var photo = await _photoService.GetPhotoById(photoId);
         var (description, dateTaken) = SplitDescription(photo.Description);
@@ -62,7 +60,7 @@ public class PhotoCarouselTools
     {
         try
         {
-            var parts = description.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = description.Split([' '], StringSplitOptions.RemoveEmptyEntries);
 
             var datePart = parts[0];
             var descriptionPart = string.Join(' ', parts[1..]);
