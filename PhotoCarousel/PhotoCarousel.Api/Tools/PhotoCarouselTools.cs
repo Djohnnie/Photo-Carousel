@@ -17,7 +17,7 @@ public class PhotoCarouselTools
         _photoService = photoService;
     }
 
-    [McpServerTool]
+    [McpServerTool(Name = $"photocarousel_{nameof(GetCurrentPhotoId)}", ReadOnly = true)]
     [Description("Gets the id for the photo currently shown.")]
     public async Task<Guid> GetCurrentPhotoId()
     {
@@ -25,7 +25,7 @@ public class PhotoCarouselTools
         return photo.Id;
     }
 
-    [McpServerTool]
+    [McpServerTool(Name = $"photocarousel_{nameof(GetPreviousPhotoId)}", ReadOnly = true)]
     [Description("Gets the id for the photo that was previously shown.")]
     public async Task<Guid> GetPreviousPhotoId()
     {
@@ -33,7 +33,7 @@ public class PhotoCarouselTools
         return photo.Id;
     }
 
-    [McpServerTool]
+    [McpServerTool(Name = $"photocarousel_{nameof(GetNextPhotoId)}", ReadOnly = true)]
     [Description("Gets the id for the photo that will be shown next.")]
     public async Task<Guid> GetNextPhotoId()
     {
@@ -41,7 +41,7 @@ public class PhotoCarouselTools
         return photo.Id;
     }
 
-    [McpServerTool]
+    [McpServerTool(Name = $"photocarousel_{nameof(GetPhotoInformation)}", ReadOnly = true)]
     [Description("Gets information about the photo with given id.")]
     [return: Description("Information, formatted in JSON containing a short description that should be used if the info is empty and a date that the photo is taken.")]
     public async Task<string> GetPhotoInformation(
